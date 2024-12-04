@@ -9,12 +9,12 @@ import User from "./user.model.js";
 
 Product.belongsTo(Category, {
     foreignKey: "categoryId",
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
 });
 
 Category.hasMany(Product, {
     foreignKey: "categoryId",
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
 });
 
 Product.hasMany(Image, {
@@ -49,12 +49,12 @@ OrderItem.belongsTo(Order, {
 
 Product.hasMany(OrderItem, {
     foreignKey: "productId",
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
 });
 
 OrderItem.belongsTo(Product, {
     foreignKey: "productId",
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
 });
 
 User.hasMany(CartItem, {

@@ -1,11 +1,10 @@
 import app from "./app.js";
 import db from "./models/index.model.js";
-import seedData from "./seedData.js";
 
 // Connect to db
-db.sync({ force: true })
+db.sync()
     .then(async (res) => {
-        await seedData();
+        console.log("Database connected");
     })
     .catch((err) => console.log(err));
 

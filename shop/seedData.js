@@ -1,10 +1,19 @@
 import CartItem from "./models/cartItem.model.js";
 import Category from "./models/category.model.js";
 import Image from "./models/image.model.js";
+import db from "./models/index.model.js";
 import Order from "./models/order.model.js";
 import OrderItem from "./models/orderItem.model.js";
 import Product from "./models/product.model.js";
 import User from "./models/user.model.js";
+
+db.drop();
+db.sync({ force: true })
+    .then(async (res) => {
+        console.log("Database connected");
+        await seedData();
+    })
+    .catch((err) => console.log(err));
 
 const seedData = async () => {
     const users = [
