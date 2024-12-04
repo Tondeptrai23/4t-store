@@ -1,13 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import { db } from "../config/config.js";
 
-class User extends Model {
-    //
-}
+class Product extends Model {}
 
-User.init(
+Product.init(
     {
-        userId: {
+        productId: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
@@ -16,24 +14,27 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
-        password: {
+        description: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        role: {
-            type: DataTypes.ENUM("user", "admin"),
-            defaultValue: "user",
+        price: {
+            type: DataTypes.DECIMAL,
+            allowNull: false,
+        },
+        size: {
+            type: DataTypes.ENUM("S", "M", "L", "XL", "XXL"),
+            allowNull: false,
+        },
+        color: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
     },
     {
         sequelize: db,
-        modelName: "user",
+        modelName: "product",
     }
 );
 
-export default User;
+export default Product;
