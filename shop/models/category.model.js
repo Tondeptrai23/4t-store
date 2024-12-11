@@ -1,13 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import { db } from "../config/config.js";
 
-class User extends Model {
-    //
-}
+class Category extends Model {}
 
-User.init(
+Category.init(
     {
-        userId: {
+        categoryId: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
@@ -16,24 +14,14 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        email: {
+        description: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        role: {
-            type: DataTypes.ENUM("user", "admin"),
-            defaultValue: "user",
         },
     },
     {
         sequelize: db,
-        modelName: "user",
+        modelName: "category",
     }
 );
 
-export default User;
+export default Category;
