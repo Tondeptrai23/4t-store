@@ -3,7 +3,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from 'url';
 
-// import errorHandler from "./middlewares/errorHandler.middleware.js";
+import errorHandler from "./middlewares/errorHandler.middleware.js";
 import router from "./routes/index.route.js";
 
 const app = express();
@@ -24,6 +24,6 @@ app.get('/', (req, res) => {
 });
 app.use("/api", router);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
