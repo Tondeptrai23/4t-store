@@ -21,6 +21,14 @@ class UserService {
     async getAllInDb() {
         return await User.findAll();
     }
+
+    async findByEmail(email) {
+        return await User.findOne({ where: { email } });
+    }
+
+    async findById(id) {
+        return await User.findByPk(id);
+    }
 }
 
 export default new UserService();
