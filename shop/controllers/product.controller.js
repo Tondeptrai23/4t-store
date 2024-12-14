@@ -19,19 +19,7 @@ class ProductController {
         }
     }
 
-    // async getAllDb(req, res, next) {
-    //     res.json(await userService.getAllInDb());
-    // }
 }
 
 export default new ProductController();
 
-function get(){
-    console.log("get function called");
-   productService.getAll()
-    .then( result =>{
-        console.log(result);
-    })
-}
-
-get()
