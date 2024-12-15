@@ -1,10 +1,10 @@
 import CartItem from "./models/cartItem.model.js";
-import Category from "./models/category.model.js";
 import Image from "./models/image.model.js";
 import db from "./models/index.model.js";
 import Order from "./models/order.model.js";
 import OrderItem from "./models/orderItem.model.js";
 import Product from "./models/product.model.js";
+import SubCategory from "./models/subCategory.model.js";
 import User from "./models/user.model.js";
 
 db.drop();
@@ -549,7 +549,7 @@ const seedData = async () => {
     ];
 
     await User.bulkCreate(users);
-    await Category.bulkCreate(categories);
+    await SubCategory.bulkCreate(categories);
     await Product.bulkCreate(products);
     await Image.bulkCreate(images);
     await Order.bulkCreate(orders);

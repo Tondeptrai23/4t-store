@@ -22,10 +22,6 @@ Image.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        productId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        }
     },
     {
         sequelize: db,
