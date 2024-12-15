@@ -69,43 +69,58 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
       text-align: left;
   }
 
-  .tab-content {
-    display: block;
+ /* Fix tab-content height to prevent shifting */
+.tab-content {
+  display: block;
+  min-height: 310px; /* Set a consistent height for all tabs */
+  overflow-y: auto;  /* Allow scrolling if content exceeds the height */
+  padding: 0; /* Optional: Adjust spacing */
 }
+
+/* Ensure only active tab-pane is displayed */
 .tab-content > .tab-pane {
-    display: none;
+  display: none;
 }
 .tab-content > .tab-pane.active {
-    display: block;
+  display: block;
 }
-.tab-content.active {
-    display: block;
-}
+
+/* Styling for nav-tabs */
 .nav-tabs .nav-link {
-    color: #333;
-    font-weight: 400;
+  color: #333;
+  font-weight: 400;
+  padding: 10px; /* Ensure uniform spacing */
+  text-align: center; /* Center text within tabs */
+  transition: background-color 0.2s, color 0.2s;
 }
-.nav-tabs {
-  margin-bottom: 10px; /* Maintain a fixed gap */
-}
+
 .nav-tabs .nav-link.active {
-    background-color: #f1f3f5;
-    font-weight: 500;
-    color: #717fe0;
+  background-color: #f1f3f5;
+  font-weight: 500;
+  color: #717fe0;
+  border: 1px solid #ddd; /* Optional: Add border for better visibility */
 }
+
+/* Styling for menu-list */
 .menu-list {
-    list-style: none;
-    padding: 0;
-    cursor: pointer;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  overflow-x: hidden;
 }
+
 .menu-list li {
-    padding: 10px 15px;
-    border-bottom: 1px solid #e9ecef;
-    transition: background-color 0.2s;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s, transform 0.1s;
 }
+
 .menu-list li:hover {
-    background-color: #f1f3f5;
+  background-color: #f1f3f5;
+  transform: scale(1.02); 
 }
+
   
   
   /*//////////////////////////////////////////////////////////////////
