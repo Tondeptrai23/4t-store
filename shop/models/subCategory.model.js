@@ -20,7 +20,7 @@ SubCategory.init(
     },
     {
         sequelize: db,
-        modelName: "sub-category",
+        modelName: "sub_category",
     }
 );
 
