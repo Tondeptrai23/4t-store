@@ -24,6 +24,12 @@ To run the server, run this below command.
 npm start
 ```
 
+To run the server in development mode, run this below command.
+
+```bash
+npm run dev
+```
+
 ### Data Initialization
 
 By default, sequelize will create the tables based on the models. If you want to initialize the data, you can run the following command.
@@ -134,16 +140,4 @@ api/products?name=[like]apple&price[gte]=100
 
 ```bash
 api/products?name=[like]apple&price[gte]=100&price[lt]=200&sort=name&page=2&size=10
-```
-
-To run the server in development mode, run this below command.
-
-```bash
-npm run dev
-```
-
-To run the code to seed the database, run this below command.
-
-```bash
-npm run seed
 ```
