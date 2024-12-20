@@ -31,7 +31,14 @@ const seedData = async () => {
 
     const data = await fs.readFile("./seedData.sql", "utf-8");
 
-    await db.query(data.replace(/[\r\n]/g, ""));
+    const queries = data
+        .split(/;\s*\n/)
+        .map((query) => query.trim())
+        .filter((query) => query.length > 0 && !query.startsWith("--"));
+
+    for (const query of queries) {
+        await db.query(query);
+    }
 };
 
 export default seedData;
