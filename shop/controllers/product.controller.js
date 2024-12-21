@@ -18,6 +18,23 @@ class ProductController {
             res.status(500).json({ error: "Server Error" });
         }
     }
+    async getById(req, res, next) {
+        try {
+            // Lấy productId từ URL
+            const productId = req.params.id;
+
+            // Gọi service và chờ kết quả trả về
+            const product = await productService.getById(productId);
+            const category = await categoryService.getById(product.categoryId);
+            const sameCategoryProducts = await categoryService.getCategoryByParentId(1);
+
+            // Render trang EJS với sản phẩm tương ứng
+            res.render('index', { body: 'pages/productDetail', product, category, sameCategoryProducts });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "Server Error" });
+        }
+    }
 
 }
 
