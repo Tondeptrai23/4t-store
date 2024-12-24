@@ -60,6 +60,19 @@ $(document).ready(function () {
         $(this).parent().addClass('active-menu');
     });
 
+    $('.nav-link').click(function(event) {
+        event.preventDefault(); 
+
+        $('.nav-link').removeClass('active');
+        $('.tab-pane').removeClass('show active');
+
+        // Thêm lớp active vào tab được nhấn
+        $(this).addClass('active');
+
+        var target = $(this).attr('href');
+        $(target).addClass('show active');
+    });
+
 });
 
 

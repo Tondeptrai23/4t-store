@@ -94,10 +94,8 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 }
 
 .nav-tabs .nav-link.active {
-  background-color: #f1f3f5;
   font-weight: 500;
   color: #717fe0;
-  border: 1px solid #ddd; /* Optional: Add border for better visibility */
 }
 
 /* Styling for menu-list */
