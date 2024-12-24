@@ -6,7 +6,7 @@
         </a>
 
         <a href="product.html" class="stext-109 cl8 hov-cl1 trans-04">
-            Nam
+            <%= parentCategory.name %>
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
 
@@ -31,12 +31,10 @@
                                 <div class="item-slick3" data-thumb="/images/<%= product.images[i].path %>">
                                     <div class="wrap-pic-w pos-relative">
                                         <img src="/images/<%= product.images[i].path %>" alt="IMG-PRODUCT">
-
-                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="<%= product.images[i] %>">
-                                            <i class="fa fa-expand"></i>
-                                        </a>
                                     </div>
+
                                 </div>
+                                
                             <% } %>
 
                         </div>
@@ -106,7 +104,7 @@
                                     </div>
                                 </div>
 
-                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 mt-2 js-addcart-detail">
                                     Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -240,6 +238,7 @@
     </div>
 </section>
 
+
 <section class="sec-relate-product bg0 p-t-45 p-b-105">
     <div class="container">
         <div class="p-b-45">
@@ -247,32 +246,51 @@
                 Sản phẩm tương tự
             </h3>
         </div>
-        <div class="d-flex flex-column">
-            <% for (let i = 0; i < sameCategoryProducts.length; i++) { %>
-                <div class="p-2">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="https://placehold.co/300x150" alt="Product" class="img-fluid">
-                            <button class="btn btn-light quick-view-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal">
-                                Quick View
-                            </button>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="mb-2">
-                                <a href="product-detail.html" class="text-dark text-decoration-none"><%= sameCategoryProducts[i].name %></a>
-                            </h5>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="product-price"><%= sameCategoryProducts[i].description %></span>
-                                <button class="btn wishlist-btn">
-                                    <i class="bi bi-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <div class="d-flex justify-content-between wrap-slick2">
+            <button class="p-3 mb-5" type="button" data-bs-target="#relatedProductsCarousel" data-bs-slide="prev">
+                <i class="fa-solid fa-chevron-left" arial-hidden="true"></i>
+            </button>
+            <div id="relatedProductsCarousel" class="carousel slide w-100" data-bs-ride="carousel">
+
+                <div class="carousel-inner">
+                    <% for (let i = 0; i < relatedProduct.length; i++) { %>
+                        <% if (i % 4 === 0) { %>
+                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                <div class="row">
+                        <% } %>
+                                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                                        <div class="block2">
+                                            <div class="block2-pic hov-img0">
+                                                <img src="/images/<%= relatedProduct[i].images[0].path %>" 
+                                                    alt="<%= relatedProduct[i].name %>">
+                                            </div>
+
+                                            <div class="block2-txt flex-w flex-t p-t-14">
+                                                <div class="block2-txt-child1 flex-col">
+                                                    <a href="/products/<%= relatedProduct[i].productId %>"
+                                                    class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                        <%= relatedProduct[i].name %>
+                                                    </a>
+                                                    <span class="stext-105 cl3">
+                                                        <%= relatedProduct[i].price %>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        <% if (i % 4 === 3 || i === relatedProduct.length - 1) { %>
+                                </div> 
+                            </div> 
+                        <% } %>
+                    <% } %>
                 </div>
-            <% } %>
-        </div>
-        
+            </div>
+            <button class="p-3 mb-5" type="button" data-bs-target="#relatedProductsCarousel" data-bs-slide="next">
+                <i class="fa-solid fa-chevron-right" arial-hidden="true"></i>
+            </button>
         </div>
     </div>
 </section>
+
+
+
