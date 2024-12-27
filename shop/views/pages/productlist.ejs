@@ -2,12 +2,12 @@
     <div class="container">
         <div class="flex-w flex-sb-m p-b-52">
             <div class="flex-w flex-l-m filter-tope-group m-tb-10">
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="*">
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
                     All Products
                 </button>
                 <% categories.forEach(category=> { %>
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-                        data-filter=".<%= category.categoryId %>">
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 category-btn"
+                        data-filter="<%= category.categoryId %>">
                         <%= category.name %>
                     </button>
                     <% }) %>
@@ -135,70 +135,56 @@
                         <div class="mtext-102 cl2 p-b-15">
                             Color
                         </div>
-                    
+
                         <ul>
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #222;">
-                                    <i class="fas fa-circle"></i> <!-- Thay thế bằng Font Awesome -->
+                                    <i class="fas fa-circle"></i> <!-- Black -->
                                 </span>
-                    
                                 <a href="#" class="filter-link stext-106 trans-04">
                                     Black
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #4272d7;">
-                                    <i class="fas fa-circle"></i> <!-- Thay thế bằng Font Awesome -->
+                                    <i class="fas fa-circle"></i> <!-- Blue -->
                                 </span>
-                    
                                 <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
                                     Blue
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
-                                    <i class="fas fa-circle"></i> <!-- Thay thế bằng Font Awesome -->
+                                    <i class="fas fa-circle"></i> <!-- Gray -->
                                 </span>
-                    
                                 <a href="#" class="filter-link stext-106 trans-04">
-                                    Grey
+                                    Gray
                                 </a>
                             </li>
-                    
-                            <li class="p-b-6">
-                                <span class="fs-15 lh-12 m-r-6" style="color: #00ad5f;">
-                                    <i class="fas fa-circle"></i> <!-- Thay thế bằng Font Awesome -->
-                                </span>
-                    
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Green
-                                </a>
-                            </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
-                                    <i class="fas fa-circle"></i> <!-- Thay thế bằng Font Awesome -->
+                                    <i class="fas fa-circle"></i> <!-- Red -->
                                 </span>
-                    
                                 <a href="#" class="filter-link stext-106 trans-04">
                                     Red
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #aaa;">
-                                    <i class="far fa-circle"></i> <!-- Thay thế bằng Font Awesome -->
+                                    <i class="far fa-circle"></i> <!-- White -->
                                 </span>
-                    
                                 <a href="#" class="filter-link stext-106 trans-04">
                                     White
                                 </a>
                             </li>
                         </ul>
+
                     </div>
-                    
+
 
                     <div class="filter-col4 p-b-27">
                         <div class="mtext-102 cl2 p-b-15">
@@ -240,20 +226,16 @@
             <div class="row isotope-grid">
                 <% products.forEach(product=> { %>
                     <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= product.categoryId %>">
-
                         <div class="block2">
                             <div class="block2-pic hov-img0">
-
                                 <img src="/images/<%= product.images[0].path %>" alt="<%= product.name %>">
-
                                 <a href="/products/<%= product.id %>"
                                     class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                                     Quick View
                                 </a>
                             </div>
-
                             <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l ">
+                                <div class="block2-txt-child1 flex-col-l">
                                     <a href="/products/<%= product.id %>"
                                         class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                         <%= product.name %>
@@ -267,7 +249,14 @@
                     </div>
                     <% }) %>
 
+                        <!-- Spinner loading -->
+                        <div id="loading" class="d-none">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
             </div>
+
 
         </div>
 
@@ -279,3 +268,6 @@
         </div>
     </div>
 </div>
+
+
+<!-- Script gửi yêu cầu AJAX -->

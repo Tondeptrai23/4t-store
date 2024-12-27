@@ -1,3 +1,5 @@
+
+import {Op} from 'sequelize';
 /**
  * @summary
  * Base class for building conditions for querying the database
