@@ -12,6 +12,10 @@ class UserService {
     async findById(id) {
         return await User.findByPk(id);
     }
+
+		async create(user) {
+				return await User.create(user);
+		}
 }
 
 export default new UserService();

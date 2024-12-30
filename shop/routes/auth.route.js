@@ -15,6 +15,7 @@ authRoute.post(
 		res.redirect("/");
 	}
 );
+authRoute.post("/register", authController.register);
 authRoute.post("/logout", authController.logout);
 // authRoute.get("/status", authController.status);
 

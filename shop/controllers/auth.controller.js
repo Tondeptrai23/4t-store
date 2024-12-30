@@ -1,3 +1,4 @@
+import UserService from "../services/user.service.js";
 
 class AuthController {
 	loginView(_request, response) {
@@ -13,6 +14,27 @@ class AuthController {
 			if (error) { throw new Error(error); }
 			response.redirect("/");
 		});
+	}
+
+	async register(request, response) {
+		const { name, email, password } = request.body;
+		const data = {
+			name,
+			email,
+			password,
+			role: "user",
+		};
+
+		try {
+			const user = await UserService.create(data);
+			request.login(user, (error) => {
+				if (error) { throw new Error(error); }
+				response.redirect("/");
+			});
+		}
+		catch (error) {
+			throw new Error(error);
+		}
 	}
 
 	// status(request, response) {
