@@ -1,19 +1,23 @@
 
 class AuthController {
-  login(request, response) {
-    response.json(request.user);
-  }
+	loginView(_request, response) {
+		return response.render("pages/login");
+	}
 
-  logout(request, response) {
-    request.logout((error) => {
-      if (error) { return response.sendStatus(500); }
-      return response.sendStatus(200);
-    });
-  }
+	registerView(_request, response) {
+		return response.render("pages/register");
+	}
 
-  status(request, response) {
-    return request.user ? response.json(request.user) : response.sendStatus(401);
-  }
+	logout(request, response) {
+		request.logout((error) => {
+			if (error) { throw new Error(error); }
+			response.redirect("/");
+		});
+	}
+
+	// status(request, response) {
+	// 	return request.user ? response.json(request.user) : response.sendStatus(401);
+	// }
 }
 
 export default new AuthController();

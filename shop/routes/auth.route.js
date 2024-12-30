@@ -5,8 +5,17 @@ import authController from "../controllers/auth.controller.js";
 
 const authRoute = Router();
 
-authRoute.post("/auth/login", passport.authenticate("local"), authController.login);
-authRoute.post("/auth/logout", authController.logout);
-authRoute.get("/auth/status", authController.status);
+authRoute.get("/login", authController.loginView);
+authRoute.get("/register", authController.registerView);
+
+authRoute.post(
+	"/login",
+	passport.authenticate("local"),
+	(_req, res) => {
+		res.redirect("/");
+	}
+);
+authRoute.post("/logout", authController.logout);
+// authRoute.get("/status", authController.status);
 
 export default authRoute;
