@@ -1,6 +1,6 @@
 import productService from "../services/product.service.js";
 import categoryService from "../services/category.service.js";
-import {convertVietnameseMoney } from "../utils/utils.js";
+import {convertVietnameseCurrency } from "../utils/utils.js";
 class ProductController {
     async getAll(req, res, next) {
         try {
@@ -9,7 +9,7 @@ class ProductController {
             // Gọi service và chờ kết quả trả về
             const products = await productService.getAll();
             const formattedProducts = products.map(product => {
-                product.price = convertVietnameseMoney(product.price);
+                product.price = convertVietnameseCurrency(product.price);
                 return product;
             });
             const categories = await categoryService.getAll();
@@ -27,12 +27,12 @@ class ProductController {
             const productId = req.params.id;
 
             const product = await productService.getById(productId);
-            product.price = convertVietnameseMoney(product.price);
+            product.price = convertVietnameseCurrency(product.price);
             const category = await categoryService.getById(product.categoryId);
             const parentCategory = await categoryService.getParentCategory(category.parentId);
             const relatedProduct = await categoryService.getRelatedProducts(product.categoryId, product.productId);
             relatedProduct.forEach(product => {
-                product.price = convertVietnameseMoney(product.price);
+                product.price = convertVietnameseCurrency(product.price);
             });
             res.render('index', { body: 'pages/productDetail', product, category, relatedProduct, parentCategory });
         } catch (err) {

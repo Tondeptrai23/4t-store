@@ -1,4 +1,4 @@
-export function convertVietnameseMoney(amount) {
+export function convertVietnameseCurrency(amount) {
     if (isNaN(amount)) {
         throw new Error("Invalid amount. Please provide a valid number.");
     }
