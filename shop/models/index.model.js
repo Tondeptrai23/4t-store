@@ -31,11 +31,13 @@ Category.hasMany(SubCategory, {
 Product.hasMany(Image, {
     foreignKey: "productId",
     onDelete: "CASCADE",
+    as: "images",
 });
 
 Image.belongsTo(Product, {
     foreignKey: "productId",
     onDelete: "CASCADE",
+    as: "product",
 });
 
 User.hasMany(Order, {

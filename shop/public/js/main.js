@@ -55,6 +55,24 @@ $(document).ready(function () {
         $(this).prev().val(numProduct + 1);
     });
 
+    $('.main-menu li a').on('click', function () {
+        $('.main-menu li').removeClass('active-menu');
+        $(this).parent().addClass('active-menu');
+    });
+
+    $('.nav-link').click(function(event) {
+        event.preventDefault(); 
+
+        $('.nav-link').removeClass('active');
+        $('.tab-pane').removeClass('show active');
+
+        // Thêm lớp active vào tab được nhấn
+        $(this).addClass('active');
+
+        var target = $(this).attr('href');
+        $(target).addClass('show active');
+    });
+
 });
 
 
