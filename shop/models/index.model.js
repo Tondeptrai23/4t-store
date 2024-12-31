@@ -5,15 +5,26 @@ import Image from "./image.model.js";
 import Order from "./order.model.js";
 import OrderItem from "./orderItem.model.js";
 import Product from "./product.model.js";
+import SubCategory from "./subCategory.model.js";
 import User from "./user.model.js";
 
-Product.belongsTo(Category, {
+Product.belongsTo(SubCategory, {
     foreignKey: "categoryId",
     onDelete: "SET NULL",
 });
 
-Category.hasMany(Product, {
+SubCategory.hasMany(Product, {
     foreignKey: "categoryId",
+    onDelete: "SET NULL",
+});
+
+SubCategory.belongsTo(Category, {
+    foreignKey: "parentId",
+    onDelete: "SET NULL",
+});
+
+Category.hasMany(SubCategory, {
+    foreignKey: "parentId",
     onDelete: "SET NULL",
 });
 
