@@ -4,13 +4,10 @@ import categoryService from "../services/category.service.js";
 class ProductController {
     async getAll(req, res, next) {
         try {
-            console.log("get function called");
-
+         
             // Gọi service và chờ kết quả trả về
             const products = await productService.getAll();
             const categories = await categoryService.getAll();
-
-            console.log(products)
 
             // Render trang EJS với danh sách sản phẩm
             res.render('index', { body: 'pages/productlist', products, categories });

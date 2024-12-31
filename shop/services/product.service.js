@@ -13,7 +13,7 @@ export class ProductSortBuilder extends SortBuilder {
             createdAt: ["createdAt"],
            
         };
-        this._defaultSort = [["name", "ASC"]];
+        this._defaultSort = [["createdAt", "ASC"]];
     }
 
 }
@@ -65,17 +65,18 @@ class ProductService {
         }
     };
 
-    // Lấy danh sách sản phẩm của một danh mục
+    // Get sorted, filtered, and paginated products
     getFilteredSortedAndPaginatedProducts = async (requestQuery) => {
         console.log("Query in service:", JSON.stringify(requestQuery));
-        const sortQuery = preprocessRequestQuery(requestQuery); // Xử lý requestQuery đầu vào
+
+        // Preprocess request query to handle sorting 
+        const sortQuery = preprocessRequestQuery(requestQuery); 
     
         try {
             // Process filtered products
             const filterBuilder = new ProductFilterBuilder(requestQuery);
             const filterCriteria = filterBuilder.build();
     
-
             //Process sorted products
             const sortBuilder = new ProductSortBuilder(sortQuery);
             const sortCriteria = sortBuilder.build();

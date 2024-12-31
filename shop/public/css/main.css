@@ -3790,11 +3790,38 @@ input.num-product::-webkit-inner-spin-button {
 
 
 /*---------------------------------------------*/
-.isotope-item {
+/* .isotope-item {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
 
 .isotope-item.show {
   opacity: 1;
+} */
+
+/* Hiệu ứng fade-in */
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Hiệu ứng fade-out */
+.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Định nghĩa mặc định cho sản phẩm */
+.isotope-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Hiển thị sản phẩm */
+.isotope-item.show {
+  opacity: 1;
+  transform: translateY(0);
 }
