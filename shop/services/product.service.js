@@ -1,11 +1,6 @@
 import Product from '../models/product.model.js'
 import Image from '../models/image.model.js';
-import SubCategory from '../models/subCategory.model.js';
-
-import { Sequelize, Op } from 'sequelize';
-
 import { SortBuilder, FilterBuilder, PaginationBuilder } from '../utils/condition.js';
-import { query } from 'express';
 
 
 export class ProductSortBuilder extends SortBuilder {
@@ -14,10 +9,11 @@ export class ProductSortBuilder extends SortBuilder {
         this._map = {
             name: ["name"],
             price: ["price"],
-            createdAt: ["createdAt"],
             updatedAt: ["updatedAt"],
+            createdAt: ["createdAt"],
+           
         };
-        this._defaultSort = [["createdAt", "DESC"]];
+        this._defaultSort = [["name", "ASC"]];
     }
 
 }
@@ -30,11 +26,20 @@ export class ProductFilterBuilder extends FilterBuilder {
             "productId",
             "name",
             "price",
+            "color",
             "updatedAt",
             "createdAt",
         ];
     }
 }
+
+const preprocessRequestQuery = (requestQuery) => {
+    if (typeof requestQuery.sort === "string") {
+        // Chuyển chuỗi `sort` thành mảng các trường
+        requestQuery.sort = requestQuery.sort.split(",").map((field) => field.trim());
+    }
+    return requestQuery;
+};
 
 class ProductService {
     // Lấy danh sách sản phẩm
@@ -61,27 +66,58 @@ class ProductService {
 
     // Lấy danh sách sản phẩm của một danh mục
     getFilteredSortedAndPaginatedProducts = async (requestQuery) => {
+        console.log("Query in service:", JSON.stringify(requestQuery));
+        const sortQuery = preprocessRequestQuery(requestQuery); // Xử lý requestQuery đầu vào
+    
         try {
-            // Khởi tạo và xử lý bộ lọc
+            // Process filtered products
             const filterBuilder = new ProductFilterBuilder(requestQuery);
             const filterCriteria = filterBuilder.build();
     
-            // Khởi tạo và xử lý bộ sắp xếp
-            const sortBuilder = new ProductSortBuilder(requestQuery);
+
+            //Process sorted products
+            const sortBuilder = new ProductSortBuilder(sortQuery);
             const sortCriteria = sortBuilder.build();
+
+            // Process paginated products
+            const paginationBuilder = new PaginationBuilder(requestQuery);
+            const { limit, offset } = paginationBuilder.build();
     
-            // Truy vấn dữ liệu từ database
+          
+            // Query products from the database
             const productsQuery = await Product.findAll({
-                where: { ...filterCriteria },
-                order: [...sortCriteria]
+                where: filterCriteria , 
+                order: [...sortCriteria],                
+                limit,                              
+                offset,                            
+            });
+
+            const totalCount = await Product.count({
+                where: filterCriteria, 
+            });
+
+            // Query images from the database
+            const images = await Image.findAll();
+
+            // Map the images to the products
+            const productsWithImages = productsQuery.map(product => {
+                
+                const productImages = images.filter(image => image.productId == product.productId);
+                return {
+                    ...product.toJSON(),
+                    images: productImages,
+                };
+
             });
     
-    
             return {
-                products: productsQuery
+                count: totalCount,
+                products: productsWithImages,
+                pagination: { limit, offset }, // Trả lại thông tin phân trang (nếu cần)
             };
+            
         } catch (err) {
-            console.error(err);
+            console.error("Error in getFilteredSortedAndPaginatedProducts:", err);
             throw new Error("Error fetching products.");
         }
     };
@@ -93,3 +129,7 @@ class ProductService {
 export default new ProductService();
 
 
+const sortBuilder = new ProductSortBuilder({"price":"price"});
+const sortCriteria = sortBuilder.build();
+
+console.log("Sort criteria test:", sortCriteria);
