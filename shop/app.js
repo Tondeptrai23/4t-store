@@ -32,7 +32,8 @@ app.set('views', path.join(__dirname, 'views'));
 console.log("Views Directory:", app.get("views"));
 
 app.get('/', (req, res) => {
-	res.render('index', { body: 'pages/landing' });
+	const isLoggedIn = req.isAuthenticated();
+	res.render('index', { body: 'pages/landing', isLoggedIn });
 });
 app.use("/", router);
 

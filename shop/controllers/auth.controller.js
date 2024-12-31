@@ -2,11 +2,11 @@ import UserService from "../services/user.service.js";
 
 class AuthController {
 	loginView(_request, response) {
-		return response.render("pages/login");
+		return response.render("pages/auth/login");
 	}
 
 	registerView(_request, response) {
-		return response.render("pages/register");
+		return response.render("pages/auth/register");
 	}
 
 	logout(request, response) {
