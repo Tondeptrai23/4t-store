@@ -1,79 +1,89 @@
-(function ($) {
+(function () {
     "use strict";
 
     /*==================================================================
-    [ Fetch and Render Products by Category ] */
-    var $filterButtons = $('.filter-tope-group button'); // Các nút lọc
+    [ Fetch and Render Products by Category ]
+    */
+    var filterButtons = document.querySelectorAll('.filter-tope-group button');
+    var productsContainer = document.querySelector('.isotope-grid');
+    var loadingSpinner = document.getElementById('loading');
 
-    async function fetchProductsByCategory(categoryId) {
-        try {
-            // Hiển thị spinner khi bắt đầu tải
-            $('#loading').removeClass('d-none');
+    filterButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var categoryId = button.getAttribute('data-filter');
 
-            const response = await fetch(`/product/category/${categoryId}`);
-            if (!response.ok) {
-                throw new Error(`Error fetching products: ${response.statusText}`);
+            // Show "All Products" if categoryId is "*"
+            if (categoryId === "*") {
+                categoryId = "";
             }
-            const data = await response.json();
-            renderProducts(data.products);
-        } catch (error) {
-            console.error('Error:', error.message);
-        } finally {
-            // Ẩn spinner khi dữ liệu đã được render xong
-            $('#loading').addClass('d-none');
-        }
-    }
 
-    function renderProducts(products) {
-        var $productList = $('.isotope-grid'); // Container cho sản phẩm
-        $productList.empty(); // Xóa nội dung cũ
+            // Update active button state
+            filterButtons.forEach(function(btn) {
+                btn.classList.remove('how-active1');
+            });
+            button.classList.add('how-active1');
 
-        // Chờ 1 khoảng thời gian để giảm giật trước khi hiển thị sản phẩm
-        setTimeout(() => {
-            products.forEach((product, index) => {
-                const productHTML = `
-                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item ${product.categoryId}">
-                        <div class="block2">
-                            <div class="block2-pic hov-img0">
-                                <img src="/images/${product.images[0]?.path || 'placeholder.jpg'}" alt="${product.name}">
-                                <a href="/products/${product.id}" 
-                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                   Quick View
-                                </a>
-                            </div>
-                            <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l">
-                                    <a href="/products/${product.id}" 
-                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                       ${product.name}
-                                    </a>
-                                    <span class="stext-105 cl3">$${product.price}</span>
+            // Show loading spinner
+            loadingSpinner.classList.remove('d-none');
+
+            // Fetch products by category
+            fetch('/products?categoryId=' + (categoryId ? '[startsWith]' + categoryId : ''))
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(response) {
+                    // Clear existing products
+                    productsContainer.innerHTML = '';
+
+                    // Check if response.data.products exists and is an array
+                    const products = response.data?.products || [];
+
+                    // Build HTML for all products
+                    let productsHTML = '';
+                    
+                    products.forEach(function(product) {
+                        // Ensure product has all required properties
+                        if (!product.images || !product.images[0]) return;
+
+                        productsHTML += `
+                            <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item ${product.categoryId || ''}">
+                                <div class="block2">
+                                    <div class="block2-pic hov-img0">
+                                        <img src="/images/${product.images[0].path}" alt="${product.name}">
+                                        <a href="/products/${product.id || product.productId}" 
+                                           class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                            Quick View
+                                        </a>
+                                    </div>
+                                    <div class="block2-txt flex-w flex-t p-t-14">
+                                        <div class="block2-txt-child1 flex-col-l">
+                                            <a href="/products/${product.id || product.productId}" 
+                                               class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                ${product.name}
+                                            </a>
+                                            <span class="stext-105 cl3">
+                                                $${product.price}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
+                        `;
+                    });
 
-                // Thêm sản phẩm vào danh sách và áp dụng hiệu ứng fade-in
-                var $productItem = $(productHTML).appendTo($productList);
+                    // Add all products to container at once (more efficient)
+                    productsContainer.innerHTML = productsHTML;
 
-                // Thêm lớp 'show' để hiển thị sản phẩm với hiệu ứng fade-in
-                setTimeout(() => {
-                    $productItem.addClass('show');
-                }, 100 * index); // Delay nhỏ giữa các sản phẩm để tránh giật
-            });
-        }, 300); // Delay trước khi hiển thị sản phẩm, tùy chỉnh theo nhu cầu
-    }
-
-    fetchProductsByCategory('*')
-
-    $filterButtons.on('click', function () {
-        var categoryId = $(this).attr('data-filter'); // Lấy categoryId từ data-filter
-        
-        fetchProductsByCategory(categoryId);
-        
-        // Đánh dấu nút hiện tại là active
-        $filterButtons.removeClass('how-active1');
-        $(this).addClass('how-active1');
+                    // Hide loading spinner
+                    loadingSpinner.classList.add('d-none');
+                })
+                .catch(function(error) {
+                    console.error('Error fetching products:', error);
+                    // Hide loading spinner
+                    loadingSpinner.classList.add('d-none');
+                    // Optionally show error message to user
+                    alert('Error loading products. Please try again.');
+                });
+        });
     });
-
-})(jQuery);
+})();

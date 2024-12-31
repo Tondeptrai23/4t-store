@@ -27,6 +27,7 @@ export class ProductFilterBuilder extends FilterBuilder {
             "name",
             "price",
             "color",
+            "categoryId",
             "updatedAt",
             "createdAt",
         ];

@@ -10,6 +10,8 @@ class ProductController {
             const products = await productService.getAll();
             const categories = await categoryService.getAll();
 
+            console.log(products)
+
             // Render trang EJS với danh sách sản phẩm
             res.render('index', { body: 'pages/productlist', products, categories });
 
