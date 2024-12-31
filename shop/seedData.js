@@ -6,6 +6,7 @@ import Order from "./models/order.model.js";
 import OrderItem from "./models/orderItem.model.js";
 import Product from "./models/product.model.js";
 import User from "./models/user.model.js";
+import bcrypt from "bcrypt";
 
 db.drop();
 db.sync({ force: true })
@@ -16,19 +17,20 @@ db.sync({ force: true })
     .catch((err) => console.log(err));
 
 const seedData = async () => {
+    const salt = await bcrypt.genSalt(10);
     const users = [
         {
             userId: "1",
             name: "John Admin",
             email: "admin@example.com",
-            password: "admin123",
+            password: await bcrypt.hash("admin123", salt),
             role: "admin",
         },
         {
             userId: "2",
             name: "Jane User",
             email: "user@example.com",
-            password: "user123",
+            password: await bcrypt.hash("user123", salt),
             role: "user",
         },
     ];

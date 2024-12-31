@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import bcrypt from "bcrypt";
 
 class UserService {
     async getAll() {
@@ -13,9 +14,11 @@ class UserService {
         return await User.findByPk(id);
     }
 
-		async create(user) {
-				return await User.create(user);
-		}
+    async create(user) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+        return await User.create(user);
+    }
 }
 
 export default new UserService();

@@ -23,7 +23,7 @@ Image.init(
             allowNull: false,
         },
         productId: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
             allowNull: false,
         }
     },
