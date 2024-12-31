@@ -1,16 +1,30 @@
 import productService from "../services/product.service.js";
 import categoryService from "../services/category.service.js";
+import subCategoryService from "../services/subCategory.service.js";
 
 class ProductController {
     async getAll(req, res, next) {
         try {
+
+            const page = parseInt(req.query.page) || 1;
+            const limit = 8; // Số sản phẩm mỗi trang
+            const startIndex = (page - 1) * limit;
+
+            // Tìm sản phẩm từ database
+
          
             // Gọi service và chờ kết quả trả về
             const products = await productService.getAll();
             const categories = await categoryService.getAll();
+            const subcategories = await subCategoryService.getAll();
+
+            const totalProducts = products.length; // Tổng số sản phẩm
+            const paginatedProducts = products.slice(startIndex, startIndex + limit);
+            const totalPages = Math.ceil(totalProducts / limit);
+            
 
             // Render trang EJS với danh sách sản phẩm
-            res.render('index', { body: 'pages/productlist', products, categories });
+            res.render('index', { body: 'pages/productlist', products, categories, subcategories, totalPages, currentPage: page});
 
         } catch (err) {
             console.error(err);

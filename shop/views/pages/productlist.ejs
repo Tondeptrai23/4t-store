@@ -5,13 +5,25 @@
                 <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
                     All Products
                 </button>
-                <% categories.forEach(category=> { %>
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 category-btn"
-                        data-filter="<%= category.categoryId %>">
-                        <%= category.name %>
-                    </button>
-                    <% }) %>
+                <% categories.forEach(category => { %>
+                    <div class="category-container">
+                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 category-btn"
+                            data-filter="<%= category.categoryId %>">
+                            <%= category.name %>
+                        </button>
+                        <div class="dropdown-menu">
+                            <% subcategories.forEach(subcategory => { %>
+                                <% if(subcategory.parentId === category.categoryId) { %>
+                                    <a href="#" class="dropdown-item" data-filter="<%= subcategory.categoryId %>">
+                                        <%= subcategory.name %>
+                                    </a>
+                                <% } %>
+                            <% }) %>
+                        </div>
+                    </div>
+                <% }) %>
             </div>
+            
 
 
             <div class="flex-w flex-c-m m-tb-10">
@@ -35,7 +47,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
 
-                    <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
+                    <input id = "search-product" class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
                         placeholder="Search">
                 </div>
             </div>
@@ -250,11 +262,29 @@
 
     </div>
 
-    <!-- Load more -->
-    <div class="flex-c-m flex-w w-full p-t-45">
-        <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-            Load More
-        </a>
+   
+    <div class="pagination-container flex-c-m m-t-20">
+        <ul id="pagination" class="pagination d-flex justify-content-center">
+            <li>
+                <a href="#" data-page="<%= currentPage - 1 %>" class="page-link <%= currentPage === 1 ? 'disabled' : '' %>">Prev</a>
+            </li>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <% if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
+                    <li>
+                        <a href="#" data-page="<%= i %>" class="page-link <%= i === currentPage ? 'active' : '' %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
+                    <li class="dots">...</li>
+                <% } %>
+            <% } %>
+            <li>
+                <a href="#" data-page="<%= currentPage + 1 %>" class="page-link <%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+            </li>
+        </ul>
     </div>
+    
+    
 
 </div>

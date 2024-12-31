@@ -1,32 +1,27 @@
-(function () {
-    "use strict";
+let currentPage = 1;
+let selectedCategory = "";
+let selectedColor = "";
+let selectedSort = "default";
+let selectedPriceRange = "";
 
-    var filterButtons = document.querySelectorAll('.filter-tope-group button');
-    var colorLinks = document.querySelectorAll('.filter-col3 .filter-link');
-    var priceLinks = document.querySelectorAll('.filter-col2 .filter-link');
-    var sortLinks = document.querySelectorAll('.filter-col1 .filter-link');
-    var productsContainer = document.querySelector('.isotope-grid');
-    var loadingSpinner = document.getElementById('loading');
-
-
-    var selectedCategory = ""; // Variable to store selected categoryId
-    var selectedColor = "";
-    var selectedPriceRange = "";
-    var selectedSort = "default";
-
-    // Function to fetch and render products with filters applied
-    function fetchAndRenderProducts({ categoryId = "", color = "", minPrice = "", maxPrice = "", sort = "" }) {
+// Hàm để cập nhật dữ liệu sản phẩm
+function fetchAndRenderProducts({ categoryId = "", color = "", minPrice = "", maxPrice = "", sort = "", search = "", page = "" }) {
+    return new Promise((resolve, reject) => {
         // Show loading spinner
         loadingSpinner.classList.remove('d-none');
-    
+
         // Prepare URL parameters based on filter selections
-        let url = '/products?size=8';
+        let url = `/products?size=8`;
 
         if (categoryId) {
-            url += `&categoryId=[startsWith]${categoryId}`;
+            if (categoryId.length > 1) {
+                url += `&categoryId=${categoryId}`;
+            } else {
+                url += `&categoryId=[startsWith]${categoryId}`;
+            }
         }
         if (color) {
-            if(color != "default") {
+            if (color != "default") {
                 url += `&color=[like]${color}`;
             }
         }
@@ -34,15 +29,25 @@
             url += `&price=[gte]${minPrice}&price=[lt]${maxPrice}`;
         }
         if (sort) {
-            if(sort != 'default'){
+            if (sort != 'default') {
                 url += `&sort=${sort}`;
             }
-           
+        }
+        if (search) {
+            url += `&name=[like]${search}`;
+        }
+        if (page) {
+            url += `&page=${page}`;
         }
 
-        // Fetch filtered products
+        console.log(url);
+
+        // Fetch filtered products using AJAX
         fetch(url)
             .then(function (response) {
+                if (!response.ok) {
+                    return reject('Failed to fetch data');
+                }
                 return response.json();
             })
             .then(function (response) {
@@ -51,20 +56,20 @@
                 currentItems.forEach(item => {
                     item.classList.remove('show');
                 });
-    
+
                 // Wait for fade-out effect
                 setTimeout(() => {
                     productsContainer.innerHTML = ''; // Clear content
-    
+
                     const products = response.data?.products || [];
                     let productsHTML = '';
-    
+
                     if (products.length === 0) {
                         productsHTML = `<div class="no-products">Không có sản phẩm</div>`;
                     } else {
                         products.forEach(function (product) {
                             if (!product.images || !product.images[0]) return;
-    
+
                             productsHTML += `
                                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item ${product.categoryId || ''}">
                                     <div class="block2">
@@ -89,10 +94,10 @@
                             `;
                         });
                     }
-    
+
                     // Add new products to container
                     productsContainer.innerHTML = productsHTML;
-    
+
                     // Add fade-in effect to new items
                     const newItems = productsContainer.querySelectorAll('.isotope-item');
                     setTimeout(() => {
@@ -100,145 +105,85 @@
                             item.classList.add('show');
                         });
                     }, 100); // Delay for smoother transition
-    
+
                     // Hide loading spinner
                     loadingSpinner.classList.add('d-none');
+
+                    resolve(); // Resolve the Promise after rendering is done
                 }, 500); // Wait for fade-out effect to complete
             })
             .catch(function (error) {
                 console.error('Error fetching products:', error);
                 loadingSpinner.classList.add('d-none');
                 alert('Error loading products. Please try again.');
+                reject(error); // Reject the Promise if there's an error
             });
-    }
-
-    // Gọi hàm fetchAndRenderProducts khi trang được tải lần đầu tiên với các bộ lọc mặc định
-    fetchAndRenderProducts({
-        categoryId: "", // Không áp dụng lọc category
-        color: "", // Không áp dụng lọc màu
-        minPrice: "", // Không áp dụng lọc giá
-        maxPrice: "", // Không áp dụng lọc giá
-        sort: "" // Không áp dụng sắp xếp
     });
+}
 
-    // Attach click event listeners for filter buttons
-    filterButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            selectedCategory = button.getAttribute('data-filter');
-            if (selectedCategory === "*") selectedCategory = "";
+// Hàm để xử lý sự kiện thay đổi trang
+pagination.addEventListener('click', function (event) {
+    event.preventDefault();
+    const target = event.target;
 
-            // Reset all filter buttons' active class
-            filterButtons.forEach(function (btn) {
-                btn.classList.remove('how-active1');
-            });
+    if (target.classList.contains('page-link')) {
+        let page = target.getAttribute('data-page'); // Lấy số trang
+        page = parseInt(page);
 
-            // Add 'active' class to the clicked button
-            button.classList.add('how-active1');
-
-            // Apply filter and fetch products based on selected filters
-            fetchAndRenderProducts({
-                categoryId: selectedCategory,
-                color: selectedColor,
-                minPrice: selectedPriceRange.split('-')[0] || "",
-                maxPrice: selectedPriceRange.split('-')[1] || "",
-                sort: selectedSort
-            });
-        });
-    });
-
-    // Lấy giá trị màu khi nhấn vào một liên kết màu
-    colorLinks.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            selectedColor = link.getAttribute('data-color');
-            colorLinks.forEach(function (btn) {
-                btn.classList.remove('filter-link-active');
-            });
-            link.classList.add('filter-link-active');
-        });
-    });
-
-    // Lấy giá trị giá khi nhấn vào một liên kết giá
-    priceLinks.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            selectedPriceRange = link.getAttribute('data-price-range');
-            priceLinks.forEach(function (btn) {
-                btn.classList.remove('filter-link-active');
-            });
-            link.classList.add('filter-link-active');
-        });
-    });
-
-    // Lấy giá trị sắp xếp khi nhấn vào một liên kết sắp xếp
-    sortLinks.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            selectedSort = link.getAttribute('data-sort');
-            sortLinks.forEach(function (btn) {
-                btn.classList.remove('filter-link-active');
-            });
-            link.classList.add('filter-link-active');
-        });
-    });
-
-    // Lắng nghe sự kiện click vào nút "Lọc"
-    var filterButton = document.getElementById('filter-button');
-    filterButton.addEventListener('click', function () {
-        // Phân tách selectedPriceRange thành minPrice và maxPrice
-        let minPrice = "";
-        let maxPrice = "";
-
-        if (selectedPriceRange) {
-            let priceRangeArray = selectedPriceRange.split('-');
-            minPrice = priceRangeArray[0];
-            maxPrice = priceRangeArray[1] || "";
+        // Kiểm tra nếu "Prev" hoặc "Next" được nhấn
+        if (target.textContent === 'Prev' && currentPage > 1) {
+            page = currentPage - 1;
+        } else if (target.textContent === 'Next' && currentPage < totalPages) {
+            page = currentPage + 1;
         }
 
-        // Gọi hàm để áp dụng các bộ lọc và hiển thị sản phẩm
+        // Cập nhật trang hiện tại
+        currentPage = page;
+
+        // Gọi API để lấy dữ liệu mới
         fetchAndRenderProducts({
             categoryId: selectedCategory,
             color: selectedColor,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            sort: selectedSort
+            minPrice: selectedPriceRange.split('-')[0] || "",
+            maxPrice: selectedPriceRange.split('-')[1] || "",
+            sort: selectedSort,
+            page: currentPage
+        }).then(() => {
+            // Cập nhật trạng thái active cho phân trang
+            document.querySelectorAll('.page-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${currentPage}"]`).classList.add('active');
+        }).catch(error => {
+            console.error('Error fetching products:', error);
+            document.getElementById('loading').classList.add('d-none');
         });
+    }
+});
+
+// Hàm xử lý sự kiện thay đổi bộ lọc (filter)
+document.getElementById('filterForm').addEventListener('change', function () {
+    selectedCategory = document.getElementById('categoryFilter').value;
+    selectedColor = document.getElementById('colorFilter').value;
+    selectedSort = document.getElementById('sortFilter').value;
+    selectedPriceRange = document.getElementById('priceFilter').value;
+
+    // Gọi lại API khi thay đổi filter
+    fetchAndRenderProducts({
+        categoryId: selectedCategory,
+        color: selectedColor,
+        minPrice: selectedPriceRange.split('-')[0] || "",
+        maxPrice: selectedPriceRange.split('-')[1] || "",
+        sort: selectedSort,
+        page: currentPage
+    }).then(() => {
+        // Cập nhật trạng thái active cho phân trang
+        document.querySelectorAll('.page-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.querySelector(`[data-page="${currentPage}"]`).classList.add('active');
+    }).catch(error => {
+        console.error('Error fetching products:', error);
+        document.getElementById('loading').classList.add('d-none');
     });
-
-    var resetButton = document.getElementById('reset-button');
-    resetButton.addEventListener('click', function () {
-        // Reset tất cả các bộ lọc
-        selectedCategory = "";
-        selectedColor = "";
-        selectedPriceRange = "";
-        selectedSort = "default";
-
-        // Xóa các lớp active và đặt lại mặc định
-        filterButtons.forEach(function (btn) {
-            btn.classList.remove('how-active1');
-        });
-        document.querySelectorAll('.filter-tope-group button')[0].classList.add('how-active1'); // Đặt active lại cho nút mặc định
-
-        colorLinks.forEach(function (btn) {
-            btn.classList.remove('filter-link-active');
-        });
-        priceLinks.forEach(function (btn) {
-            btn.classList.remove('filter-link-active');
-        });
-        sortLinks.forEach(function (btn) {
-            btn.classList.remove('filter-link-active');
-        });
-        document.querySelector('.filter-col1 .filter-link[data-sort="default"]').classList.add('filter-link-active'); 
-        document.querySelector('.filter-col2 .filter-link[data-price-range="default"]').classList.add('filter-link-active'); 
-        document.querySelector('.filter-col3 .filter-link[data-color="default"]').classList.add('filter-link-active');
-
-        // Gọi lại hàm để hiển thị tất cả sản phẩm
-        fetchAndRenderProducts({
-            categoryId: "",
-            color: "",
-            priceRange: "",
-            sort: "default"
-        });
-    });
-
-})();
+});

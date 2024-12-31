@@ -3825,3 +3825,54 @@ input.num-product::-webkit-inner-spin-button {
   opacity: 1;
   transform: translateY(0);
 }
+
+
+.category-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 200px;
+}
+
+.category-container:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.pagination li {
+  list-style: none;
+  margin: 0 5px;
+}
+
+.pagination li a {
+  text-decoration: none;
+  color: black;
+  border: 1px solid black;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.pagination li a.active {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
