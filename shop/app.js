@@ -1,5 +1,9 @@
 import bodyParser from "body-parser";
 import express from "express";
+import session from "express-session";
+import passport from "passport";
+
+import "./config/passport/local.js";
 import path from "path";
 import { fileURLToPath } from 'url';
 
@@ -14,16 +18,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
+
+app.use(session({
+	secret: "Vqj29kq&f93$s",
+	saveUninitialized: false,
+	resave: false,
+	cookie: { maxAge: 60 * 60 * 1000 },
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.set('views', path.join(__dirname, 'views'));
 
 console.log("Views Directory:", app.get("views"));
 
 app.get('/', (req, res) => {
-    res.render('index', { body: 'pages/landing' });
-    
+	const isLoggedIn = req.isAuthenticated();
+	res.render('index', { body: 'pages/landing', isLoggedIn });
 });
 app.use("/", router);
-// app.use("/api", router);
 
 app.use(errorHandler);
 
