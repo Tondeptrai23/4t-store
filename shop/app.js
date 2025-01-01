@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
     
 });
 app.use("/", router);
-app.use("/api", router);
+// app.use("/api", router);
 
 app.use(errorHandler);
 

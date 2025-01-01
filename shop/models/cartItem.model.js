@@ -13,7 +13,7 @@ CartItem.init(
         quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
+        }
     },
     {
         sequelize: db,
