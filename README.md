@@ -12,9 +12,22 @@
 
 ### Execution
 
+Before any coding or running, run this below command to install all the dependencies.
+
 ```bash
 npm install
+```
+
+To run the server, run this below command.
+
+```bash
 npm start
+```
+
+To run the server in development mode, run this below command.
+
+```bash
+npm run dev
 ```
 
 ### Data Initialization
