@@ -12,8 +12,9 @@ class CartController {
 
     async getCart(req, res) {
         try {
-            const cart = await CartItemService.getCart();
-            res.status(200).send(cart);
+            const isLoggedIn = req.isAuthenticated();
+            // const cart = await CartItemService.getCart();
+            res.render('index', { body: 'pages/shopingCart', isLoggedIn });
         } catch (error) {
             res.status(400).send(error.message);
         }

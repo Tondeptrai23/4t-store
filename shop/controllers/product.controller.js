@@ -5,6 +5,7 @@ class ProductController {
     async getAll(req, res, next) {
         try {
             console.log("get function called");
+            const isLoggedIn = req.isAuthenticated();
             
             // Gọi service và chờ kết quả trả về
             const products = await productService.getAll();
@@ -15,7 +16,7 @@ class ProductController {
             const categories = await categoryService.getAll();
             
             // Render trang EJS với danh sách sản phẩm
-            res.render('index', { body: 'pages/productlist', products: formattedProducts, categories });
+            res.render('index', { body: 'pages/productlist', products: formattedProducts, categories, isLoggedIn });
     
         } catch (err) {
             console.error(err);
@@ -24,6 +25,7 @@ class ProductController {
     }
     async getById(req, res, next) {
         try {
+            const isLoggedIn = req.isAuthenticated();
             const productId = req.params.id;
 
             const product = await productService.getById(productId);
@@ -34,7 +36,7 @@ class ProductController {
             relatedProduct.forEach(product => {
                 product.price = convertVietnameseCurrency(product.price);
             });
-            res.render('index', { body: 'pages/productDetail', product, category, relatedProduct, parentCategory });
+            res.render('index', { body: 'pages/productDetail', product, category, relatedProduct, parentCategory, isLoggedIn });
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: "Server Error" });
