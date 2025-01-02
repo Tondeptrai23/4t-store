@@ -84,32 +84,27 @@ class ProductService {
             const paginationBuilder = new PaginationBuilder(requestQuery);
             const { limit, offset } = paginationBuilder.build();
     
-          
             // Query products from the database
             const productsQuery = await Product.findAll({
                 where: filterCriteria , 
                 order: [...sortCriteria],                
                 limit,                              
-                offset,                            
+                offset,    
+                include: [
+                    {
+                        model: Image,
+                        as: "images", 
+                        required: false,
+                    },
+                ],                        
             });
 
             const totalCount = await Product.count({
                 where: filterCriteria, 
             });
 
-            // Query images from the database
-            const images = await Image.findAll();
-
             // Map the images to the products
-            const productsWithImages = productsQuery.map(product => {
-                
-                const productImages = images.filter(image => image.productId == product.productId);
-                return {
-                    ...product.toJSON(),
-                    images: productImages,
-                };
-
-            });
+            const productsWithImages = productsQuery.map(product => product.toJSON());
 
             const totalPages = Math.ceil(totalCount / limit);
     
