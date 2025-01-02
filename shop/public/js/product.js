@@ -7,6 +7,7 @@
         selectedColor: "default",
         selectedPriceRange: "",
         selectedSort: "default",
+         searchQuery: "",
         totalPages: 0,
         currentPage: 1
     };
@@ -100,9 +101,6 @@
 
             if (sort && sort !== 'default') params.append('sort', sort);
             if (search) params.append('name', `[like]${search}`);
-            console.log("min", minPrice, "max", maxPrice);
-
-            console.log(`/products?${params.toString()}`)
 
             return `/products?${params.toString()}`;
         },
@@ -226,6 +224,22 @@
             if (correspondingButton) {
                 correspondingButton.classList.add('how-active1');
             }
+        },
+
+        resetAllFilters: () => {
+            Object.assign(STATE, {
+                selectedCategory: "",
+                selectedColor: "default",
+                selectedPriceRange: "",
+                selectedSort: "default",
+                currentPage: 1,
+                searchQuery: "" // Reset search query
+            });
+
+            ui.updateActiveStates(DOM.categoryButtons, DOM.categoryButtons[0], 'how-active1');
+            ui.updateActiveStates(DOM.colorLinks, document.querySelector('.filter-col3 .filter-link[data-color="default"]'));
+            ui.updateActiveStates(DOM.priceLinks, document.querySelector('.filter-col2 .filter-link[data-price-range="default"]'));
+            ui.updateActiveStates(DOM.sortLinks, document.querySelector('.filter-col1 .filter-link[data-sort="default"]'));
         }
     };
 
@@ -234,7 +248,13 @@
         ui.showLoading();
 
         try {
-            const response = await api.fetchProducts(params);
+            // Always include the current search query in params
+            const searchParams = {
+                ...params,
+                search: STATE.searchQuery
+            };
+
+            const response = await api.fetchProducts(searchParams);
             const products = response.data?.products || [];
 
             // Update STATE with current filter values
@@ -258,10 +278,6 @@
                     '<div class="no-products display-4 text-center">Không có sản phẩm</div></div>';
 
                 STATE.totalPages = response.data?.pagination.totalPages || 0;
-
-                console.log('Total pages in before ' + STATE.totalPages);
-
-             
                 renderer.renderPagination(STATE.totalPages, STATE.currentPage);
                 
                 setTimeout(() => {
@@ -358,13 +374,6 @@
             });
         });
 
-        // Reset button
-        DOM.resetButton.addEventListener('click', () => {
-            ui.resetAllFilters();
-            fetchAndRenderProducts({
-                page: 1
-            });
-        });
 
         // Pagination
         DOM.paginationContainer.addEventListener('click', (e) => {
@@ -391,10 +400,30 @@
 
         // Search input
         DOM.searchInput.addEventListener('input', utils.debounce((e) => {
-            const query = e.target.value.trim();
-            fetchAndRenderProducts({ search: query || "" });
+            STATE.searchQuery = e.target.value.trim();
+            const { min: minPrice, max: maxPrice } = utils.parsePrice(STATE.selectedPriceRange);
+            
+            fetchAndRenderProducts({
+                categoryId: STATE.selectedCategory,
+                color: STATE.selectedColor,
+                minPrice,
+                maxPrice,
+                sort: STATE.selectedSort,
+                page: 1 // Reset to first page when searching
+            });
         }, CONSTANTS.DEBOUNCE_DELAY));
 
+        // Update reset button to clear search
+        DOM.resetButton.addEventListener('click', () => {
+            ui.resetAllFilters();
+            STATE.searchQuery = ""; // Clear search query
+            DOM.searchInput.value = ""; // Clear search input
+            fetchAndRenderProducts({
+                page: 1
+            });
+        });
+
+        
     
     }
 
