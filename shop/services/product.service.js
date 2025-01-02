@@ -111,11 +111,13 @@ class ProductService {
                 };
 
             });
+
+            const totalPages = Math.ceil(totalCount / limit);
     
             return {
                 count: totalCount,
                 products: productsWithImages,
-                pagination: { limit, offset }, // Trả lại thông tin phân trang (nếu cần)
+                pagination: { limit, offset, totalPages}, // Trả lại thông tin phân trang (nếu cần)
             };
             
         } catch (err) {

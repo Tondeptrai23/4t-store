@@ -3858,21 +3858,17 @@ input.num-product::-webkit-inner-spin-button {
   background-color: #f1f1f1;
 }
 
-.pagination li {
-  list-style: none;
-  margin: 0 5px;
-}
-
-.pagination li a {
-  text-decoration: none;
-  color: black;
-  border: 1px solid black;
-  padding: 5px 10px;
-  border-radius: 3px;
-}
-
-.pagination li a.active {
+.page-item.active .page-link {
   background-color: black;
   color: white;
   border-color: black;
+}
+
+.page-link {
+  color: black;
+}
+
+.page-link:hover {
+  background-color: #f8f9fa; /* Màu nền nhạt khi hover */
+  color: black;
 }
