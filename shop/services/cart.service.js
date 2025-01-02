@@ -70,6 +70,54 @@ class CartItemService{
             throw new Error("Error deleting cartItem: " + error.message);
         }
     };
+    // đồng bộ giữa localStorage và database
+    syncCart = async (userId, cart) => {
+        try {
+            const cartItems = await CartItem.findAll({
+                where: {
+                    userId,
+                },
+            });
+            const cartItemIds = cartItems.map((cartItem) => cartItem.productId);
+            const cartItemIdsInCart = cart.map((item) => item.productId);
+            const cartItemsToDelete = cartItems.filter(
+                (cartItem) => !cartItemIdsInCart.includes(cartItem.productId)
+            );
+            const cartItemsToAdd = cart.filter(
+                (item) => !cartItemIds.includes(item.productId)
+            );
+            const cartItemsToUpdate = cart.filter((item) =>
+                cartItemIds.includes(item.productId)
+            );
+            await Promise.all(
+                cartItemsToDelete.map((cartItem) => cartItem.destroy())
+            );
+            await Promise.all(
+                cartItemsToAdd.map((item) =>
+                    CartItem.create({
+                        userId,
+                        productId: item.productId,
+                        quantity: item.quantity,
+                    })
+                )
+            );
+            await Promise.all(
+                cartItemsToUpdate.map((item) =>
+                    CartItem.update(
+                        { quantity: item.quantity },
+                        {
+                            where: {
+                                userId,
+                                productId: item.productId,
+                            },
+                        }
+                    )
+                )
+            );
+        } catch (error) {
+            throw new Error("Error syncing cart: " + error.message);
+        }
+    };
 }
 
 export default new CartItemService();

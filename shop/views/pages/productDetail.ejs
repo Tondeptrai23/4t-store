@@ -100,9 +100,9 @@
                                     </div>
                                 </div>
 
-                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 mt-2 js-addcart-detail">
+                                <button type="button" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 mt-2 js-add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Thêm vào giỏ hàng
-                                </button>
+                                </button>                                                                                               
                             </div>
                         </div>	
                     </div>
@@ -216,5 +216,19 @@
     </div>
 </section>
 
-
-
+<div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <strong><%=product.name%></strong> đã được thêm vào giỏ hàng
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -45,6 +45,9 @@ $(document).ready(function () {
 
     /*==================================================================
     [ +/- num product ]*/
+    $('.btn-num-product-down').off('click');
+    $('.btn-num-product-up').off('click');
+    
     $('.btn-num-product-down').on('click', function () {
         var numProduct = Number($(this).next().val());
         if (numProduct > 0) $(this).next().val(numProduct - 1);
@@ -71,6 +74,14 @@ $(document).ready(function () {
 
         var target = $(this).attr('href');
         $(target).addClass('show active');
+    });
+
+    $('.js-addcart-detail').each(function(){
+        //var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+        var nameProduct = "Product";
+        $(this).on('click', function(){
+            swal(nameProduct, "is added to cart !", "success");
+        });
     });
 
 });
