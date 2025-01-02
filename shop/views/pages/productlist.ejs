@@ -5,25 +5,25 @@
                 <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
                     All Products
                 </button>
-                <% categories.forEach(category => { %>
+                <% categories.forEach(category=> { %>
                     <div class="category-container">
                         <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 category-btn"
                             data-filter="<%= category.categoryId %>">
                             <%= category.name %>
                         </button>
                         <div class="dropdown-menu">
-                            <% subcategories.forEach(subcategory => { %>
-                                <% if(subcategory.parentId === category.categoryId) { %>
+                            <% subcategories.forEach(subcategory=> { %>
+                                <% if(subcategory.parentId===category.categoryId) { %>
                                     <a href="#" class="dropdown-item" data-filter="<%= subcategory.categoryId %>">
                                         <%= subcategory.name %>
                                     </a>
-                                <% } %>
-                            <% }) %>
+                                    <% } %>
+                                        <% }) %>
                         </div>
                     </div>
-                <% }) %>
+                    <% }) %>
             </div>
-            
+
 
 
             <div class="flex-w flex-c-m m-tb-10">
@@ -47,8 +47,8 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
 
-                    <input id = "search-product" class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
-                        placeholder="Search">
+                    <input id="search-product" class="mtext-107 cl2 size-114 plh2 p-r-15" type="text"
+                        name="search-product" placeholder="Search">
                 </div>
             </div>
 
@@ -59,38 +59,39 @@
                         <div class="mtext-102 cl2 p-b-15">
                             Sắp xếp theo
                         </div>
-                    
+
                         <ul>
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active" data-sort="default">
+                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active"
+                                    data-sort="default">
                                     Mặc định
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <a href="#" class="filter-link stext-106 trans-04" data-sort="">
                                     Popularity
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <a href="#" class="filter-link stext-106 trans-04" data-sort="">
                                     Average rating
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <a id="createdAt" href="#" class="filter-link stext-106 trans-04" data-sort="createdAt">
                                     Mới nhất
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <a id="price" href="#" class="filter-link stext-106 trans-04" data-sort="price">
                                     Giá: Thấp tới cao
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <a id="-price" href="#" class="filter-link stext-106 trans-04" data-sort="-price">
                                     Giá: Cao xuống thấp
@@ -98,7 +99,7 @@
                             </li>
                         </ul>
                     </div>
-                    
+
 
                     <div class="filter-col2 p-r-15 p-b-27">
                         <div class="mtext-102 cl2 p-b-15">
@@ -107,7 +108,8 @@
 
                         <ul>
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active" data-price-range="default">
+                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active"
+                                    data-price-range="default">
                                     Tất cả
                                 </a>
                             </li>
@@ -148,13 +150,14 @@
                         <div class="mtext-102 cl2 p-b-15">
                             Màu sắc
                         </div>
-                    
+
                         <ul>
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: transparent;">
                                     <i class="fas fa-circle"></i> <!-- Black -->
                                 </span>
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active" data-color="default">
+                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active"
+                                    data-color="default">
                                     Mặc định
                                 </a>
                             </li>
@@ -167,7 +170,7 @@
                                     Đen
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #4272d7;">
                                     <i class="fas fa-circle"></i> <!-- Blue -->
@@ -176,7 +179,7 @@
                                     Xanh dương
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
                                     <i class="fas fa-circle"></i> <!-- Gray -->
@@ -185,7 +188,7 @@
                                     Xám
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
                                     <i class="fas fa-circle"></i> <!-- Red -->
@@ -194,7 +197,7 @@
                                     Đỏ
                                 </a>
                             </li>
-                    
+
                             <li class="p-b-6">
                                 <span class="fs-15 lh-12 m-r-6" style="color: #aaa;">
                                     <i class="far fa-circle"></i> <!-- White -->
@@ -204,16 +207,16 @@
                                 </a>
                             </li>
                         </ul>
-                    
+
                     </div>
-                    
+
                     <div class="filter-col4 p-b-27">
                         <div class="flex-w p-t-4 m-r--5">
                             <!-- Nút Lọc -->
                             <button class="btn btn-dark text-white py-2 px-4" id="filter-button">
                                 Lọc
                             </button>
-                    
+
                             <!-- Nút Đặt lại -->
                             <button class="btn btn-light text-dark py-2 px-4 ml-3" id="reset-button">
                                 Đặt lại
@@ -226,7 +229,7 @@
         </div>
 
         <div class="row isotope-grid">
-<<<<<<< HEAD
+
             <% products.forEach(product=> { %>
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= product.categoryId %>">
                     <div class="block2">
@@ -246,28 +249,6 @@
                                 <span class="stext-105 cl3">
                                     $<%= product.price %>
                                 </span>
-=======
-            <div class="row isotope-grid">
-                <% products.forEach(product=> { %>
-                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= product.categoryId %>">
-
-                        <div class="block2">
-                            <div class="block2-pic hov-img0">
-
-                                <img src="/images/<%= product.images[0].path %>" alt="<%= product.name %>">
-                            </div>
-
-                            <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l ">
-                                    <a href="/products/<%= product.productId %>"
-                                        class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                        <%= product.name %>
-                                    </a>
-                                    <span class="stext-105 cl3">
-                                        <%= product.price %>
-                                    </span>
-                                </div>
->>>>>>> e3cc2263be1da4d122fb6785c64c0b5b11000a2b
                             </div>
                         </div>
                     </div>
@@ -285,57 +266,58 @@
 
     </div>
 
-   
+
     <div id="pagination-container" class="pagination-container flex-c-m m-t-20">
         <ul id="pagination" class="pagination d-flex justify-content-center">
             <!-- Prev Button -->
             <li>
-                <a href="#" data-page="<%= currentPage - 1 %>" 
-                   class="page-link <%= currentPage === 1 ? 'disabled' : '' %>">Prev</a>
+                <a href="#" data-page="<%= currentPage - 1 %>"
+                    class="page-link <%= currentPage === 1 ? 'disabled' : '' %>">Prev</a>
             </li>
-    
+
             <!-- First Page -->
             <li>
                 <a href="#" data-page="1" class="page-link <%= currentPage === 1 ? 'active' : '' %>">1</a>
             </li>
-    
+
             <!-- Left Dots -->
-            <% if (currentPage > 5) { %>
+            <% if (currentPage> 5) { %>
                 <li class="dots">...</li>
-            <% } %>
-    
-            <!-- Dynamic Pages -->
-            <% for (let i = Math.max(2, currentPage - 3); i <= Math.min(totalPages - 1, currentPage + 2); i++) { %>
-                <li>
-                    <a href="#" data-page="<%= i %>" class="page-link <%= i === currentPage ? 'active' : '' %>">
-                        <%= i %>
-                    </a>
-                </li>
-            <% } %>
-    
-            <!-- Right Dots -->
-            <% if (currentPage < totalPages - 3) { %>
-                <li class="dots">...</li>
-            <% } %>
-    
-            <!-- Last Page -->
-            <% if (totalPages > 1) { %>
-                <li>
-                    <a href="#" data-page="<%= totalPages %>" class="page-link <%= currentPage === totalPages ? 'active' : '' %>">
-                        <%= totalPages %>
-                    </a>
-                </li>
-            <% } %>
-    
-            <!-- Next Button -->
-            <li>
-                <a href="#" data-page="<%= currentPage + 1 %>" 
-                   class="page-link <%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
-            </li>
+                <% } %>
+
+                    <!-- Dynamic Pages -->
+                    <% for (let i=Math.max(2, currentPage - 3); i <=Math.min(totalPages - 1, currentPage + 2); i++) { %>
+                        <li>
+                            <a href="#" data-page="<%= i %>" class="page-link <%= i === currentPage ? 'active' : '' %>">
+                                <%= i %>
+                            </a>
+                        </li>
+                        <% } %>
+
+                            <!-- Right Dots -->
+                            <% if (currentPage < totalPages - 3) { %>
+                                <li class="dots">...</li>
+                                <% } %>
+
+                                    <!-- Last Page -->
+                                    <% if (totalPages> 1) { %>
+                                        <li>
+                                            <a href="#" data-page="<%= totalPages %>"
+                                                class="page-link <%= currentPage === totalPages ? 'active' : '' %>">
+                                                <%= totalPages %>
+                                            </a>
+                                        </li>
+                                        <% } %>
+
+                                            <!-- Next Button -->
+                                            <li>
+                                                <a href="#" data-page="<%= currentPage + 1 %>"
+                                                    class="page-link <%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+                                            </li>
         </ul>
     </div>
-    
-    
-    
+
+
+
 
 </div>
