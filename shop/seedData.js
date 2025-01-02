@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import db from "./models/index.model.js";
 import User from "./models/user.model.js";
+import bcrypt from "bcrypt";
 
 db.sync({ force: true })
     .then(async (res) => {
@@ -10,19 +11,20 @@ db.sync({ force: true })
     .catch((err) => console.log(err));
 
 const seedData = async () => {
+    const salt = await bcrypt.genSalt(10);
     const users = [
         {
             userId: "1",
             name: "John Admin",
             email: "admin@example.com",
-            password: "admin123",
+            password: await bcrypt.hash("admin123", salt),
             role: "admin",
         },
         {
             userId: "2",
             name: "Jane User",
             email: "user@example.com",
-            password: "user123",
+            password: await bcrypt.hash("user123", salt),
             role: "user",
         },
     ];
