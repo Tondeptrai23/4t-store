@@ -1,25 +1,23 @@
 import User from "../models/user.model.js";
+import bcrypt from "bcrypt";
 
 class UserService {
-    getAll() {
-        return [
-            {
-                userId: "123",
-                name: "abc",
-            },
-            {
-                userId: "234",
-                name: "abc",
-            },
-            {
-                userId: "345",
-                name: "abc",
-            },
-        ];
+    async getAll() {
+        return await User.findAll();
     }
 
-    async getAllInDb() {
-        return await User.findAll();
+    async findByEmail(email) {
+        return await User.findOne({ where: { email } });
+    }
+
+    async findById(id) {
+        return await User.findByPk(id);
+    }
+
+    async create(user) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+        return await User.create(user);
     }
 }
 

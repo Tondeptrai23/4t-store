@@ -1,0 +1,220 @@
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+            Trang chủ
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <a href="product.html" class="stext-109 cl8 hov-cl1 trans-04">
+            <%= parentCategory.name %>
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4">
+            <%= product.name %>
+        </span>
+    </div>
+</div>
+
+
+<section class="sec-product-detail bg0 p-t-65 p-b-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-7 p-b-30">
+                <div class="p-l-25 p-r-30 p-lr-0-lg">
+                    <div class="wrap-slick3 flex-sb flex-w">
+                        <div class="wrap-slick3-dots"></div>
+                        <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
+                        <div class="slick3 gallery-lb">
+                            <% for (var i = 0; i < product.images.length; i++) { %>
+                                <div class="item-slick3" data-thumb="/images/<%= product.images[i].path %>">
+                                    <div class="wrap-pic-w pos-relative">
+                                        <img src="/images/<%= product.images[i].path %>" alt="IMG-PRODUCT">
+                                    </div>
+
+                                </div>
+                                
+                            <% } %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="col-md-6 col-lg-5 p-b-30">
+                <div class="p-r-50 p-t-5 p-lr-0-lg">
+                    <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                        <%= product.name %>
+                    </h4>
+
+                    <span class="mtext-106 cl2">
+                        <%= product.price %>
+                    </span>
+
+                    <p class="stext-102 cl3 p-t-23">
+                        <%= product.description %>
+                    </p>
+                    
+                    <!--  -->
+                    <div class="p-t-33">
+                        <div class="flex-w flex-r-m p-b-10">
+                            <div class="size-203 flex-c-m respon6">
+                                Size
+                            </div>
+
+                            <div class="size-204 respon6-next">
+                                <div class=" bor8 bg0">
+                                    <ul class="form-control" name="time">
+                                        <li><%= product.size %> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex-w flex-r-m p-b-10">
+                            <div class="size-203 flex-c-m respon6">
+                                Màu
+                            </div>
+
+                            <div class="size-204 respon6-next">
+                                <div class="bor8 bg0">
+                                    <ul class="form-control" name="time">
+                                        <li><%= product.color %></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex-w flex-r-m p-b-10">
+                            <div class="size-204 flex-w flex-m respon6-next">
+                                <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                        <i class="fs-16 fa fa-minus"></i>
+                                    </div>
+
+                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+
+                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                        <i class="fs-16 fa fa-plus"></i>
+                                    </div>
+                                </div>
+
+                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 mt-2 js-addcart-detail">
+                                    Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                        </div>	
+                    </div>
+
+                    <div class="flex-w flex-m p-l-100 p-t-40 respon7">
+                        <div class="flex-m bor9 p-r-10 m-r-11">
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                        </div>
+
+                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
+                            <i class="fa-brands fa-facebook"></i>
+                        </a>
+
+                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Twitter">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+
+                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Google Plus">
+                            <i class="fa-brands fa-google-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bor10 m-t-50 p-t-43 p-b-40">
+            <!-- Tab01 -->
+            <div class="tab01">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item p-b-10">
+                        <a class="nav-link active" data-toggle="tab" href="#description" role="tab">Mô tả</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content p-t-43">
+                    <!-- - -->
+                    <div class="tab-pane fade show active" id="description" role="tabpanel">
+                        <div class="how-pos2 p-lr-15-md">
+                            <p class="stext-102 cl6">
+                                <%= category.description %>                                  
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
+        <span class="stext-107 cl6 p-lr-25">
+            <%= category.name %>
+        </span>
+    </div>
+</section>
+
+
+<section class="sec-relate-product bg0 p-t-45 p-b-105">
+    <div class="container">
+        <div class="p-b-45">
+            <h3 class="ltext-106 cl5 txt-center">
+                Sản phẩm tương tự
+            </h3>
+        </div>
+        <div class="d-flex justify-content-between wrap-slick2">
+            <button class="p-3 mb-5" type="button" data-bs-target="#relatedProductsCarousel" data-bs-slide="prev">
+                <i class="fa-solid fa-chevron-left" arial-hidden="true"></i>
+            </button>
+            <div id="relatedProductsCarousel" class="carousel slide w-100" data-bs-ride="carousel">
+
+                <div class="carousel-inner">
+                    <% for (let i = 0; i < relatedProduct.length; i++) { %>
+                        <% if (i % 4 === 0) { %>
+                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                <div class="row">
+                        <% } %>
+                                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                                        <div class="block2">
+                                            <div class="block2-pic hov-img0">
+                                                <img src="/images/<%= relatedProduct[i].images[0].path %>" 
+                                                    alt="<%= relatedProduct[i].name %>">
+                                            </div>
+
+                                            <div class="block2-txt flex-w flex-t p-t-14">
+                                                <div class="block2-txt-child1 flex-col">
+                                                    <a href="/products/<%= relatedProduct[i].productId %>"
+                                                    class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                        <%= relatedProduct[i].name %>
+                                                    </a>
+                                                    <span class="stext-105 cl3">
+                                                        <%= relatedProduct[i].price %>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        <% if (i % 4 === 3 || i === relatedProduct.length - 1) { %>
+                                </div> 
+                            </div> 
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+            <button class="p-3 mb-5" type="button" data-bs-target="#relatedProductsCarousel" data-bs-slide="next">
+                <i class="fa-solid fa-chevron-right" arial-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+
+
