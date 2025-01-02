@@ -70,7 +70,7 @@ class CartItemService{
             throw new Error("Error deleting cartItem: " + error.message);
         }
     };
-    // đồng bộ giữa localStorage và database
+
     syncCart = async (userId, cart) => {
         try {
             const cartItems = await CartItem.findAll({

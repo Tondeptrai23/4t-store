@@ -3,24 +3,13 @@ import CartItemService from "../services/cart.service.js";
 class CartController {
     async addToCart(req, res) {
         try {
-            const {productId, quantity} = req.body;
-            if (req.isAuthenticated()){
-                const cartItem = await CartItemService.addToCart(req.user.id, productId, quantity);
-            }
-            else {
-                let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                let index = cart.findIndex(item => item.productId === productId);
-                if (index !== -1) {
-                    cart[index].quantity += quantity;
-                } else {
-                    cart.push({productId, quantity});
-                }
-                localStorage.setItem('cart', JSON.stringify(cart));
-                return res.status(201).send({message: 'Sản phẩm đã được thêm vào giỏ hàng'});
-            }
-            res.status(201).send(cartItem);
+            const { productId, quantity } = req.body;
+            let updatedCart = [];
+            const cartItem = await CartItemService.addToCart(req.user.id, productId, quantity);
+            updatedCart = await CartItemService.getCartItems(req.user.id); 
+            res.status(201).send(updatedCart);
         } catch (error) {
-        res.status(400).send(error.message);
+            res.status(400).send(error.message);
         }
     }
 
@@ -36,15 +25,8 @@ class CartController {
     async deleteCartItem(req, res) {
         try {
             const {cartItemId} = req.body;
-            if (req.isAuthenticated()){
-                const cart = await CartItemService.deleteCartItem(cartItemId);
-            }
-            else{
-                let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                cart = cart.filter(item => item.productId !== cartItemId);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                return res.status(200).send(cart);
-            }
+            await CartItemService.deleteCartItem(cartItemId);
+            let cart = await CartItemService.getCartItems(req.user.id);
             res.status(200).send(cart);
         } catch (error) {
             res.status(400).send(error.message);
