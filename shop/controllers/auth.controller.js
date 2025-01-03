@@ -2,13 +2,19 @@ import UserService from "../services/user.service.js";
 
 class AuthController {
 	loginView(request, response) {
+		if (request.isAuthenticated()) {
+			return response.render("pages/auth/authenticated");
+		}
 		const errorMsg = request.query["invalid-credentials"] 
 			? "Email hoặc mật khẩu bạn nhập không chính xác. Xin vui lòng thử lại." 
 			: null;
 		return response.render("pages/auth/login", { errorMsg: errorMsg });
 	}
 
-	registerView(_request, response) {
+	registerView(request, response) {
+		if (request.isAuthenticated()) {
+			return response.render("pages/auth/authenticated");
+		}
 		return response.render("pages/auth/register", { errorMsg: null });
 	}
 
