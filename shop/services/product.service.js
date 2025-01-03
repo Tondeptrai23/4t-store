@@ -83,7 +83,7 @@ class ProductService {
             const filterCriteria = filterBuilder.build();
 
             //Process sorted products
-            const sortBuilder = new ProductSortBuilder(sortQuery);
+            const sortBuilder = new ProductSortBuilder(requestQuery);
             const sortCriteria = sortBuilder.build();
 
             // Process paginated products

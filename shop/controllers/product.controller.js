@@ -8,20 +8,25 @@ class ProductController {
         try {
             const isLoggedIn = req.isAuthenticated();
 
-            const page = parseInt(req.query.page) || 1;
-            const limit = 8; // Số sản phẩm mỗi trang
-
             // Gọi service và chờ kết quả trả về
-            const products = await productService.getAll();
+            const data =
+                await productService.getFilteredSortedAndPaginatedProducts(
+                    req.query
+                );
+            const products = data.products || [];
+            const page = data.pagination.page || 1;
+            const limit = data.pagination.limit || 8;
+            const totalProducts = data.count || products.length; // Tổng số sản phẩm
+            const totalPages =
+                data.pagination.totalPages || Math.ceil(totalProducts / limit);
+
             const formattedProducts = products.map((product) => {
                 product.price = convertVietnameseCurrency(product.price);
                 return product;
             });
+
             const categories = await categoryService.getAll();
             const subcategories = await subCategoryService.getAll();
-
-            const totalProducts = products.length; // Tổng số sản phẩm
-            const totalPages = Math.ceil(totalProducts / limit);
 
             // Render trang EJS với danh sách sản phẩm
             res.render("index", {

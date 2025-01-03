@@ -28,9 +28,9 @@
 
     // Constants
     const CONSTANTS = {
-        DEBOUNCE_DELAY: 500,
+        DEBOUNCE_DELAY: 400,
         PAGE_SIZE: 8,
-        FADE_DURATION: 500,
+        FADE_DURATION: 300,
         FADE_IN_DELAY: 100
     };
 
