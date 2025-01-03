@@ -7,15 +7,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     addToCartButtons.forEach(button => {
         button.addEventListener('click', async function () {
             const productId = this.getAttribute('data-product-id');
-            const productName = this.getAttribute('data-product-name');
-            const productPrice = this.getAttribute('data-product-price');
-            const productImage = this.getAttribute('data-product-image'); 
             const quantity = document.querySelector('input[name="num-product"]').value;
             const productData = {
                 productId: productId,
-                name: productName,
-                price: parseFloat(productPrice),
-                image: productImage, 
                 quantity: parseInt(quantity, 10)
             };
             if (!isLoggedIn) {
@@ -65,21 +59,22 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     } else {
         const savedCart = localStorage.getItem('cart');
-        console.log('Saved Cart:', savedCart);
         const Cart = savedCart ? JSON.parse(savedCart) : [];
         if (savedCart) {
             updateCartUI(JSON.parse(savedCart), isLoggedIn);
             updateCartTable(Cart);
         }
     }
-
+    
+    //delete item in cart
     document.addEventListener('click', async function (event) {
         if (event.target.classList.contains('header-cart-item-img')) {
             const productId = event.target.getAttribute('data-product-id');
-            const isLoggedIn = event.target.getAttribute('data-is-logged-in') === 'true';
             const productData = {
                 productId: productId
             };
+            console.log('Product Data:', productData);
+
             if (!isLoggedIn) {
                 let cart = localStorage.getItem('cart');
                 cart = cart ? JSON.parse(cart) : [];
@@ -98,13 +93,55 @@ document.addEventListener('DOMContentLoaded', async function () {
                         },
                         body: JSON.stringify(productData)
                     });
-                    if (response.status === 200) {
-                        const cart = await response.json();
-                        updateCartUI(cart, isLoggedIn);
+                    if (response.ok) {
+                        const updatedCart = await response.json();
+                        console.log('Server Response:', updatedCart);
+                        updateCartUI(updatedCart, isLoggedIn);
                     }
                 } catch (error) {
                     console.error('Error deleting item:', error);
                 }
+            }
+        }
+    });
+
+    //update cart
+    document.getElementById('js-update-cart').addEventListener('click', async function () {
+        const cartItems = [];
+        let productData;
+
+        document.querySelectorAll('.table-shopping-cart .table_row').forEach(row => {
+            const productId = row.querySelector('.column-1 .how-itemcart1').getAttribute('data-product-id');
+            const quantity = parseInt(row.querySelector('.num-product').value, 10);
+            const name = row.querySelector('.column-2').textContent.trim();
+            const price = parseFloat(row.querySelector('.column-3').getAttribute('data-price'));
+            const image = row.querySelector('.column-1 .how-itemcart1 img').getAttribute('src').replace('/images/', '');
+
+            cartItems.push({ productId, name, price, image, quantity });
+            productData = { productId, quantity };        
+        });
+        console.log('Product Data:', productData);
+
+        if (!isLoggedIn) {
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            updateCartUI(cartItems, isLoggedIn);
+            updateCartTable(cartItems);
+        } else {
+            try {
+                const response = await fetch('/api/cart/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+                if (response.ok) {
+                    const updatedCart = await response.json();
+                    updateCartUI(updatedCart, isLoggedIn);
+                    updateCartTable(updatedCart);
+                }
+            } catch (error) {
+                console.error('Error updating cart:', error);
             }
         }
     });
@@ -118,7 +155,6 @@ function updateCartUI(cartItems, isLoggedIn) {
         cartWrap.innerHTML = '<p class="text-center">Giỏ hàng trống</p>';
     }
     cartItems.forEach(item => {
-        console.log('Cart Item:', item); 
         const listItem = `
             <li class="header-cart-item flex-w flex-t m-b-12">
                 <div class="header-cart-item-img" data-product-id="${item.productId}" data-is-logged-in="${isLoggedIn}">
@@ -161,12 +197,12 @@ function updateCartTable(cartItems) {
         const row = `
             <tr class="table_row">
                 <td class="column-1">
-                    <div class="how-itemcart1">
+                    <div class="how-itemcart1" data-product-id="${item.productId}">
                         <img src="/images/${item.image}" alt="${item.name}">
                     </div>
                 </td>
                 <td class="column-2">${item.name}</td>
-                <td class="column-3">${convertVietnameseCurrency(item.price)}</td>
+                <td class="column-3" data-price="${item.price}">${convertVietnameseCurrency(item.price)}</td>
                 <td class="column-4">
                     <div class="wrap-num-product flex-w m-l-auto m-r-0">
                         <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
@@ -185,4 +221,26 @@ function updateCartTable(cartItems) {
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
     });
+
+    const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    document.getElementById('subtotal').textContent = convertVietnameseCurrency(total);
+    document.getElementById('total').textContent = convertVietnameseCurrency(total);
+    
+    document.querySelectorAll('.num-product').forEach(input => {
+        input.addEventListener('change', updateQuantity);
+    });
+}
+
+function updateQuantity(event) {
+    const input = event.target;
+    const productId = input.name.replace('num-product', '');
+    const quantity = parseInt(input.value, 10);
+    let cart = localStorage.getItem('cart');
+    cart = cart ? JSON.parse(cart) : [];
+    const index = cart.findIndex(item => item.productId === productId);
+    if (index !== -1) {
+        cart[index].quantity = quantity;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartTable(cart);
+    }
 }

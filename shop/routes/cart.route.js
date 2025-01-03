@@ -10,4 +10,6 @@ cartRoute.post("/add", cartController.addToCart);
 
 cartRoute.post("/delete", cartController.deleteCartItem); 
 
+cartRoute.post("/update", cartController.updateCartItem);
+
 export default cartRoute;

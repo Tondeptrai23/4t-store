@@ -45,14 +45,18 @@ class CartItemService{
             throw new Error("Error fetching cartItems: " + error.message);
         }
     }
-    updateCartItem = async (cartItemId, quantity) => {
+    updateCartItem = async (userId,productId, quantity) => {
         try {
-            const cartItem = await CartItem.findByPk(cartItemId);
-            if (!cartItem) {
-                throw new Error(`CartItem with ID ${cartItemId} not found`);
+            const product = await Product.findByPk(productId);
+            if (!product) {
+                throw new Error(`Product with ID ${productId} not found`);
             }
-            cartItem.quantity = quantity;
-            await cartItem.save();
+
+            let cartItem = await CartItem.findOne({ where: { userId, productId } });
+            if (cartItem) {
+                cartItem.quantity = quantity;
+                await cartItem.save();
+            } 
             return cartItem;
         } catch (error) {
             throw new Error("Error updating cartItem: " + error.message);

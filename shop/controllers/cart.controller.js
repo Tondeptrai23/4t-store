@@ -16,7 +16,7 @@ class CartController {
     async getCart(req, res) {
         try {
             const isLoggedIn = req.isAuthenticated();
-            res.render('index', { body: 'pages/shopingCart', isLoggedIn});
+            res.render('index', { body: 'pages/shoppingCart', isLoggedIn});
         } catch (error) {
             res.status(400).send(error.message);
         }
@@ -44,8 +44,10 @@ class CartController {
 
     async updateCartItem(req, res) {
         try {            
-            const cart = await CartItemService.updateCartItem(req.params.id, req.body);
-            res.status(200).send(cart);
+            const { productId, quantity } = req.body;
+            await CartItemService.updateCartItem(req.user.userId,productId, quantity);
+            const updatedCart = await CartItemService.getCartItems(req.user.userId); 
+            res.status(200).send(updatedCart);
         } catch (error) {
             res.status(400).send(error.message);
         }

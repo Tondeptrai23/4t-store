@@ -45,17 +45,17 @@ $(document).ready(function () {
 
     /*==================================================================
     [ +/- num product ]*/
-    $('.btn-num-product-down').off('click');
-    $('.btn-num-product-up').off('click');
+    $(document).off('click', '.btn-num-product-down');
+    $(document).off('click', '.btn-num-product-up');
     
-    $('.btn-num-product-down').on('click', function () {
+    $(document).on('click', '.btn-num-product-down', function () {
         var numProduct = Number($(this).next().val());
-        if (numProduct > 0) $(this).next().val(numProduct - 1);
+        if (numProduct > 1) $(this).next().val(numProduct - 1).trigger('change');
     });
-
-    $('.btn-num-product-up').on('click', function () {
+    
+    $(document).on('click', '.btn-num-product-up', function () {
         var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
+        $(this).prev().val(numProduct + 1).trigger('change');
     });
 
     $('.main-menu li a').on('click', function () {
