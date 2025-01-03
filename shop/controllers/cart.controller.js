@@ -16,7 +16,7 @@ class CartController {
     async getCart(req, res) {
         try {
             const isLoggedIn = req.isAuthenticated();
-            res.render('index', { body: 'pages/shopingCart', isLoggedIn });
+            res.render('index', { body: 'pages/shopingCart', isLoggedIn});
         } catch (error) {
             res.status(400).send(error.message);
         }
@@ -24,18 +24,18 @@ class CartController {
     
     async getCartItems(req, res) {
         try {
-            const cart = await CartItemService.getCartItems(req.user.id);
+            const cart = await CartItemService.getCartItems(req.user.userId);
             res.status(200).send(cart);
         }catch (error) {
             res.status(400).send(error.message);
         }
     }
-    
+
     async deleteCartItem(req, res) {
         try {
-            const { cartItemId } = req.body;
-            await CartItemService.deleteCartItem(cartItemId);
-            let cart = await CartItemService.getCartItems(req.user.id);
+            const { productId } = req.body;
+            await CartItemService.deleteCartItem(productId);
+            let cart = await CartItemService.getCartItems(req.user.userId);
             res.status(200).send(cart);
         } catch (error) {
             res.status(400).send(error.message);

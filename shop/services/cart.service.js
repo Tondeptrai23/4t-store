@@ -82,11 +82,12 @@ class CartItemService{
             throw new Error("Error adding cartItem: " + error.message);
         }
     };
-    deleteCartItem = async (cartItemId) => {
+    deleteCartItem = async (productId) => {
         try {
-            const cartItem = await CartItem.findByPk(cartItemId);
+            // delete cartItem by productId
+            const cartItem = await CartItem.findOne({ where: { productId } });
             if (!cartItem) {
-                throw new Error(`CartItem with ID ${cartItemId} not found`);
+                throw new Error(`CartItem with productId ${productId} not found`);
             }
             await cartItem.destroy();
             return cartItem;
