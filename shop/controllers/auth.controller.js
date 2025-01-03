@@ -1,12 +1,23 @@
 import UserService from "../services/user.service.js";
+import { AuthenticationError } from "../utils/error.js";
 
 class AuthController {
 	loginView(_request, response) {
-		return response.render("pages/auth/login");
+		return response.render("pages/auth/login", { error: null });
 	}
 
 	registerView(_request, response) {
 		return response.render("pages/auth/register");
+	}
+
+	loginErrorHandle(error, _request, response, _next) {
+		if (error && error instanceof AuthenticationError) {
+			response.render(
+				"pages/auth/login", 
+				{ errorMsg: "Email hoặc mật khẩu của bạn không đúng. Xin vui lòng thử lại." }
+			);
+		}
+		response.redirect("/");
 	}
 
 	logout(request, response) {

@@ -2,6 +2,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import UserService from "../../services/user.service.js";
+import { AuthenticationError } from "../../utils/error.js";
 
 passport.serializeUser((user, done) => {
 	done(null, user.userId);
@@ -24,11 +25,11 @@ export default passport.use(new LocalStrategy({
 	try {
 		const user = await UserService.findByEmail(username);
 		if (!user) {
-			return done(new Error("The username or the password is incorrect"), false);
+			return done(new AuthenticationError("The username or the password is incorrect"), false);
 		}
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
-			return done(new Error("The username or the password is incorrect"), false);
+			return done(new AuthenticationError("The username or the password is incorrect"), false);
 		}
 		return done(null, user);
 	} catch (error) {
