@@ -9,7 +9,7 @@ class AuthController {
 	}
 
 	registerView(_request, response) {
-		return response.render("pages/auth/register");
+		return response.render("pages/auth/register", { errorMsg: null });
 	}
 
 	logout(request, response) {
@@ -37,16 +37,21 @@ class AuthController {
 			role: "user",
 		};
 
-		try {
-			const user = await UserService.create(data);
-			request.login(user, (error) => {
-				if (error) { throw new Error(error); }
-				response.redirect("/");
+		const user = UserService.create(data).catch((error) => {
+			response.render("pages/auth/register", { 
+				errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác." 
 			});
-		}
-		catch (error) {
-			throw new Error(error);
-		}
+		});
+		request.login(user, (error) => {
+			if (error) { 
+				response.render("pages/auth/register", { 
+					errorMsg: "Đăng ký thất bại. Vui lòng thử lại." 
+				}); 
+			}
+			else {
+				response.redirect("/");
+			}
+		});
 	}
 
 	// status(request, response) {

@@ -58,6 +58,12 @@
 							<div id="password-feedback" class="invalid-feedback"></div>
 						</div>
 
+						<% if (errorMsg) { %>
+							<div class="alert alert-danger" role="alert">
+								<%= errorMsg %>
+							</div>
+						<% } %>
+
 						<button type="submit" class="btn btn-primary w-100 size-101">
 							Đăng ký
 						</button>

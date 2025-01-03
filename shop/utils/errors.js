@@ -13,3 +13,11 @@ export class DeserializeError extends Error {
 		this.name = "DeserializeError";
 	}
 }
+
+export class ModelError extends Error {
+	constructor(message) {
+		super(message);
+		this.name = "ModelError";
+		// this.moreInfo = something else;
+	}
+}
