@@ -3,4 +3,4 @@ node_modules
 .codegpt
 .vscode
 template
-public/images
+*/public/images

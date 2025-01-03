@@ -195,6 +195,39 @@ class ProductService {
             throw new Error("Failed to create product: " + error.message);
         }
     };
+
+    update = async (productId, productData) => {
+        try {
+            const { image, ...updateData } = productData;
+
+            const product = await Product.findByPk(productId);
+            if (!product) {
+                throw new Error(`Product with ID ${productId} not found`);
+            }
+
+            await product.update(updateData);
+
+            if (image) {
+                await Image.destroy({ where: { productId } });
+                await Image.create({
+                    ...image,
+                    productId,
+                    displayOrder: 0,
+                });
+            }
+
+            return await Product.findByPk(productId, {
+                include: [
+                    {
+                        model: Image,
+                        as: "images",
+                    },
+                ],
+            });
+        } catch (error) {
+            throw new Error("Failed to update product: " + error.message);
+        }
+    };
 }
 
 export default new ProductService();

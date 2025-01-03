@@ -64,7 +64,56 @@ class AdminProductController {
         }
     }
 
-    // Delete a product
+    async showEditForm(req, res) {
+        try {
+            const { id } = req.params;
+            const product = await productService.getById(id);
+            const categories = await categoryService.getAll();
+            const subcategories = await subCategoryService.getAll();
+
+            res.render("admin/pages/products/edit", {
+                layout: "admin/layouts/main",
+                product,
+                categories,
+                subcategories,
+            });
+        } catch (error) {
+            console.error("Error loading edit product form:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async updateProduct(req, res) {
+        try {
+            const { id } = req.params;
+            const productData = req.body;
+            const image = req.files
+                ? req.files.map((file) => ({
+                      path: file.filename,
+                      contentType: file.mimetype,
+                      displayOrder: 0,
+                  }))[0]
+                : null;
+
+            const updatedProduct = await productService.update(id, {
+                ...productData,
+                image: image,
+            });
+
+            res.json({
+                success: true,
+                message: "Product updated successfully",
+                product: updatedProduct,
+            });
+        } catch (error) {
+            console.error("Error updating product:", error);
+            res.status(500).json({
+                success: false,
+                message: "Failed to update product",
+            });
+        }
+    }
+
     async deleteProduct(req, res) {
         try {
             const { id } = req.params;
@@ -82,7 +131,6 @@ class AdminProductController {
         }
     }
 
-    // Bulk delete products
     async bulkDeleteProducts(req, res) {
         try {
             const { ids } = req.body;

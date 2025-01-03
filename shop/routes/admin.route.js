@@ -9,7 +9,8 @@ router.use(expressLayouts);
 router.get("/products", adminProductController.listProducts);
 router.get("/products/create", adminProductController.showCreateForm);
 router.post("/products/create", adminProductController.createProduct);
-
+router.get("/products/edit/:id", adminProductController.showEditForm);
+router.put("/products/:id", adminProductController.updateProduct);
 router.delete("/products/:id", adminProductController.deleteProduct);
 router.post("/products/bulk-delete", adminProductController.bulkDeleteProducts);
 
