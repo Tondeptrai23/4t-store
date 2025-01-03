@@ -4,15 +4,15 @@
         <div class="col-12">
             <div class="row align-items-center mb-2">
                 <div class="col">
-                    <h2 class="h5 page-title">Product Management</h2>
+                    <h2 class="h5 page-title">Quản lý sản phẩm</h2>
                 </div>
                 <div class="col-auto">
                     <a href="/admin/products/create" class="btn btn-primary">
-                        Add New Product
+                        Thêm sản phẩm mới
                     </a>
                     <button id="bulkDelete" class="btn btn-danger ml-2">
                         <i class="fe fe-trash-2 fe-16"></i>
-                        Delete Selected
+                        Xóa đã chọn
                     </button>
                 </div>
             </div>
@@ -34,13 +34,13 @@
                                         ></label>
                                     </div>
                                 </th>
-                                <th>Image</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Size</th>
-                                <th>Color</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
+                                <th>Hình ảnh</th>
+                                <th>Tên</th>
+                                <th>Giá</th>
+                                <th>Kích thước</th>
+                                <th>Màu sắc</th>
+                                <th>Ngày tạo</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,19 +70,28 @@
                                     />
                                     <% } else { %>
                                     <img
-                                        src="/admin/assets/placeholder.png"
-                                        alt="No image"
+                                        src="https://placehold.co/300x200"
+                                        alt="Không có hình"
                                         width="50"
                                     />
                                     <% } %>
                                 </td>
                                 <td><%= product.name %></td>
-                                <td><%= product.price %></td>
+                                <td>
+                                    <%= new Intl.NumberFormat('vi-VN', { style:
+                                    'currency', currency: 'VND'
+                                    }).format(product.price) %>
+                                </td>
                                 <td><%= product.size %></td>
-                                <td><%= product.color %></td>
+                                <td>
+                                    <% const colorMap = { 'Black': 'Đen', 'Red':
+                                    'Đỏ', 'Blue': 'Xanh dương', 'Grey': 'Xám',
+                                    'White': 'Trắng' } %> <%=
+                                    colorMap[product.color] || product.color %>
+                                </td>
                                 <td>
                                     <%= new
-                                    Date(product.createdAt).toLocaleDateString()
+                                    Date(product.createdAt).toLocaleDateString('vi-VN')
                                     %>
                                 </td>
                                 <td>
@@ -94,7 +103,7 @@
                                         aria-expanded="false"
                                     >
                                         <span class="text-muted sr-only">
-                                            Action
+                                            Thao tác
                                         </span>
                                     </button>
                                     <div
@@ -104,14 +113,14 @@
                                             class="dropdown-item"
                                             href="/admin/products/edit/<%= product.productId %>"
                                         >
-                                            Edit
+                                            Sửa
                                         </a>
                                         <a
                                             class="dropdown-item text-danger"
                                             href="#"
                                             onclick="deleteProduct('<%= product.productId %>')"
                                         >
-                                            Delete
+                                            Xóa
                                         </a>
                                     </div>
                                 </td>
@@ -137,9 +146,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">
-                    Confirm Delete
-                </h5>
+                <h5 class="modal-title" id="defaultModalLabel">Xác nhận xóa</h5>
                 <button
                     type="button"
                     class="close"
@@ -151,8 +158,8 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Are you sure you want to delete this product? This action
-                    cannot be undone.
+                    Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không
+                    thể hoàn tác.
                 </p>
             </div>
             <div class="modal-footer">
@@ -161,14 +168,14 @@
                     class="btn mb-2 btn-secondary"
                     data-dismiss="modal"
                 >
-                    Cancel
+                    Hủy
                 </button>
                 <button
                     type="button"
                     class="btn mb-2 btn-danger"
                     id="confirmDelete"
                 >
-                    Delete
+                    Xóa
                 </button>
             </div>
         </div>
@@ -187,7 +194,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Bulk Delete</h5>
+                <h5 class="modal-title">Xác nhận xóa nhiều</h5>
                 <button
                     type="button"
                     class="close"
@@ -199,8 +206,8 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Are you sure you want to delete the selected products? This
-                    action cannot be undone.
+                    Bạn có chắc chắn muốn xóa các sản phẩm đã chọn? Hành động
+                    này không thể hoàn tác.
                 </p>
             </div>
             <div class="modal-footer">
@@ -209,14 +216,14 @@
                     class="btn mb-2 btn-secondary"
                     data-dismiss="modal"
                 >
-                    Cancel
+                    Hủy
                 </button>
                 <button
                     type="button"
                     class="btn mb-2 btn-danger"
                     id="confirmBulkDelete"
                 >
-                    Delete All
+                    Xóa tất cả
                 </button>
             </div>
         </div>
@@ -235,7 +242,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Notification</h5>
+                <h5 class="modal-title">Thông báo</h5>
                 <button
                     type="button"
                     class="close"
@@ -261,7 +268,7 @@
                     class="btn btn-secondary"
                     data-dismiss="modal"
                 >
-                    Close
+                    Đóng
                 </button>
             </div>
         </div>
@@ -305,5 +312,4 @@
 </style>
 
 <%- contentFor('script') %>
-
 <script src="/admin/js/product-list.js"></script>
