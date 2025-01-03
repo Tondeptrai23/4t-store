@@ -19,6 +19,42 @@ class AdminProductController {
             layout: "admin/layouts/main",
         });
     }
+
+    // Delete a product
+    async deleteProduct(req, res) {
+        try {
+            const { id } = req.params;
+            await productService.deleteById(id);
+            res.json({
+                success: true,
+                message: "Product deleted successfully",
+            });
+        } catch (error) {
+            console.error("Error deleting product:", error);
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                success: false,
+                message: "Failed to delete product",
+            });
+        }
+    }
+
+    // Bulk delete products
+    async bulkDeleteProducts(req, res) {
+        try {
+            const { ids } = req.body;
+            await productService.bulkDelete(ids);
+            res.json({
+                success: true,
+                message: "Products deleted successfully",
+            });
+        } catch (error) {
+            console.error("Error bulk deleting products:", error);
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                success: false,
+                message: "Failed to delete products",
+            });
+        }
+    }
 }
 
 export default new AdminProductController();

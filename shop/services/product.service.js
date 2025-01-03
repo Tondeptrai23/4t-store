@@ -152,6 +152,45 @@ class ProductService {
             );
         }
     };
+
+    deleteById = async (productId) => {
+        try {
+            // First check if the product exists
+            const product = await Product.findByPk(productId);
+
+            if (!product) {
+                return false;
+            }
+
+            // Delete the product
+            await Product.destroy({
+                where: {
+                    productId: productId,
+                },
+            });
+
+            return true;
+        } catch (error) {
+            console.error("Error in deleteById:", error);
+            throw new Error("Failed to delete product");
+        }
+    };
+
+    // Bulk delete products
+    bulkDelete = async (productIds) => {
+        try {
+            const result = await Product.destroy({
+                where: {
+                    productId: productIds,
+                },
+            });
+
+            return result;
+        } catch (error) {
+            console.error("Error in bulkDelete:", error);
+            throw new Error("Failed to delete products");
+        }
+    };
 }
 
 export default new ProductService();
