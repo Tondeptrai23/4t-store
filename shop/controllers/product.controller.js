@@ -29,6 +29,7 @@ class ProductController {
             const productId = req.params.id;
 
             const product = await productService.getById(productId);
+            const rawMoney = product.price;
             product.price = convertVietnameseCurrency(product.price);
             const category = await categoryService.getById(product.categoryId);
             const parentCategory = await categoryService.getParentCategory(category.parentId);
@@ -36,7 +37,7 @@ class ProductController {
             relatedProduct.forEach(product => {
                 product.price = convertVietnameseCurrency(product.price);
             });
-            res.render('index', { body: 'pages/productDetail', product, category, relatedProduct, parentCategory, isLoggedIn });
+            res.render('index', { body: 'pages/productDetail', product, category, relatedProduct, rawMoney, parentCategory, isLoggedIn });
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: "Server Error" });

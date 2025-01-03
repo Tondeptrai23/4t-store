@@ -24,7 +24,23 @@ class CartItemService{
                     },
                 ],
             });
-            return cartItems;
+
+            const transformedCartItems = cartItems.map(cartItem => {
+                const product = cartItem.product;
+                const image = product.images.length > 0 ? product.images[0].path : null;
+                return {
+                    cartItemId: cartItem.cartItemID,
+                    productId: cartItem.productId,
+                    quantity: cartItem.quantity,
+                    userId: cartItem.userId,
+                    name: product.name,
+                    image: image,
+                    price: product.price,
+                    description: product.description, 
+                };
+            });
+
+            return transformedCartItems;
         } catch (error) {
             throw new Error("Error fetching cartItems: " + error.message);
         }
@@ -42,17 +58,25 @@ class CartItemService{
             throw new Error("Error updating cartItem: " + error.message);
         }
     };
-    addCartItem = async (userId, productId, quantity) => {
+    async addCartItem(userId, productId, quantity) {
         try {
             const product = await Product.findByPk(productId);
             if (!product) {
                 throw new Error(`Product with ID ${productId} not found`);
             }
-            const cartItem = await CartItem.create({
-                userId,
-                productId,
-                quantity,
-            });
+
+            let cartItem = await CartItem.findOne({ where: { userId, productId } });
+            if (cartItem) {
+                cartItem.quantity += quantity;
+                await cartItem.save();
+            } else {
+                cartItem = await CartItem.create({
+                    quantity,
+                    userId,
+                    productId,
+                });
+            }
+
             return cartItem;
         } catch (error) {
             throw new Error("Error adding cartItem: " + error.message);

@@ -5,8 +5,8 @@ class CartController {
         try {
             const { productId, quantity } = req.body;
             let updatedCart = [];
-            const cartItem = await CartItemService.addToCart(req.user.id, productId, quantity);
-            updatedCart = await CartItemService.getCartItems(req.user.id); 
+            const cartItem = await CartItemService.addCartItem(req.user.userId, productId, quantity);
+            updatedCart = await CartItemService.getCartItems(req.user.userId); 
             res.status(201).send(updatedCart);
         } catch (error) {
             res.status(400).send(error.message);
@@ -21,10 +21,19 @@ class CartController {
             res.status(400).send(error.message);
         }
     }
-
+    
+    async getCartItems(req, res) {
+        try {
+            const cart = await CartItemService.getCartItems(req.user.id);
+            res.status(200).send(cart);
+        }catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
+    
     async deleteCartItem(req, res) {
         try {
-            const {cartItemId} = req.body;
+            const { cartItemId } = req.body;
             await CartItemService.deleteCartItem(cartItemId);
             let cart = await CartItemService.getCartItems(req.user.id);
             res.status(200).send(cart);
@@ -44,18 +53,7 @@ class CartController {
 
     async checkout(req, res) {
         try {
-            const isLoggedIn = req.isAuthenticated();
-            if (!isLoggedIn) {
-                return res.status(401).send({message: 'Bạn cần đăng nhập để thực hiện chức năng này'});
-            }else{
-                // đồng bộ giữa local storage và database
-                let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                if (cart.length > 0){
-                    await CartItemService.syncCart(req.user.id, cart);
-                    localStorage.removeItem('cart');
-                }
-            }
-            res.render('index', { body: 'pages/checkout', isLoggedIn });
+            // Checkout logic here
         } catch (error) {
             res.status(400).send(error.message);
         }
