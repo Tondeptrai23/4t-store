@@ -176,7 +176,6 @@ class ProductService {
         }
     };
 
-    // Bulk delete products
     bulkDelete = async (productIds) => {
         try {
             const result = await Product.destroy({
@@ -189,6 +188,24 @@ class ProductService {
         } catch (error) {
             console.error("Error in bulkDelete:", error);
             throw new Error("Failed to delete products");
+        }
+    };
+
+    create = async (productData) => {
+        try {
+            const product = await Product.create(productData, {
+                include: [
+                    {
+                        model: Image,
+                        as: "images",
+                    },
+                ],
+            });
+
+            return product.toJSON();
+        } catch (error) {
+            console.error("Error creating product:", error);
+            throw new Error("Failed to create product: " + error.message);
         }
     };
 }

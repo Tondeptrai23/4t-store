@@ -8,6 +8,7 @@ router.use(expressLayouts);
 
 router.get("/products", adminProductController.listProducts);
 router.get("/products/create", adminProductController.showCreateForm);
+router.post("/products/create", adminProductController.createProduct);
 
 router.delete("/products/:id", adminProductController.deleteProduct);
 router.post("/products/bulk-delete", adminProductController.bulkDeleteProducts);

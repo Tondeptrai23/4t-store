@@ -1,0 +1,250 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h2 class="h5 page-title">Create New Product</h2>
+                </div>
+                <div class="card-body">
+                    <form id="createProductForm" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Product Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="name"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="price">Price</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="price"
+                                    name="price"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="category">Category</label>
+                                <select
+                                    class="form-control"
+                                    id="category"
+                                    name="parentCategoryId"
+                                >
+                                    <% categories.forEach(function(category) {
+                                    %>
+                                    <option value="<%= category.categoryId %>">
+                                        <%= category.name %>
+                                    </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="subcategory">Subcategory</label>
+                                <select
+                                    class="form-control"
+                                    id="subcategory"
+                                    name="categoryId"
+                                >
+                                    <%
+                                    subcategories.forEach(function(subcategory)
+                                    { %>
+                                    <option
+                                        value="<%= subcategory.categoryId %>"
+                                    >
+                                        <%= subcategory.name %>
+                                    </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="size">Size</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="size"
+                                    name="size"
+                                />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="color">Color</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="color"
+                                    name="color"
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea
+                                class="form-control"
+                                id="description"
+                                name="description"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="images">Product Images</label>
+                            <input
+                                type="file"
+                                class="form-control-file"
+                                id="images"
+                                name="images"
+                                multiple
+                            />
+                        </div>
+                        <div class="form-group">
+                            <div
+                                id="image-preview"
+                                class="d-flex flex-wrap"
+                            ></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Create Product
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- contentFor('style') %>
+<style>
+    .image-preview-container {
+        position: relative;
+        margin: 10px;
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+    .image-preview-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+    .remove-image {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+</style>
+
+<%- contentFor('script') %>
+<script>
+    $(document).ready(function () {
+        $("#images").on("change", function (event) {
+            const previewContainer = $("#image-preview");
+            previewContainer.empty();
+
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Check file type
+                if (!file.type.startsWith("image/")) {
+                    alert("Please select only image files");
+                    continue;
+                }
+
+                // Check file size (optional: limit to 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("File is too large. Maximum size is 5MB.");
+                    continue;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const previewWrapper = $("<div>", {
+                        class: "image-preview-container mr-2 mb-2",
+                    });
+
+                    const img = $("<img>", {
+                        src: e.target.result,
+                        alt: "Image preview",
+                    });
+
+                    const removeBtn = $("<button>", {
+                        class: "remove-image",
+                        html: "&times;",
+                        click: function () {
+                            // Remove this preview and the corresponding file from input
+                            previewWrapper.remove();
+
+                            // Recreate the FileList without the removed file
+                            const dt = new DataTransfer();
+                            const input = $("#images")[0];
+                            const { files } = input;
+
+                            for (let j = 0; j < files.length; j++) {
+                                const file = files[j];
+                                if (file !== input.files[i]) {
+                                    dt.items.add(file);
+                                }
+                            }
+
+                            input.files = dt.files;
+                        },
+                    });
+
+                    previewWrapper.append(img).append(removeBtn);
+                    previewContainer.append(previewWrapper);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        $("#createProductForm").on("submit", function (e) {
+            e.preventDefault();
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "/admin/products/create",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Product created successfully");
+                        window.location.href = "/admin/products";
+                    } else {
+                        alert("Failed to create product: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while creating the product");
+                },
+            });
+        });
+    });
+</script>
