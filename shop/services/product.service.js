@@ -148,8 +148,3 @@ class ProductService {
 
 export default new ProductService();
 
-
-const sortBuilder = new ProductSortBuilder({"price":"price"});
-const sortCriteria = sortBuilder.build();
-
-console.log("Sort criteria test:", sortCriteria);
