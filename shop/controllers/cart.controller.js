@@ -53,9 +53,15 @@ class CartController {
         }
     }
 
-    async checkout(req, res) {
+    async syncCart(req, res) {
         try {
-            // Checkout logic here
+            const { cart } = req.body;
+            let updatedCart = [];
+            for (const item of cart) {
+                await CartItemService.addCartItem(req.user.userId, item.productId, item.quantity);
+            }
+            updatedCart = await CartItemService.getCartItems(req.user.userId);
+            res.status(200).send(updatedCart);
         } catch (error) {
             res.status(400).send(error.message);
         }

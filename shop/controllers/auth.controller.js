@@ -1,4 +1,5 @@
 import UserService from "../services/user.service.js";
+import CartItemService from "../services/cart.service.js";
 
 class AuthController {
 	loginView(_request, response) {
@@ -35,6 +36,23 @@ class AuthController {
 		catch (error) {
 			throw new Error(error);
 		}
+	}
+
+	async postLogin(req, res) {
+		const { redirectUrl, cartData } = req.body;
+		if (cartData) {
+            try {
+                const cartItems = JSON.parse(cartData);
+                for (let i = 0; i < cartItems.length; i++) {
+                    const cartItem = cartItems[i];
+                    await CartItemService.addCartItem(req.user.userId, cartItem.productId, cartItem.quantity);
+                }
+            } catch (error) {
+                console.error('Error syncing cart data:', error);
+                return res.status(500).send('Error syncing cart data');
+            }
+        }
+		res.redirect(redirectUrl);
 	}
 
 	// status(request, response) {
