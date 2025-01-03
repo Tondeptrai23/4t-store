@@ -1,8 +1,8 @@
-import Category from '../models/category.model.js'
-import SubCategory from '../models/subCategory.model.js';
-import Product from '../models/product.model.js';
-import { Op } from 'sequelize';
-import Image from '../models/image.model.js';
+import { Op } from "sequelize";
+import Category from "../models/category.model.js";
+import Image from "../models/image.model.js";
+import Product from "../models/product.model.js";
+import SubCategory from "../models/subCategory.model.js";
 
 class CategoryService {
     getAll = async () => {
@@ -28,7 +28,7 @@ class CategoryService {
         try {
             const Pcategory = await Category.findByPk(categoryId);
             return Pcategory;
-        }catch (error) {
+        } catch (error) {
             throw new Error("Error fetching products: " + error.message);
         }
     };
@@ -43,20 +43,22 @@ class CategoryService {
                 },
             });
             const images = await Image.findAll();
-            const productsWithImages = products.map(product => {
-                const productImages = images.filter(image => image.productId == product.productId);
+            const productsWithImages = products.map((product) => {
+                const productImages = images.filter(
+                    (image) => image.productId == product.productId
+                );
                 return {
                     ...product.toJSON(),
                     images: productImages,
                 };
             });
             return productsWithImages;
-        }catch (error) {
-            throw new Error("Error fetching products with images: " + error.message);
+        } catch (error) {
+            throw new Error(
+                "Error fetching products with images: " + error.message
+            );
         }
     };
-
 }
 
 export default new CategoryService();
-
