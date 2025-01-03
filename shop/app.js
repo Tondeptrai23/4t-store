@@ -11,6 +11,7 @@ import connectSequelize from "connect-session-sequelize";
 import { db } from "./config/config.js";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
 import router from "./routes/index.route.js";
+import { deserializeHandler } from "./middlewares/auth.middleware.js";
 
 const app = express();
 const SequelizeStore = connectSequelize(session.Store);
@@ -41,6 +42,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(deserializeHandler);
+
 app.set("views", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {

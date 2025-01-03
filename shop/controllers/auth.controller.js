@@ -1,23 +1,15 @@
 import UserService from "../services/user.service.js";
-import { AuthenticationError } from "../utils/error.js";
 
 class AuthController {
-	loginView(_request, response) {
-		return response.render("pages/auth/login", { error: null });
+	loginView(request, response) {
+		const errorMsg = request.query["invalid-credentials"] 
+			? "Email hoặc mật khẩu bạn nhập không chính xác. Xin vui lòng thử lại." 
+			: null;
+		return response.render("pages/auth/login", { errorMsg: errorMsg });
 	}
 
 	registerView(_request, response) {
 		return response.render("pages/auth/register");
-	}
-
-	loginErrorHandle(error, _request, response, _next) {
-		if (error && error instanceof AuthenticationError) {
-			response.render(
-				"pages/auth/login", 
-				{ errorMsg: "Email hoặc mật khẩu của bạn không đúng. Xin vui lòng thử lại." }
-			);
-		}
-		response.redirect("/");
 	}
 
 	logout(request, response) {
@@ -25,6 +17,15 @@ class AuthController {
 			if (error) { throw new Error(error); }
 			response.redirect("/");
 		});
+	}
+
+	async checkEmail(request, response) {
+		const { email } = request.body;
+		const user = await UserService.findByEmail(email);
+		if (user) {
+			return response.json({ isExisted: true });
+		}
+		return response.json({ isExisted: false });
 	}
 
 	async register(request, response) {
