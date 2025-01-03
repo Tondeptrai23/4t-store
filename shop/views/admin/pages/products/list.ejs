@@ -1,0 +1,182 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <h2 class="h5 page-title">Product Management</h2>
+                </div>
+                <div class="col-auto">
+                    <a href="/admin/products/create" class="btn btn-primary">
+                        Add New Product
+                    </a>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table datatables" id="productTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 40px">
+                                    <div class="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            class="custom-control-input"
+                                            id="selectAll"
+                                        />
+                                        <label
+                                            class="custom-control-label"
+                                            for="selectAll"
+                                        ></label>
+                                    </div>
+                                </th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Size</th>
+                                <th>Color</th>
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.forEach(function(product, index) { %>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            class="custom-control-input"
+                                            id="check<%= index %>"
+                                            value="<%= product.productId %>"
+                                        />
+                                        <label
+                                            class="custom-control-label"
+                                            for="check<%= index %>"
+                                        ></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <% if (product.images &&
+                                    product.images.length > 0) { %>
+                                    <img
+                                        src="/images/<%= product.images[0].path %>"
+                                        alt="<%= product.name %>"
+                                        width="50"
+                                    />
+                                    <% } else { %>
+                                    <img
+                                        src="/admin/assets/placeholder.png"
+                                        alt="No image"
+                                        width="50"
+                                    />
+                                    <% } %>
+                                </td>
+                                <td><%= product.name %></td>
+                                <td><%= product.price %></td>
+                                <td><%= product.size %></td>
+                                <td><%= product.color %></td>
+                                <td>
+                                    <%= new
+                                    Date(product.createdAt).toLocaleDateString()
+                                    %>
+                                </td>
+                                <td>
+                                    <button
+                                        class="btn btn-sm dropdown-toggle more-horizontal"
+                                        type="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <span class="text-muted sr-only">
+                                            Action
+                                        </span>
+                                    </button>
+                                    <div
+                                        class="dropdown-menu dropdown-menu-right"
+                                    >
+                                        <a
+                                            class="dropdown-item"
+                                            href="/admin/products/edit/<%= product.productId %>"
+                                        >
+                                            Edit
+                                        </a>
+                                        <a
+                                            class="dropdown-item text-danger"
+                                            href="#"
+                                            onclick="deleteProduct('<%= product.productId %>')"
+                                        >
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('style') %>
+<style>
+    .custom-control {
+        padding-left: 1.5rem;
+        margin: 0;
+    }
+    .custom-control-input {
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        width: 1rem;
+        height: 1.15625rem;
+        opacity: 0;
+    }
+    .custom-control-label {
+        position: relative;
+        margin-bottom: 0;
+        vertical-align: top;
+    }
+    .custom-control-label::before {
+        position: absolute;
+        top: 0.07812rem;
+        left: -1.5rem;
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        pointer-events: none;
+        content: "";
+        background-color: #fff;
+        border: 1px solid #b4c4d3;
+    }
+    .custom-checkbox .custom-control-label::before {
+        border-radius: 3px;
+    }
+</style>
+
+<%- contentFor('script') %>
+<script>
+    $(document).ready(function () {
+        $("#productTable").DataTable({
+            autoWidth: true,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"],
+            ],
+        });
+
+        $("#selectAll").change(function () {
+            const isChecked = $(this).prop("checked");
+            $(".custom-control-input").prop("checked", isChecked);
+        });
+    });
+
+    function deleteProduct(productId) {
+        if (confirm("Are you sure you want to delete this product?")) {
+            console.log("Delete product:", productId);
+        }
+    }
+</script>
