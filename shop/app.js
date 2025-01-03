@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import "./config/passport/local.js";
 
 import connectSequelize from "connect-session-sequelize";
+import expressLayouts from "express-ejs-layouts";
 import { db } from "./config/config.js";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
 import router from "./routes/index.route.js";
@@ -28,7 +29,6 @@ const __dirname = path.dirname(__filename);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.set("view engine", "ejs");
 
 app.use(
     session({
@@ -41,7 +41,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(expressLayouts);
 
 app.get("/", (req, res) => {
     const isLoggedIn = req.isAuthenticated();

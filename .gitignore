@@ -1,7 +1,5 @@
 node_modules
 .env
-<<<<<<< HEAD
 .codegpt
-=======
 .vscode
->>>>>>> e3cc2263be1da4d122fb6785c64c0b5b11000a2b
+template
