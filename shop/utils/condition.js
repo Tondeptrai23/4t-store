@@ -1,3 +1,5 @@
+
+import { Op } from 'sequelize';
 /**
  * @summary
  * Base class for building conditions for querying the database
@@ -28,6 +30,7 @@ export class FilterBuilder {
             "[gte]": Op.gte,
             "[between]": Op.between,
             "[like]": Op.like,
+            "[startsWith]": Op.startsWith,
             "[ne]": Op.ne,
             "[lt]": Op.lt,
             "[gt]": Op.gt,
@@ -74,6 +77,10 @@ export class FilterBuilder {
                         let compareValue = value.substring(comparator.length);
                         if (operator === Op.between) {
                             compareValue = compareValue.split(",");
+                        }
+
+                        if (operator === Op.startsWith) {
+                            compareValue = `${compareValue}%`;
                         }
 
                         if (operator === Op.like) {
@@ -177,6 +184,14 @@ export class SortBuilder {
      */
     build = () => {
         const sortConditions = [];
+
+        if (this._query &&
+            this._query.sort
+            && typeof this._query.sort === "string") {
+        
+            this._query.sort = this._query.sort.split(",").map((field) => field.trim());
+        }
+
         if (
             !this._query ||
             !this._query.sort ||

@@ -122,46 +122,6 @@ $(document).ready(function () {
 (function ($) {
     "use strict";
 
-    /*==================================================================
-    [ Filter Items ]*/
-    var $topeContainer = $('.isotope-grid'); // Lọc phần tử trong container
-    var $filterButtons = $('.filter-tope-group button'); // Các nút lọc
-    $filterButtons.filter('[data-filter="*"]').addClass('how-active1');
-
-    // Function to filter items based on button click
-    function filterItems(filterValue) {
-        var $items = $topeContainer.find('.isotope-item');
-
-        // Show all items if 'all' is selected
-        if (filterValue === '*') {
-            $items.show();
-        } else {
-            $items.each(function () {
-                // Show matching items, hide others
-                if ($(this).hasClass(filterValue.substring(1))) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
-    }
-
-    // Add event listener to filter buttons
-    $filterButtons.on('click', function () {
-        var filterValue = $(this).attr('data-filter'); // Get filter value
-
-        // Apply filter to items
-        filterItems(filterValue);
-
-        // Toggle active class on filter button
-        $filterButtons.removeClass('how-active1');
-        $(this).addClass('how-active1');
-    });
-
-
-    filterItems('*');
-
 
     /*==================================================================
   [ Filter / Search product ]*/
@@ -214,3 +174,6 @@ $(document).ready(function () {
     });
 
 })(jQuery);
+
+
+
