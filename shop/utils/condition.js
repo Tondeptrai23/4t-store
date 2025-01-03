@@ -1,5 +1,5 @@
 
-import {Op} from 'sequelize';
+import { Op } from 'sequelize';
 /**
  * @summary
  * Base class for building conditions for querying the database
@@ -184,7 +184,14 @@ export class SortBuilder {
      */
     build = () => {
         const sortConditions = [];
+
+        if (this._query &&
+            this._query.sort
+            && typeof this._query.sort === "string") {
         
+            this._query.sort = this._query.sort.split(",").map((field) => field.trim());
+        }
+
         if (
             !this._query ||
             !this._query.sort ||
