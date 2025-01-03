@@ -104,7 +104,24 @@
                                         data-product-price="<%= rawMoney %>"
                                         data-product-image="<%= product.images[0].path %>">
                                     Thêm vào giỏ hàng
-                                </button>                                                                                         
+                                </button>  
+                                
+                                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong><%=product.name%></strong> đã được thêm vào giỏ hàng
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>	
                     </div>
@@ -216,19 +233,3 @@
     </div>
 </section>
 
-<div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <strong><%=product.name%></strong> đã được thêm vào giỏ hàng
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
