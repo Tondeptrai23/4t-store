@@ -25,42 +25,16 @@
 		<div class="row justify-content-center align-items-center min-vh-100">
 			<div class="col-md-6 col-lg-5">
 				<div class="card p-4 shadow-sm">
-					<h2 class="text-center mb-4">Đăng nhập</h2>
+					<h2 class="text-center mb-4">Xác nhận</h2>
 
-					<form action="/login" method="post">
-						<div class="form-group mb-3">
-							<label for="email" class="form-label">
-								Email
-							</label>
-							<input type="email" class="form-control" id="email" name="email" required />
-						</div>
+					<p class="text-center mb-4">
+						Bạn đã đăng nhập. Nếu bạn muốn sử dụng một tài khoản khác thì hãy đăng xuất khỏi tài khoản hiện tại trước.
+					</p>
 
-						<div class="form-group mb-4">
-							<label for="password" class="form-label">
-								Mật khẩu
-							</label>
-							<input type="password" class="form-control" id="password" name="password" required />
-						</div>
-
-						<% if (errorMsg) { %>
-						<div class="alert alert-danger" role="alert">
-							<%= errorMsg %>
-						</div>
-						<% } %>
-
-						<button type="submit" class="btn btn-primary w-100 size-101">
-							Đăng nhập
-						</button>
-
-						<div class="text-center mt-3">
-							<p>
-								Bạn chưa có tài khoản?
-								<a href="/register" class="cl1">
-									Đăng ký tại đây
-								</a>
-							</p>
-						</div>
-					</form>
+					<div class="d-flex justify-content-center gap-3">
+						<a href="/logout" class="btn btn-primary px-4 py-2 fw-medium">Đăng xuất</a>
+						<a href="/" class="btn btn-outline-primary px-4 py-2 fw-medium">Trở về trang chủ</a>
+					</div>
 				</div>
 			</div>
 		</div>

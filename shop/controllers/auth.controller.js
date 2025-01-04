@@ -1,12 +1,22 @@
 import UserService from "../services/user.service.js";
+import { ModelError } from "../utils/errors.js";
 
 class AuthController {
-	loginView(_request, response) {
-		return response.render("pages/auth/login");
+	loginView(request, response) {
+		if (request.isAuthenticated()) {
+			return response.render("pages/auth/authenticated");
+		}
+		const errorMsg = request.query["invalid-credentials"] 
+			? "Email hoặc mật khẩu bạn nhập không chính xác. Xin vui lòng thử lại." 
+			: null;
+		return response.render("pages/auth/login", { errorMsg: errorMsg });
 	}
 
-	registerView(_request, response) {
-		return response.render("pages/auth/register");
+	registerView(request, response) {
+		if (request.isAuthenticated()) {
+			return response.render("pages/auth/authenticated");
+		}
+		return response.render("pages/auth/register", { errorMsg: null });
 	}
 
 	logout(request, response) {
@@ -14,6 +24,15 @@ class AuthController {
 			if (error) { throw new Error(error); }
 			response.redirect("/");
 		});
+	}
+
+	async checkEmail(request, response) {
+		const { email } = request.body;
+		const user = await UserService.findByEmail(email);
+		if (user) {
+			return response.json({ isExisted: true });
+		}
+		return response.json({ isExisted: false });
 	}
 
 	async register(request, response) {
@@ -28,13 +47,23 @@ class AuthController {
 		try {
 			const user = await UserService.create(data);
 			request.login(user, (error) => {
-				if (error) { throw new Error(error); }
+				if (error) {
+					console.log(user);
+					return response.render("pages/auth/register", {
+						errorMsg: "Đăng ký thất bại. Vui lòng thử lại."
+					});
+				}
 				response.redirect("/");
 			});
-		}
-		catch (error) {
+		} catch (error) {
+			if (error instanceof ModelError) {
+				return response.render("pages/auth/register", { 
+					errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác." 
+				});
+			}
 			throw new Error(error);
 		}
+		
 	}
 
 	// status(request, response) {
