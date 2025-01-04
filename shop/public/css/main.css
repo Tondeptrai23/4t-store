@@ -3348,3 +3348,88 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     }
   
   }
+
+
+/*---------------------------------------------*/
+/* .isotope-item {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.isotope-item.show {
+  opacity: 1;
+} */
+
+/* Hiệu ứng fade-in */
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Hiệu ứng fade-out */
+.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Định nghĩa mặc định cho sản phẩm */
+.isotope-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Hiển thị sản phẩm */
+.isotope-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.category-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 200px;
+}
+
+.category-container:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.page-item.active .page-link {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+.page-link {
+  color: black;
+}
+
+.page-link:hover {
+  background-color: #f8f9fa; /* Màu nền nhạt khi hover */
+  color: black;
+}

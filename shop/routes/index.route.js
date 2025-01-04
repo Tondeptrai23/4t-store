@@ -1,14 +1,14 @@
 import { Router } from "express";
-import userRoute from "./user.route.js";
 import authRoute from "./auth.route.js";
-import productRoute from "./product.route.js";
 import cartRoute from "./cart.route.js";
 import cartRenderRoute from "./cartRender.route.js";
+import productRoute from "./product.route.js";
+import userRoute from "./user.route.js";
 
 const router = Router();
 
-router.use(userRoute);
 router.use(authRoute);
+router.use(userRoute);
 router.use(productRoute);
 router.use(cartRenderRoute);
 
