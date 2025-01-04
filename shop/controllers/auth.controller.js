@@ -1,4 +1,5 @@
 import UserService from "../services/user.service.js";
+import { ModelError } from "../utils/errors.js";
 
 class AuthController {
 	loginView(request, response) {
@@ -43,21 +44,26 @@ class AuthController {
 			role: "user",
 		};
 
-		const user = UserService.create(data).catch((error) => {
-			response.render("pages/auth/register", { 
-				errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác." 
-			});
-		});
-		request.login(user, (error) => {
-			if (error) { 
-				response.render("pages/auth/register", { 
-					errorMsg: "Đăng ký thất bại. Vui lòng thử lại." 
-				}); 
-			}
-			else {
+		try {
+			const user = await UserService.create(data);
+			request.login(user, (error) => {
+				if (error) {
+					console.log(user);
+					return response.render("pages/auth/register", {
+						errorMsg: "Đăng ký thất bại. Vui lòng thử lại."
+					});
+				}
 				response.redirect("/");
+			});
+		} catch (error) {
+			if (error instanceof ModelError) {
+				return response.render("pages/auth/register", { 
+					errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác." 
+				});
 			}
-		});
+			throw new Error(error);
+		}
+		
 	}
 
 	// status(request, response) {
