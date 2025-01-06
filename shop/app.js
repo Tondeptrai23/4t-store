@@ -10,6 +10,7 @@ import "./config/passport/local.js";
 
 import connectSequelize from "connect-session-sequelize";
 import { db } from "./config/config.js";
+import { deserializeHandler } from "./middlewares/auth.middleware.js";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
 import router from "./routes/index.route.js";
 
@@ -56,6 +57,8 @@ const upload = multer({ storage: storage });
 app.use(upload.array("images", 5));
 
 app.set("view engine", "ejs");
+app.use(deserializeHandler);
+
 app.set("views", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {
