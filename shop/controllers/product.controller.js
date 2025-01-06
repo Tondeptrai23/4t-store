@@ -45,10 +45,11 @@ class ProductController {
     }
     async getById(req, res, next) {
         try {
-            const productId = req.params.id;
             const isLoggedIn = req.isAuthenticated();
+            const productId = req.params.id;
 
             const product = await productService.getById(productId);
+            const rawMoney = product.price;
             product.price = convertVietnameseCurrency(product.price);
             const category = await categoryService.getById(product.categoryId);
             const parentCategory = await categoryService.getParentCategory(
@@ -66,8 +67,9 @@ class ProductController {
                 product,
                 category,
                 relatedProduct,
-                parentCategory,
                 isLoggedIn,
+                rawMoney,
+                parentCategory,
             });
         } catch (err) {
             console.error(err);

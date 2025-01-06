@@ -1,11 +1,11 @@
 <div class="container">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
             Trang chủ
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
 
-        <a href="product.html" class="stext-109 cl8 hov-cl1 trans-04">
+        <a href="/product" class="stext-109 cl8 hov-cl1 trans-04">
             <%= parentCategory.name %>
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
@@ -15,7 +15,6 @@
         </span>
     </div>
 </div>
-
 
 <section class="sec-product-detail bg0 p-t-65 p-b-60">
     <div class="container">
@@ -98,11 +97,31 @@
                                     <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 fa fa-plus"></i>
                                     </div>
-                                </div>
-
-                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 mt-2 js-addcart-detail">
+                                </div>    
+                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 mt-2 js-add-to-cart"
+                                        data-product-id="<%= product.productId %>"
+                                        data-product-name="<%= product.name %>"
+                                        data-product-price="<%= rawMoney %>"
+                                        data-product-image="<%= product.images[0].path %>">
                                     Thêm vào giỏ hàng
-                                </button>
+                                </button>  
+                                
+                                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong><%=product.name%></strong> đã được thêm vào giỏ hàng
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>	
                     </div>
@@ -133,7 +152,6 @@
         <div class="bor10 m-t-50 p-t-43 p-b-40">
             <!-- Tab01 -->
             <div class="tab01">
-                <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item p-b-10">
                         <a class="nav-link active" data-toggle="tab" href="#description" role="tab">Mô tả</a>
@@ -141,7 +159,6 @@
                 </ul>
 
                 <div class="tab-content p-t-43">
-                    <!-- - -->
                     <div class="tab-pane fade show active" id="description" role="tabpanel">
                         <div class="how-pos2 p-lr-15-md">
                             <p class="stext-102 cl6">
@@ -215,6 +232,4 @@
         </div>
     </div>
 </section>
-
-
 

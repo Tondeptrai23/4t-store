@@ -80,4 +80,9 @@ CartItem.belongsTo(User, {
     onDelete: "CASCADE",
 });
 
+CartItem.belongsTo(Product, {
+    foreignKey: "productId",
+    onDelete: "CASCADE",
+});
+
 export default db;
