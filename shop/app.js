@@ -3,15 +3,16 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 
+import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import "./config/passport/local.js";
 
 import connectSequelize from "connect-session-sequelize";
 import { db } from "./config/config.js";
+import { deserializeHandler } from "./middlewares/auth.middleware.js";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
 import router from "./routes/index.route.js";
-import { deserializeHandler } from "./middlewares/auth.middleware.js";
 
 const app = express();
 const SequelizeStore = connectSequelize(session.Store);
@@ -29,6 +30,7 @@ const __dirname = path.dirname(__filename);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/utils", express.static(path.join(__dirname, "utils")));
 app.set("view engine", "ejs");
 
 app.use(
@@ -42,6 +44,21 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, "public", "images"));
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    },
+});
+
+const upload = multer({ storage: storage });
+
+app.use(upload.array("images", 5));
+
+app.set("view engine", "ejs");
 app.use(deserializeHandler);
 
 app.set("views", path.join(__dirname, "views"));
