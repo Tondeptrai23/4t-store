@@ -92,6 +92,11 @@ class AuthController {
     // status(request, response) {
     // 	return request.user ? response.json(request.user) : response.sendStatus(401);
     // }
+
+	googleCallback(request, response) {
+		console.log(request.user);
+		response.redirect("/");
+	}
 }
 
 export default new AuthController();

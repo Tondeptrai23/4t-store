@@ -6,7 +6,9 @@ import passport from "passport";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+
 import "./config/passport/local.js";
+import "./config/passport/google-oauth2.js";
 
 import connectSequelize from "connect-session-sequelize";
 import { db } from "./config/config.js";
