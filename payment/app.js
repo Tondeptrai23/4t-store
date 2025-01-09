@@ -1,14 +1,16 @@
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import express from "express";
 import db from "./config/database.js";
-import errorHandler from "./middleware/errorHandler.middleware.js";
+import errorHandler from "./middlewares/errorHandler.middleware.js";
 import router from "./routes/index.route.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 
 app.use(errorHandler);

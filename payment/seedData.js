@@ -1,21 +1,26 @@
-import sequelize from "../config/database.js";
-import User from "../models/User.js";
+import bcrypt from "bcrypt";
+import db from "./config/database.js";
+import User from "./models/user.js";
 
 async function seed() {
     try {
-        await sequelize.drop();
-        await sequelize.sync({ force: true });
+        await db.drop();
+        await db.sync({ force: true });
+
+        const salt = await bcrypt.genSalt(10);
+        const adminPassword = await bcrypt.hash("admin", salt);
+        const userPassword = await bcrypt.hash("user", salt);
 
         await User.create({
             username: "admin",
-            password: "admin123",
+            password: adminPassword,
             isAdmin: true,
             balance: 0,
         });
 
         await User.create({
             username: "user1",
-            password: "user123",
+            password: userPassword,
             balance: 1000,
         });
 
@@ -25,4 +30,4 @@ async function seed() {
     }
 }
 
-export default seed;
+seed();
