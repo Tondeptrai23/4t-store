@@ -32,6 +32,8 @@ class AuthController {
     async register(req, res) {
         const { username, password } = req.body;
 
+        const DEFAULT_BALANCE = 500000;
+
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ message: "Username already exists" });
@@ -43,7 +45,7 @@ class AuthController {
         const user = await User.create({
             username,
             password: hashedPassword,
-            balance: 1000,
+            balance: DEFAULT_BALANCE,
             isAdmin: false,
         });
 

@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import db from "../config/database.js";
 import Transaction from "../models/transaction.js";
 import User from "../models/user.js";
@@ -54,7 +55,7 @@ class TransactionController {
             );
 
             // Small delay to simulate processing time
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             // Update balances
             await User.update(
@@ -101,11 +102,13 @@ class TransactionController {
             [Op.and]: [userCondition, ...filterBuilder.build()],
         };
 
+        const count = await Transaction.count({ where: conditions });
+
         // Get pagination and sort
         const { limit, offset } = paginationBuilder.build();
         const order = sortBuilder.build();
 
-        const transactions = await Transaction.findAndCountAll({
+        const transactions = await Transaction.findAll({
             where: conditions,
             order,
             limit,
@@ -113,10 +116,10 @@ class TransactionController {
         });
 
         res.json({
-            transactions: transactions.rows,
-            total: transactions.count,
+            transactions: transactions,
+            totalItems: count,
             currentPage: Math.floor(offset / limit) + 1,
-            totalPages: Math.ceil(transactions.count / limit),
+            totalPages: Math.ceil(count / limit),
         });
     }
 
