@@ -1,11 +1,13 @@
 import allCategoryService from "../services/allCategory.service.js";
+import categoryService from "../services/category.service.js";
+import subCategoryService from "../services/subCategory.service.js";
 
 class AllCategoryController {
    
     getCategories = async function(req, res, next) {
         try {
             const requestQuery = req.query; 
-            console.log("get all categories " + JSON.stringify(requestQuery));
+        
             const result =
                 await allCategoryService.getFilteredSortedAndPaginatedCategories(
                     requestQuery
@@ -26,32 +28,15 @@ class AllCategoryController {
 
     async getById(req, res, next) {
         try {
-            const isLoggedIn = req.isAuthenticated();
-            const productId = req.params.id;
+        
+            const categoryId = req.params.id;
 
-            const product = await productService.getById(productId);
-            const rawMoney = product.price;
-            product.price = convertVietnameseCurrency(product.price);
-            const category = await categoryService.getById(product.categoryId);
-            const parentCategory = await categoryService.getParentCategory(
-                category.parentId
-            );
-            const relatedProduct = await categoryService.getRelatedProducts(
-                product.categoryId,
-                product.productId
-            );
-            relatedProduct.forEach((product) => {
-                product.price = convertVietnameseCurrency(product.price);
-            });
-            res.render("index", {
-                body: "pages/productDetail",
-                product,
-                category,
-                relatedProduct,
-                isLoggedIn,
-                rawMoney,
-                parentCategory,
-            });
+            let category = await categoryService.getById(categoryId);
+            if (!category) {
+                category = await subCategoryService.getById(categoryId);
+            }
+
+           
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: "Server Error" });

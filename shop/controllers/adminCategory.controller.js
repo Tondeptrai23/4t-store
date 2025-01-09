@@ -71,43 +71,64 @@ class AdminCategoryController {
 
     async showEditForm(req, res) {
         try {
-            const { id } = req.params;
-            const product = await productService.getById(id);
-            const categories = await categoryService.getAll();
-            const subcategories = await subCategoryService.getAll();
 
-            res.render("admin/pages/products/edit", {
+            const { id } = req.params;
+            let category = await categoryService.getParentCategory(id);
+
+            console.log("Test category :", category)
+
+            if(!category){
+                category = await subCategoryService.getById(id);
+            }
+
+            const selectedParentCategoryId = category.parentId || null;
+
+            const categories = await categoryService.getAll();
+           
+            res.render("admin/pages/categories/edit", {
                 layout: "admin/layouts/main",
-                product,
+                category,
                 categories,
-                subcategories,
+                selectedParentCategoryId
             });
         } catch (error) {
-            console.error("Error loading edit product form:", error);
+            console.error("Error loading edit category form:", error);
             res.status(500).send("Internal Server Error");
         }
     }
 
     async updateCategory(req, res) {
         try {
+
             const { id } = req.params;
             const categoryData = req.body;
 
-            const updatedProduct = await productService.update(id, {
-                ...productData,
-                image: image,
-            });
+            console.log("Test category data :", categoryData)
+
+            let updatedCategory;
+
+            if(categoryData.parentCategoryId){
+                updatedCategory = await subCategoryService.update(id, {
+                   ...categoryData,
+                   parentId: categoryData.parentCategoryId || null
+                })
+            } else {
+                updatedCategory = await categoryService.update(id, {
+                    ...categoryData
+                });
+            }
+            
 
             res.json({
                 success: true,
-                message: "Product updated successfully",
-                product: updatedProduct,
+                message: "Category updated successfully",
+                product: updatedCategory,
             });
         } catch (error) {
-            console.error("Error updating product:", error);
+            console.error("Error updating category:", error);
             res.status(500).json({
                 success: false,
-                message: "Failed to update product",
+                message: "Failed to update category",
             });
         }
     }

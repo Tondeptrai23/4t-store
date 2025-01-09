@@ -120,7 +120,6 @@ class AllCategoryService {
             });
             
     
-      
             const paginatedCategories = combinedCategories.slice(offset, offset + limit);
     
             const totalCount = combinedCategories.length;

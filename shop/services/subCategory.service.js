@@ -15,6 +15,18 @@ class SubCategoryService {
         }
     };
 
+    getById = async (categoryId) => {
+        try {
+            const category = await SubCategory.findByPk(categoryId);
+            if (!category) {
+                throw new Error(`Category with ID ${categoryId} not found`);
+            }
+            return category;
+        } catch (error) {
+            throw new Error("Error fetching product: " + error.message);
+        }
+    };
+
     create = async (categoryData) => {
         try {
             const category = await  SubCategory.create(categoryData);
@@ -23,6 +35,24 @@ class SubCategoryService {
         } catch (error) {
             console.error("Error creating subCategory:", error);
             throw new Error("Failed to create subCategory: " + error.message);
+        }
+    };
+
+    update = async (categoryId, categoryData) => {
+        try {
+           
+            const category = await SubCategory.findByPk(categoryId);
+
+            if (!category) {
+                throw new Error(`SubCategory with ID ${categoryId} not found`);
+            }
+
+            await category.update(categoryData);
+
+            return await SubCategory.findByPk(categoryId);
+            
+        } catch (error) {
+            throw new Error("Failed to update subCategory: " + error.message);
         }
     };
 

@@ -74,6 +74,24 @@ class CategoryService {
         }
     };
 
+    update = async (categoryId, categoryData) => {
+        try {
+           
+            const category = await Category.findByPk(categoryId);
+
+            if (!category) {
+                throw new Error(`Category with ID ${categoryId} not found`);
+            }
+
+            await category.update(categoryData);
+
+            return await Category.findByPk(categoryId);
+
+        } catch (error) {
+            throw new Error("Failed to update category: " + error.message);
+        }
+    };
+
     deleteById = async (categoryId) => {
         try {
             // First check if the product exists
@@ -93,7 +111,7 @@ class CategoryService {
             return true;
         } catch (error) {
             console.error("Error in deleteById:", error);
-            throw new Error("Failed to delete category");
+            throw new Error("Failed to delete subCategory");
         }
     };
 
