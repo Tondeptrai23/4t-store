@@ -11,8 +11,16 @@ router.post("/register", authController.register);
 
 router.post("/transfer", verifyToken, transactionController.transfer);
 
-router.get("/test", verifyToken, (req, res) => {
-    res.send("Test");
-});
+router.get(
+    "/transactions",
+    verifyToken,
+    transactionController.getTransactionHistory
+);
+
+router.get(
+    "/admin/balance",
+    verifyToken,
+    transactionController.getAdminBalance
+);
 
 export default router;

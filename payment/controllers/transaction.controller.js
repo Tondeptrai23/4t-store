@@ -1,6 +1,11 @@
 import db from "../config/database.js";
 import Transaction from "../models/transaction.js";
 import User from "../models/user.js";
+import {
+    FilterBuilder,
+    PaginationBuilder,
+    SortBuilder,
+} from "../utils/condition.js";
 
 class TransactionController {
     async transfer(req, res) {
@@ -79,6 +84,72 @@ class TransactionController {
             await t.rollback();
             res.status(500).json({ message: "Transfer failed" });
         }
+    }
+
+    async getTransactionHistory(req, res) {
+        const filterBuilder = new TransactionFilterBuilder(req.query);
+        const paginationBuilder = new PaginationBuilder(req.query);
+        const sortBuilder = new TransactionSortBuilder(req.query);
+
+        // Add user condition (always filter by current user)
+        const userCondition = {
+            [Op.or]: [{ fromUserId: req.user.id }, { toUserId: req.user.id }],
+        };
+
+        // Combine all conditions
+        const conditions = {
+            [Op.and]: [userCondition, ...filterBuilder.build()],
+        };
+
+        // Get pagination and sort
+        const { limit, offset } = paginationBuilder.build();
+        const order = sortBuilder.build();
+
+        const transactions = await Transaction.findAndCountAll({
+            where: conditions,
+            order,
+            limit,
+            offset,
+        });
+
+        res.json({
+            transactions: transactions.rows,
+            total: transactions.count,
+            currentPage: Math.floor(offset / limit) + 1,
+            totalPages: Math.ceil(transactions.count / limit),
+        });
+    }
+
+    async getAdminBalance(req, res) {
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
+        const admin = await User.findOne({
+            where: { isAdmin: true },
+            attributes: ["balance"],
+        });
+
+        res.json({ success: true, balance: admin.balance });
+    }
+}
+
+export class TransactionFilterBuilder extends FilterBuilder {
+    constructor(requestQuery) {
+        super(requestQuery);
+        this._allowFields = ["status", "fromUserId", "toUserId", "createdAt"];
+    }
+}
+
+export class TransactionSortBuilder extends SortBuilder {
+    constructor(requestQuery) {
+        super(requestQuery);
+        this._map = {
+            amount: ["amount"],
+            createdAt: ["createdAt"],
+            status: ["status"],
+        };
+        this._defaultSort = [["createdAt", "DESC"]];
     }
 }
 
