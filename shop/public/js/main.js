@@ -45,14 +45,43 @@ $(document).ready(function () {
 
     /*==================================================================
     [ +/- num product ]*/
-    $('.btn-num-product-down').on('click', function () {
+    $(document).off('click', '.btn-num-product-down');
+    $(document).off('click', '.btn-num-product-up');
+    
+    $(document).on('click', '.btn-num-product-down', function () {
         var numProduct = Number($(this).next().val());
-        if (numProduct > 0) $(this).next().val(numProduct - 1);
+        if (numProduct > 1) $(this).next().val(numProduct - 1).trigger('change');
+    });
+    
+    $(document).on('click', '.btn-num-product-up', function () {
+        var numProduct = Number($(this).prev().val());
+        $(this).prev().val(numProduct + 1).trigger('change');
     });
 
-    $('.btn-num-product-up').on('click', function () {
-        var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
+    $('.main-menu li a').on('click', function () {
+        $('.main-menu li').removeClass('active-menu');
+        $(this).parent().addClass('active-menu');
+    });
+
+    $('.nav-link').click(function(event) {
+        event.preventDefault(); 
+
+        $('.nav-link').removeClass('active');
+        $('.tab-pane').removeClass('show active');
+
+        // Thêm lớp active vào tab được nhấn
+        $(this).addClass('active');
+
+        var target = $(this).attr('href');
+        $(target).addClass('show active');
+    });
+
+    $('.js-addcart-detail').each(function(){
+        //var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+        var nameProduct = "Product";
+        $(this).on('click', function(){
+            swal(nameProduct, "is added to cart !", "success");
+        });
     });
 
 });
@@ -103,46 +132,6 @@ $(document).ready(function () {
 
 (function ($) {
     "use strict";
-
-    /*==================================================================
-    [ Filter Items ]*/
-    var $topeContainer = $('.isotope-grid'); // Lọc phần tử trong container
-    var $filterButtons = $('.filter-tope-group button'); // Các nút lọc
-    $filterButtons.filter('[data-filter="*"]').addClass('how-active1');
-
-    // Function to filter items based on button click
-    function filterItems(filterValue) {
-        var $items = $topeContainer.find('.isotope-item');
-
-        // Show all items if 'all' is selected
-        if (filterValue === '*') {
-            $items.show();
-        } else {
-            $items.each(function () {
-                // Show matching items, hide others
-                if ($(this).hasClass(filterValue.substring(1))) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
-    }
-
-    // Add event listener to filter buttons
-    $filterButtons.on('click', function () {
-        var filterValue = $(this).attr('data-filter'); // Get filter value
-
-        // Apply filter to items
-        filterItems(filterValue);
-
-        // Toggle active class on filter button
-        $filterButtons.removeClass('how-active1');
-        $(this).addClass('how-active1');
-    });
-
-
-    filterItems('*');
 
 
     /*==================================================================
@@ -196,3 +185,6 @@ $(document).ready(function () {
     });
 
 })(jQuery);
+
+
+

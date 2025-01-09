@@ -12,9 +12,22 @@
 
 ### Execution
 
+Before any coding or running, run this below command to install all the dependencies.
+
 ```bash
 npm install
+```
+
+To run the server, run this below command.
+
+```bash
 npm start
+```
+
+To run the server in development mode, run this below command.
+
+```bash
+npm run dev
 ```
 
 ### Data Initialization
@@ -118,7 +131,7 @@ await Product.findAll({
 -   The filtering supports multiple comparison operators, such as `ne`, `gt`, `gte`, `lt`, `lte`, `like`, `between` and multiple fields at a time. For example, the following query string will filter the products whose name contains 'apple' and price is greater than or equal to 100.
 
 ```bash
-api/products?name=[like]apple&price[gte]=100
+api/products?name=[like]apple&price=[gte]100
 ```
 
 4. **Combining**
@@ -126,5 +139,5 @@ api/products?name=[like]apple&price[gte]=100
 -   You can combine the sorting, pagination and filtering together. For example, the following query string will filter the products whose name contains 'apple', price is greater than or equal to 100, less than 200, sort by name in ascending order, and return the second page with 10 products.
 
 ```bash
-api/products?name=[like]apple&price[gte]=100&price[lt]=200&sort=name&page=2&size=10
+api/products?name=[like]apple&price=[gte]100&price=[lt]200&sort=name&page=2&size=10
 ```

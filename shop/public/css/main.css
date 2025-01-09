@@ -59,7 +59,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
 
   .carousel-item {
-      height: 100vh;
       background-size: cover;
       background-position: center;
   }
@@ -95,10 +94,8 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 }
 
 .nav-tabs .nav-link.active {
-  background-color: #f1f3f5;
-  font-weight: 500;
+  font-weight: 400;
   color: #717fe0;
-  border: 1px solid #ddd; /* Optional: Add border for better visibility */
 }
 
 /* Styling for menu-list */
@@ -236,7 +233,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   /*---------------------------------------------*/
   .left-top-bar {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 12px;
     line-height: 1.8;
     color: #b2b2b2;
@@ -245,7 +242,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   /*---------------------------------------------*/
   .right-top-bar a {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 12px;
     line-height: 1.8;
   
@@ -373,8 +370,9 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .main-menu > li > a {
-    font-family: "Poppins", sans-serif;
-    font-size: 14px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 15px;
     color: #333;
     padding: 5px 0px;
     transition: all 0.4s;
@@ -428,7 +426,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .sub-menu a {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     line-height: 1.5;
     color: #555;
@@ -498,7 +496,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   /*---------------------------------------------*/
   .icon-header-noti::after {
     content: attr(data-notify);
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 12px;
     color: #fff;
     line-height: 15px;
@@ -566,7 +564,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   /*---------------------------------------------*/
   .wrap-search-header input {
-    font-family: Poppins-ExtraLight;
+    font-family: Roboto-ExtraLight;
     font-size: 50px;
     line-height: 1.2;
     color: #333;
@@ -742,7 +740,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .main-menu-m > li > a {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     color: white;
     line-height: 2.8;
@@ -796,7 +794,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .sub-menu-m a {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     color: #666;
     line-height: 2.5;
@@ -878,6 +876,9 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     gap:20px;
   }
   
+  .sidebar-content::-webkit-scrollbar {
+    display: none;
+  }
   /*---------------------------------------------*/
   .wrap-item-gallery {
     width: calc((100% - 20px) / 3);
@@ -976,6 +977,15 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     height: 16.5%;
     min-height: 85px;
   }
+  .header-cart-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for other browsers */
+  .header-cart-content {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
   
   .header-cart-content {
     flex-grow: 1;
@@ -1000,7 +1010,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .header-cart-item-img::after {
-    content: '\e870';
+    content: '🗑️';
     font-family: Linearicons-Free;
     font-size: 16px;
     display: -webkit-box;
@@ -1035,7 +1045,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   .header-cart-item-name {
     display: block;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     color: #555;
     line-height: 1.3;
@@ -1043,14 +1053,14 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   .header-cart-item-info {
     display: block;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     color: #888;
     line-height: 1.5;
   }
   
   .header-cart-total {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 18px;
     color: #222;
     line-height: 1.3;
@@ -1097,7 +1107,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   /*------------------------------------------------------------------
   [ in select ]*/
   .rs1-select2 .select2-container .select2-selection--single .select2-selection__rendered {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     color: #555;
     line-height: 1.2;
@@ -1174,7 +1184,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .rs1-select2 .select2-results__options {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     color: #555;
     line-height: 1.2;
@@ -1183,7 +1193,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   .rs1-select2 .select2-search--dropdown .select2-search__field {
     border: 1px solid #aaa;
     outline: none;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     color: #555;
     line-height: 1.2;
@@ -1332,7 +1342,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .caption-dots-slick1 {
-    font-family: Poppins-ExtraLight;
+    font-family: Roboto-ExtraLight;
     font-size: 16px;
     line-height: 1.3;
     color: #fff;
@@ -1621,7 +1631,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .tab01 .nav-link {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     color: #888;
     line-height: 1.2;
@@ -1629,7 +1639,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     padding: 0;
     border-radius: 0px;
     border: none;
-    border-bottom: 1px solid transparent;
   
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
@@ -1639,7 +1648,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   .tab01 .nav-link.active {
     color: #333;
-    border-color: #797979;
   }
   
   .tab01 .nav-link:hover {
@@ -1660,7 +1668,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   .swal-button {
     background-color: #717fe0;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 16px;
     color: white;
     text-transform: uppercase;
@@ -1681,7 +1689,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .swal-title {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     color: #333333;
     font-size: 18px;
     line-height: 1.5;
@@ -1689,7 +1697,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .swal-text {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     color: #555555;
     font-size: 16px;
     line-height: 1.666667;
@@ -1833,7 +1841,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   .tooltip100::after {
     content: attr(data-tooltip);
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 12px;
     color: #888;
     line-height: 18px;
@@ -1970,7 +1978,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .table-shopping-cart .table_head th {
-    font-family: Poppins-Bold;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     color: #555;
     text-transform: uppercase;
@@ -1980,7 +1988,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .table-shopping-cart td {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     color: #555;
     line-height: 1.6;
   }
@@ -2148,106 +2156,107 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   /*//////////////////////////////////////////////////////////////////
   [ S-Text 0 - 15 ]*/
   .stext-101 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
+    font-weight: 500;
     line-height: 1.466667;
     text-transform: uppercase;
   }
   
   .stext-102 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     line-height: 1.7;
   }
   
   .stext-103 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     line-height: 1.466667;
   }
   
   .stext-104 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     line-height: 1.466667;
   }
   
   .stext-105 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     line-height: 1.466667;
     letter-spacing: 1px;
   }
   
   .stext-106 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     line-height: 1.2;
   }
   
   .stext-107 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     line-height: 1.923;
   }
   
   .stext-108 {
-    font-family: Poppins-Light;
+    font-family: Roboto-Light;
     font-size: 14px;
     line-height: 1.7143;
   }
   
   .stext-109 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 12px;
     line-height: 1.833333;
   }
   
   .stext-110 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     line-height: 1.466667;
   }
   
   .stext-111 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     line-height: 1.6923;
   }
   
   .stext-112 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 13px;
     line-height: 1.6923;
     text-transform: uppercase;
   }
   
   .stext-113 {
-    font-family: Poppins-Light;
+    font-family: Roboto-Light;
     font-size: 14px;
     line-height: 1.7857;
   }
   
   .stext-114 {
-    font-family: Poppins-Italic;
+    font-family: Roboto-Italic;
     font-size: 15px;
     line-height: 1.666667;
   }
   
   .stext-115 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     line-height: 1.666667;
   }
   
   .stext-116 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     line-height: 1.266667;
   }
   
   .stext-117 {
-    font-family: Poppins-Light;
+    font-family: Roboto-Light;
     font-size: 15px;
     line-height: 1.666667;
   }
@@ -2265,81 +2274,82 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   /*//////////////////////////////////////////////////////////////////
   [ M-Text 16 - 25 ]*/
   .mtext-101 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 18px;
     line-height: 1.333333;
   }
   
   .mtext-102 {
-    font-family: Poppins-SemiBold;
+    font-family: Roboto-SemiBold;
     font-size: 16px;
     line-height: 1.6;
   }
   
   .mtext-103 {
-    font-family: Poppins-Bold;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
     font-size: 18px;
     line-height: 1.333333;
     text-transform: uppercase;
   }
   
   .mtext-104 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 16px;
     line-height: 1.6;
   }
   
   .mtext-105 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 24px;
     line-height: 1.5;
   }
   
   .mtext-106 {
-    font-family: Poppins-SemiBold;
+    font-family: "Roboto", sans-serif;
     font-size: 18px;
     line-height: 1.388888;
   }
   
   .mtext-107 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 16px;
     line-height: 1.625;
   }
   
   .mtext-108 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 20px;
     line-height: 1.3;
   }
   
   .mtext-109 {
-    font-family: Poppins-Bold;
+    font-family: "Roboto", sans-serif;
     font-size: 20px;
     line-height: 1.3;
     text-transform: uppercase;
   }
   
   .mtext-110 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 18px;
     line-height: 1.222222;
   }
   
   .mtext-111 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 25px;
     line-height: 1.2;
   }
   
   .mtext-112 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 22px;
     line-height: 1.333333;
   }
   
   .mtext-113 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 22px;
     line-height: 1.333333;
     text-transform: uppercase;
@@ -2349,57 +2359,56 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   /*//////////////////////////////////////////////////////////////////
   [ L-Text >= 26 ]*/
   .ltext-101 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 28px;
     line-height: 1.2857;
   }
   
   .ltext-102 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 28px;
     line-height: 1.1;
   }
   
   .ltext-103 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 36px;
     line-height: 1.1;
     text-transform: uppercase;
   }
   
   .ltext-104 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 60px;
     line-height: 1.1;
     text-transform: uppercase;
   }
   
   .ltext-105 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 50px;
     line-height: 1.1;
   }
   
   .ltext-106 {
-    font-family: Poppins-Bold;
     font-size: 36px;
     line-height: 1.2;
   }
   
   .ltext-107 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 30px;
     line-height: 1.1;
   }
   
   .ltext-108 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 26px;
     line-height: 1.3846;
   }
   
   .ltext-109 {
-    font-family: Poppins-Bold;
+    font-family: Roboto-Bold;
     font-size: 36px;
     line-height: 1.2;
   }
@@ -2818,7 +2827,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   .label1::after {
     content: attr(data-label1);
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 10px;
     line-height: 15px;
     color: #fff;
@@ -2876,7 +2885,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   
   /*---------------------------------------------*/
   .how-pagination1 {
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px;
     color: #808080;
   
@@ -2975,7 +2984,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .how-itemcart1::after {
-    content: '\e870';
+    content: '🗑️';
     font-family: Linearicons-Free;
     font-size: 16px;
     display: -webkit-box;
@@ -3339,3 +3348,88 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     }
   
   }
+
+
+/*---------------------------------------------*/
+/* .isotope-item {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.isotope-item.show {
+  opacity: 1;
+} */
+
+/* Hiệu ứng fade-in */
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Hiệu ứng fade-out */
+.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Định nghĩa mặc định cho sản phẩm */
+.isotope-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Hiển thị sản phẩm */
+.isotope-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.category-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 200px;
+}
+
+.category-container:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.page-item.active .page-link {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+.page-link {
+  color: black;
+}
+
+.page-link:hover {
+  background-color: #f8f9fa; /* Màu nền nhạt khi hover */
+  color: black;
+}
