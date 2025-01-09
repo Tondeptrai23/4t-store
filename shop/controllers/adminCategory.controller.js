@@ -118,7 +118,6 @@ class AdminCategoryController {
                 });
             }
             
-
             res.json({
                 success: true,
                 message: "Category updated successfully",

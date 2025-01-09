@@ -1,8 +1,6 @@
 import { Sequelize } from "sequelize";
 import Category from "../models/category.model.js";
 import SubCategory from "../models/subCategory.model.js";
-import Image from "../models/image.model.js";
-import Product from "../models/product.model.js";
 import subCategoryService from "../services/subCategory.service.js";
 import categoryService from "../services/category.service.js";
 import {
