@@ -73,6 +73,44 @@ class CategoryService {
             throw new Error("Failed to create category: " + error.message);
         }
     };
+
+    deleteById = async (categoryId) => {
+        try {
+            // First check if the product exists
+            const category = await Category.findByPk(categoryId);
+
+            if (!category) {
+                return false;
+            }
+
+            // Delete the product
+            await Category.destroy({
+                where: {
+                    categoryId: categoryId,
+                },
+            });
+
+            return true;
+        } catch (error) {
+            console.error("Error in deleteById:", error);
+            throw new Error("Failed to delete category");
+        }
+    };
+
+    bulkDelete = async (categoryIds) => {
+        try {
+            const result = await Category.destroy({
+                where: {
+                    categoryId: categoryIds,
+                },
+            });
+
+            return result;
+        } catch (error) {
+            console.error("Error in bulkDelete:", error);
+            throw new Error("Failed to delete categories");
+        }
+    };
 }
 
 export default new CategoryService();

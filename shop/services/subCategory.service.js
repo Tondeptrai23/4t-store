@@ -26,6 +26,44 @@ class SubCategoryService {
         }
     };
 
+    deleteById = async (categoryId) => {
+        try {
+            // First check if the product exists
+            const category = await SubCategory.findByPk(categoryId);
+
+            if (!category) {
+                return false;
+            }
+
+            // Delete the product
+            await SubCategory.destroy({
+                where: {
+                    categoryId: categoryId,
+                },
+            });
+
+            return true;
+        } catch (error) {
+            console.error("Error in deleteById:", error);
+            throw new Error("Failed to delete subCategory");
+        }
+    };
+
+    bulkDelete = async (categoryIds) => {
+        try {
+            const result = await SubCategory.destroy({
+                where: {
+                    categoryId: categoryIds,
+                },
+            });
+
+            return result;
+        } catch (error) {
+            console.error("Error in bulkDelete:", error);
+            throw new Error("Failed to delete subCategories");
+        }
+    };
+
 }
 
 export default new SubCategoryService();

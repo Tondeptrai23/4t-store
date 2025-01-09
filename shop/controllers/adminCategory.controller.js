@@ -42,8 +42,6 @@ class AdminCategoryController {
         try {
             const categoryData = req.body;
 
-            console.log("Creating category ",JSON.stringify(categoryData));
-
             let newCategory;
 
             if(categoryData.parentCategoryId !== "null"){
@@ -114,36 +112,39 @@ class AdminCategoryController {
         }
     }
 
-    async deleteProduct(req, res) {
+    async deleteCategory(req, res) {
         try {
             const { id } = req.params;
-            await productService.deleteById(id);
+            await categoryService.deleteById(id);
+            await subCategoryService.deleteById(id);
+
             res.json({
                 success: true,
-                message: "Product deleted successfully",
+                message: "Category deleted successfully",
             });
         } catch (error) {
-            console.error("Error deleting product:", error);
+            console.error("Error deleting category:", error);
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: "Failed to delete product",
+                message: "Failed to delete category",
             });
         }
     }
 
-    async bulkDeleteProducts(req, res) {
+    async bulkDeleteCategories(req, res) {
         try {
             const { ids } = req.body;
-            await productService.bulkDelete(ids);
+            await categoryService.bulkDelete(ids);
+            await subCategoryService.bulkDelete(ids);
             res.json({
                 success: true,
-                message: "Products deleted successfully",
+                message: "Categories deleted successfully",
             });
         } catch (error) {
-            console.error("Error bulk deleting products:", error);
+            console.error("Error bulk deleting categories:", error);
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: "Failed to delete products",
+                message: "Failed to delete categories",
             });
         }
     }

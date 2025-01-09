@@ -18,5 +18,7 @@ router.post("/products/bulk-delete", adminProductController.bulkDeleteProducts);
 router.get('/categories', adminCategoryController.listCategories);
 router.get("/categories/create", adminCategoryController.showCreateForm);
 router.post('/categories/create', adminCategoryController.createCategory);
+router.delete("/categories/:id", adminCategoryController.deleteCategory);
+router.post("/categories/bulk-delete", adminCategoryController.bulkDeleteCategories);
 
 export default router;
