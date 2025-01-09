@@ -94,12 +94,7 @@ $(document).ready(function () {
                 },
             },
         ],
-        order: [[1, "asc"]],
-        
-        columnDefs: [
-            { orderable: false, targets: 0 }, // Không sắp xếp cột checkbox
-            { orderable: false, targets: 4 }, // Không sắp xếp cột thao tác
-        ]
+        order: [[1, "asc"]]
         
     });
 

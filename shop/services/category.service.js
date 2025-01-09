@@ -62,6 +62,17 @@ class CategoryService {
             );
         }
     };
+
+    create = async (categoryData) => {
+        try {
+            const category = await Category.create(categoryData);
+
+            return category.toJSON();
+        } catch (error) {
+            console.error("Error creating category:", error);
+            throw new Error("Failed to create category: " + error.message);
+        }
+    };
 }
 
 export default new CategoryService();

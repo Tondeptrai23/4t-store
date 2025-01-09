@@ -1,14 +1,17 @@
 import categoryService from "../services/category.service.js";
 import productService from "../services/product.service.js";
 import allCategoryService from "../services/allCategory.service.js";
+import subCategoryService from "../services/subCategory.service.js";
 
 class AdminCategoryController {
     async listCategories(req, res) {
         try {
 
-            const response = await allCategoryService.getFilteredSortedAndPaginatedCategories(req.query);
+            const response = await allCategoryService.getFilteredSortedAndPaginatedCategories(
+                req.query
+            );
 
-            const categories = response.categories;
+            const categories = response.categories || [];
     
             res.render("admin/pages/categories/list", {
                 layout: "admin/layouts/main",
@@ -24,15 +27,13 @@ class AdminCategoryController {
     async showCreateForm(req, res) {
         try {
             const categories = await categoryService.getAll();
-            const subcategories = await subCategoryService.getAll();
-
-            res.render("admin/pages/products/create", {
+          
+            res.render("admin/pages/categories/create", {
                 layout: "admin/layouts/main",
-                categories,
-                subcategories,
+                categories
             });
         } catch (error) {
-            console.error("Error loading create product form:", error);
+            console.error("Error loading create category form:", error);
             res.status(500).send("Internal Server Error");
         }
     }
@@ -41,10 +42,21 @@ class AdminCategoryController {
         try {
             const categoryData = req.body;
 
-            const newCategory = await categoryService.create({
-                ...categoryData
-            });
+            console.log("Creating category ",JSON.stringify(categoryData));
 
+            let newCategory;
+
+            if(categoryData.parentCategoryId !== "null"){
+                newCategory = await subCategoryService.create({
+                   ...categoryData,
+                   parentId: categoryData.parentCategoryId || null
+                })
+            } else {
+                newCategory = await categoryService.create({
+                    ...categoryData
+                });
+            }
+            
             res.status(201).json({
                 success: true,
                 message: "Category created successfully",

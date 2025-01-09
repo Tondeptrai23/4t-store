@@ -15,6 +15,17 @@ class SubCategoryService {
         }
     };
 
+    create = async (categoryData) => {
+        try {
+            const category = await  SubCategory.create(categoryData);
+
+            return category.toJSON();
+        } catch (error) {
+            console.error("Error creating subCategory:", error);
+            throw new Error("Failed to create subCategory: " + error.message);
+        }
+    };
+
 }
 
 export default new SubCategoryService();

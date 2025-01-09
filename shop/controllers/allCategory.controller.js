@@ -4,14 +4,13 @@ class AllCategoryController {
    
     getCategories = async function(req, res, next) {
         try {
-            const requestQuery = req.query; // Lấy các tham số từ query string
+            const requestQuery = req.query; 
             console.log("get all categories " + JSON.stringify(requestQuery));
             const result =
                 await allCategoryService.getFilteredSortedAndPaginatedCategories(
                     requestQuery
                 );
 
-            // Trả về kết quả
             res.status(200).json({
                 success: true,
                 data: result,
