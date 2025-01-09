@@ -3,13 +3,18 @@ import SubCategory from '../models/subCategory.model.js'
 class SubCategoryService {
     getAll = async () => {
         try {
-            const subCategories = await SubCategory.findAll();
+            let subCategories = await SubCategory.findAll();
+
+            subCategories = subCategories.map((subCategory) =>
+                subCategory.toJSON()
+            );
+
             return subCategories;
         } catch (error) {
-            throw new Error("Error fetching products: " + error.message);
+            throw new Error("Error fetching subCategories: " + error.message);
         }
     };
-    
+
 }
 
 export default new SubCategoryService();

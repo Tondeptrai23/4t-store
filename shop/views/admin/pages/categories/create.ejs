@@ -1,0 +1,411 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h2 class="page-title">Tạo danh mục mới</h2>
+            <p class="text-muted">
+                Thêm danh mục mới với thông tin chi tiết.
+            </p>
+
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">Thông tin sản phẩm</strong>
+                </div>
+                <div class="card-body">
+                    <form
+                        id="createProductForm"
+                        class="needs-validation"
+                        enctype="multipart/form-data"
+                        novalidate
+                    >
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="name">Tên sản phẩm</label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        class="form-control"
+                                        required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập tên sản phẩm.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="category">Danh mục</label>
+                                    <select
+                                        class="custom-select"
+                                        id="category"
+                                        name="parentCategoryId"
+                                        required
+                                    >
+                                        <option selected disabled value="">
+                                            Chọn danh mục...
+                                        </option>
+                                        <% categories.forEach(function(category)
+                                        { %>
+                                        <option
+                                            value="<%= category.categoryId %>"
+                                        >
+                                            <%= category.name %>
+                                        </option>
+                                        <% }); %>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn danh mục.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="subcategory">
+                                        Danh mục con
+                                    </label>
+                                    <select
+                                        class="custom-select"
+                                        id="subcategory"
+                                        name="categoryId"
+                                        required
+                                        disabled
+                                    >
+                                        <option selected disabled value="">
+                                            Chọn danh mục con...
+                                        </option>
+                                        <%
+                                        subcategories.forEach(function(subcategory)
+                                        { %>
+                                        <option
+                                            value="<%= subcategory.categoryId %>"
+                                            data-parent="<%= subcategory.parentId %>"
+                                        >
+                                            <%= subcategory.name %>
+                                        </option>
+                                        <% }); %>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn danh mục con.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="price">Giá</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                ₫
+                                            </span>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            step="1000"
+                                            id="price"
+                                            name="price"
+                                            class="form-control"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập giá hợp lệ.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="size">Kích thước</label>
+                                    <select
+                                        class="custom-select"
+                                        id="size"
+                                        name="size"
+                                        required
+                                    >
+                                        <option value="" disabled selected>
+                                            Chọn kích thước...
+                                        </option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn kích thước.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="color">Màu sắc</label>
+                                    <select
+                                        class="custom-select"
+                                        id="color"
+                                        name="color"
+                                        required
+                                    >
+                                        <option value="" disabled selected>
+                                            Chọn màu sắc...
+                                        </option>
+                                        <option value="Black">Đen</option>
+                                        <option value="Red">Đỏ</option>
+                                        <option value="Blue">Xanh dương</option>
+                                        <option value="Gray">Xám</option>
+                                        <option value="White">Trắng</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn màu sắc.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="description">Mô tả</label>
+                            <textarea
+                                class="form-control"
+                                id="description"
+                                name="description"
+                                rows="4"
+                                required
+                            ></textarea>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập mô tả sản phẩm.
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="images">Hình ảnh sản phẩm</label>
+                            <div class="custom-file">
+                                <input
+                                    type="file"
+                                    class="custom-file-input"
+                                    id="image"
+                                    name="images"
+                                    accept="image/*"
+                                    required
+                                />
+                                <label class="custom-file-label" for="image">
+                                    Chọn tệp...
+                                </label>
+                                <div class="invalid-feedback">
+                                    Vui lòng chọn hình ảnh.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="image-preview" class="mt-2"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Tạo sản phẩm
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('style') %>
+<style>
+    .image-preview-container {
+        position: relative;
+        margin: 10px;
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .image-preview-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-image {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+</style>
+
+<%- contentFor('script') %>
+<script>
+    $(document).ready(function () {
+        $("#category").on("change", function () {
+            const selectedCategoryId = $(this).val();
+            const subcategorySelect = $("#subcategory");
+
+            // Enable subcategory select
+            subcategorySelect.prop("disabled", false);
+
+            // Hide all options first
+            subcategorySelect.find("option").hide();
+            subcategorySelect.find("option:first").show();
+
+            // Show only relevant subcategories
+            subcategorySelect
+                .find('option[data-parent="' + selectedCategoryId + '"]')
+                .show();
+
+            // Reset subcategory selection
+            subcategorySelect.val("");
+        });
+
+        // Handle file input change and preview
+        $("#images").on("change", function (event) {
+            const previewContainer = $("#image-preview");
+            previewContainer.empty();
+
+            const files = event.target.files;
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+            Array.from(files).forEach((file, index) => {
+                if (!file.type.startsWith("image/")) {
+                    alert("Vui lòng chỉ chọn tệp hình ảnh");
+                    return;
+                }
+
+                if (file.size > maxFileSize) {
+                    alert(
+                        `Tệp ${file.name} quá lớn. Kích thước tối đa là 5MB.`
+                    );
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const previewWrapper = $("<div>", {
+                        class: "image-preview-container",
+                    });
+
+                    const img = $("<img>", {
+                        src: e.target.result,
+                        alt: "Xem trước",
+                    });
+
+                    const removeBtn = $("<button>", {
+                        class: "remove-image",
+                        html: "&times;",
+                        type: "button",
+                        click: function () {
+                            previewWrapper.remove();
+                            const dt = new DataTransfer();
+                            const input = $("#images")[0];
+                            const { files } = input;
+
+                            for (let i = 0; i < files.length; i++) {
+                                if (i !== index) dt.items.add(files[i]);
+                            }
+
+                            input.files = dt.files;
+                        },
+                    });
+
+                    previewWrapper.append(img, removeBtn);
+                    previewContainer.append(previewWrapper);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Form validation and submission
+        const form = $("#createProductForm")[0];
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+
+                    $.ajax({
+                        url: "/admin/products/create",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Thành công!",
+                                    text: "Đã tạo sản phẩm thành công",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href =
+                                            "/admin/products";
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Lỗi!",
+                                    text:
+                                        response.message ||
+                                        "Không thể tạo sản phẩm",
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi!",
+                                text: "Đã xảy ra lỗi khi tạo sản phẩm",
+                            });
+                        },
+                    });
+                }
+
+                form.classList.add("was-validated");
+            },
+            false
+        );
+
+        // Custom file input label
+        $(".custom-file-input").on("change", function () {
+            let fileCount = $(this)[0].files.length;
+            let label =
+                fileCount + " tệp" + (fileCount === 1 ? "" : "") + " đã chọn";
+            $(this).next(".custom-file-label").html(label);
+        });
+
+        // Initialize Select2 for better dropdown experience
+        $(".custom-select").select2({
+            theme: "bootstrap4",
+        });
+    });
+</script>

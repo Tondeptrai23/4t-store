@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .treeview ul {
+            list-style: none;
+            margin: 0;
+            padding-left: 20px;
+        }
+        .treeview li {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .treeview .toggle::before {
+            content: "▶";
+            margin-right: 5px;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        .treeview .toggle.open::before {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Category Management</h2>
+    <div class="treeview">
+        <ul>
+            <li class="toggle">
+                <strong>Danh mục cha 1</strong>
+                <ul class="nested">
+                    <li>Danh mục con 1.1</li>
+                    <li>Danh mục con 1.2</li>
+                    <li>Danh mục con 1.3</li>
+                </ul>
+            </li>
+            <li class="toggle">
+                <strong>Danh mục cha 2</strong>
+                <ul class="nested">
+                    <li>Danh mục con 2.1</li>
+                    <li>Danh mục con 2.2</li>
+                </ul>
+            </li>
+            <li class="toggle">
+                <strong>Danh mục cha 3</strong>
+                <ul class="nested">
+                    <li>Danh mục con 3.1</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // JavaScript to handle tree toggle
+    document.querySelectorAll('.treeview .toggle').forEach(item => {
+        item.addEventListener('click', () => {
+            const nested = item.querySelector('.nested');
+            if (nested) {
+                nested.classList.toggle('d-none'); // Bootstrap class to hide elements
+                item.classList.toggle('open');
+            }
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -7,7 +7,10 @@ import SubCategory from "../models/subCategory.model.js";
 class CategoryService {
     getAll = async () => {
         try {
-            const categories = await Category.findAll();
+            let categories = await Category.findAll();
+
+            categories = categories.map((category) => category.toJSON());
+
             return categories;
         } catch (error) {
             throw new Error("Error fetching products: " + error.message);
