@@ -18,7 +18,9 @@ class TransactionController {
 
             // Validate amount
             if (!amount || amount <= 0) {
-                return res.status(400).json({ message: "Invalid amount" });
+                return res
+                    .status(400)
+                    .json({ success: false, message: "Invalid amount" });
             }
 
             // Get user and admin
@@ -30,9 +32,10 @@ class TransactionController {
 
             if (!user || !admin) {
                 await t.rollback();
-                return res
-                    .status(404)
-                    .json({ message: "User or admin not found" });
+                return res.status(404).json({
+                    success: false,
+                    message: "User or admin not found",
+                });
             }
 
             // Check balance
@@ -40,7 +43,7 @@ class TransactionController {
                 await t.rollback();
                 return res
                     .status(400)
-                    .json({ message: "Insufficient balance" });
+                    .json({ success: false, message: "Insufficient balance" });
             }
 
             // Create transaction record
@@ -83,7 +86,7 @@ class TransactionController {
             });
         } catch (error) {
             await t.rollback();
-            res.status(500).json({ message: "Transfer failed" });
+            throw error;
         }
     }
 
@@ -124,16 +127,89 @@ class TransactionController {
     }
 
     async getAdminBalance(req, res) {
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ message: "Access denied" });
-        }
-
         const admin = await User.findOne({
             where: { isAdmin: true },
             attributes: ["balance"],
         });
 
         res.json({ success: true, balance: admin.balance });
+    }
+
+    async getUserStatistics(req, res) {
+        const totalUsers = await User.count({
+            where: { isAdmin: false },
+        });
+
+        const totalBalance = await User.sum("balance", {
+            where: { isAdmin: false },
+        });
+
+        const newUsersToday = await User.count({
+            where: {
+                isAdmin: false,
+                createdAt: {
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
+                },
+            },
+        });
+
+        res.json({
+            totalUsers,
+            totalBalance,
+            newUsersToday,
+            averageBalance: totalBalance / totalUsers,
+        });
+    }
+
+    async getTransactionStatistics(req, res) {
+        const totalTransactions = await Transaction.count();
+
+        const totalAmount = await Transaction.sum("amount");
+
+        const pendingTransactions = await Transaction.count({
+            where: { status: "pending" },
+        });
+
+        const completedTransactions = await Transaction.count({
+            where: { status: "completed" },
+        });
+
+        res.json({
+            totalTransactions,
+            totalAmount,
+            pendingTransactions,
+            completedTransactions,
+        });
+    }
+
+    async getBalanceStatistics(req, res) {
+        const adminBalance = await User.findOne({
+            where: { isAdmin: true },
+            attributes: ["balance"],
+        });
+
+        const userBalances = await User.findAll({
+            where: { isAdmin: false },
+            attributes: [
+                [
+                    sequelize.fn("SUM", sequelize.col("balance")),
+                    "totalUserBalance",
+                ],
+                [
+                    sequelize.fn("AVG", sequelize.col("balance")),
+                    "averageBalance",
+                ],
+                [sequelize.fn("MAX", sequelize.col("balance")), "maxBalance"],
+                [sequelize.fn("MIN", sequelize.col("balance")), "minBalance"],
+            ],
+        });
+
+        res.json({
+            adminBalance: adminBalance.balance,
+            userBalances: userBalances[0],
+            totalSystemBalance:
+                adminBalance.balance + userBalances[0].totalUserBalance,
+        });
     }
 }
 

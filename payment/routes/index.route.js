@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authController from "../controllers/auth.controller.js";
 import transactionController from "../controllers/transaction.controller.js";
-import { verifyToken } from "../middlewares/auth.middleware.js";
+import { isAdmin, verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -18,8 +18,23 @@ router.get(
 );
 
 router.get(
+    "/admin/stats/users",
+    verifyToken,
+    isAdmin,
+    transactionController.getUserStatistics
+);
+
+router.get(
+    "/admin/stats/balance",
+    verifyToken,
+    isAdmin,
+    transactionController.getAdminBalance
+);
+
+router.get(
     "/admin/balance",
     verifyToken,
+    isAdmin,
     transactionController.getAdminBalance
 );
 
