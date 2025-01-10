@@ -24,6 +24,10 @@ Order.init(
             allowNull: false,
             defaultValue: 0,
         },
+        address: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     },
     {
         sequelize: db,
