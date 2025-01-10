@@ -79,6 +79,12 @@ $(document).ready(function () {
                 },
             },
 
+            { 
+                data: "parentName", 
+                name: "parentName" ,
+                orderable: false
+            },
+
             {
                 data: null,
                 orderable: false,

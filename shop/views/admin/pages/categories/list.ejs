@@ -37,6 +37,7 @@
                                 <th>Tên</th>
                                 <th>Mô tả</th>
                                 <th>Ngày tạo</th>
+                                <th>Danh mục cha</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
@@ -65,6 +66,16 @@
                                     <%= new
                                     Date(category.createdAt).toLocaleDateString('vi-VN')
                                     %>
+                                </td>
+
+                                
+                                <td>
+                                    <% if (category.parentName) { %>
+                                    <%= category.parentName %>
+                                    <% } else { %>
+                                    
+                                    <% } %>
+                                    </td>
                                 </td>
 
                                 <td>

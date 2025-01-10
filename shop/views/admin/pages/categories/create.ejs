@@ -39,6 +39,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
+                                    
                                     <label for="category">Danh mục cha</label>
                                     <select
                                         class="custom-select"
@@ -49,7 +50,6 @@
                                         <option selected disabled value="">
                                             Chọn danh mục cha...
                                         </option>
-                                        <option value="null">Chọn làm danh mục cha</option>
                                         <% categories.forEach(function(category) { %>
                                             <option value="<%= category.categoryId %>">
                                                 <%= category.name %>
@@ -58,6 +58,19 @@
                                     </select>
                                     <div class="invalid-feedback">
                                         Vui lòng chọn danh mục cha.
+                                    </div>
+
+                                    <div class="form-check my-2">
+                                        <input 
+                                            type="checkbox" 
+                                            class="form-check-input" 
+                                            id="isParentCategory" 
+                                            name="isParentCategory"
+                                            onchange="toggleCategorySelection()"
+                                        >
+                                        <label class="form-check-label" for="isParentCategory">
+                                            Danh mục cha
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -129,75 +142,88 @@
 
 <%- contentFor('script') %>
 <script>
-    $(document).ready(function () {
-        
-        $("#category").on("change", function () {
-            const selectedCategoryId = $(this).val();
-            console.log("Danh mục cha đã chọn:", selectedCategoryId);
-        });
+ $(document).ready(function () {
+    // Khi checkbox "Danh mục cha" thay đổi trạng thái
+    $("#isParentCategory").on("change", function () {
+        const isChecked = $(this).is(":checked");
+        const categorySelect = $("#category");
+        const hiddenCategory = $("#hiddenCategory");
 
-        
-        // Form validation and submission
-        const form = $("#createCategoryForm")[0];
+        if (isChecked) {
+            // Ẩn dropdown và kích hoạt input ẩn
+            categorySelect.addClass("d-none").prop("disabled", true);
+            hiddenCategory.prop("disabled", false);
+        } else {
+            // Hiển thị lại dropdown và vô hiệu hóa input ẩn
+            categorySelect.removeClass("d-none").prop("disabled", false);
+            hiddenCategory.prop("disabled", true);
+        }
+    });
 
-        form.addEventListener(
-            "submit",
-            function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                } else {
-                    event.preventDefault();
-                    const formData = new FormData(form);
+    // Xử lý sự kiện khi chọn danh mục
+    $("#category").on("change", function () {
+        const selectedCategoryId = $(this).val();
+        console.log("Danh mục cha đã chọn:", selectedCategoryId);
+    });
 
-                    $.ajax({
-                        url: "/admin/categories/create",
-                        type: "POST",
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Thành công!",
-                                    text: "Đã tạo danh mục thành công",
-                                    confirmButtonText: "OK",
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href =
-                                            "/admin/categories";
-                                    }
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Lỗi!",
-                                    text:
-                                        response.message ||
-                                        "Không thể tạo danh mục",
-                                });
-                            }
-                        },
-                        error: function (xhr, status, error) {
+    // Form validation and submission
+    const form = $("#createCategoryForm")[0];
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                event.preventDefault();
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: "/admin/categories/create",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thành công!",
+                                text: "Đã tạo danh mục thành công",
+                                confirmButtonText: "OK",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "/admin/categories";
+                                }
+                            });
+                        } else {
                             Swal.fire({
                                 icon: "error",
                                 title: "Lỗi!",
-                                text: "Đã xảy ra lỗi khi tạo danh mục",
+                                text: response.message || "Không thể tạo danh mục",
                             });
-                        },
-                    });
-                }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: "Đã xảy ra lỗi khi tạo danh mục",
+                        });
+                    },
+                });
+            }
 
-                form.classList.add("was-validated");
-            },
-            false
-        );
+            form.classList.add("was-validated");
+        },
+        false
+    );
 
-       
-        // Initialize Select2 for better dropdown experience
-        $(".custom-select").select2({
-            theme: "bootstrap4",
-        });
+    // Initialize Select2 for better dropdown experience
+    $(".custom-select").select2({
+        theme: "bootstrap4",
     });
+});
+
 </script>

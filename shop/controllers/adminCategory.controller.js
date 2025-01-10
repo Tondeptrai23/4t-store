@@ -12,10 +12,10 @@ class AdminCategoryController {
             );
 
             const categories = response.categories || [];
-    
+
             res.render("admin/pages/categories/list", {
                 layout: "admin/layouts/main",
-                categories,
+                categories
             });
 
         } catch (error) {
@@ -44,7 +44,9 @@ class AdminCategoryController {
 
             let newCategory;
 
-            if(categoryData.parentCategoryId !== "null"){
+            console.log(categoryData.isParentCategory);
+
+            if(!categoryData.isParentCategory){
                 newCategory = await subCategoryService.create({
                    ...categoryData,
                    parentId: categoryData.parentCategoryId || null

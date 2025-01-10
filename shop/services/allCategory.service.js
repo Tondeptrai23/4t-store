@@ -84,6 +84,17 @@ class AllCategoryService {
                 ...parentCategories.map(item => ({ ...item.toJSON() })),
                 ...subCategories.map(item => ({ ...item.toJSON() }))
             ];
+
+          
+
+            combinedCategories = combinedCategories.map(category => {
+            
+                const parent = parentCategories.find(parent => parent.categoryId === category.parentId);
+                return {
+                    ...category,
+                    parentName: parent ? parent.name : null 
+                };
+            });
     
            
             combinedCategories.sort((a, b) => {
