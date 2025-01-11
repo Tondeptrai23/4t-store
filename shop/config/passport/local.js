@@ -1,7 +1,7 @@
-import axios from "axios";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import api from "../../config/api.js";
 import UserService from "../../services/user.service.js";
 import { DeserializeError } from "../../utils/errors.js";
 
@@ -45,13 +45,10 @@ export default passport.use(
                     return done(null, false);
                 }
 
-                const res = await axios.post(
-                    `${process.env.PAYMENT_SERVER_URL}/login`,
-                    {
-                        username: username,
-                        password: password,
-                    }
-                );
+                const res = await api.post(`/login`, {
+                    username: username,
+                    password: password,
+                });
 
                 return done(null, {
                     user: user,
