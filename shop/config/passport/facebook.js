@@ -1,22 +1,23 @@
-import { Strategy as GoogleStrategy } from "passport-google-oauth2";
+import { Strategy as FacebookStrategy } from "passport-facebook";
 import passport from "passport";
 import UserService from "../../services/user.service.js";
 import { generate } from "generate-password";
 
-passport.use(new GoogleStrategy({
-	clientID: process.env.GOOGLE_CLIENT_ID,
-	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-	callbackURL: process.env.GOOGLE_CALLBACK_URL,
+passport.use(new FacebookStrategy({
+	clientID: process.env.FACEBOOK_CLIENT_ID,
+	clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+	callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+	profileFields: ['email', 'id', 'displayName'],
 	passReqToCallback: true
 },
 	async function (request, accessToken, refreshToken, profile, done) {
 		try {
-			const user = await UserService.findByEmail(profile.email);
+			const user = await UserService.findByEmail(profile.emails[0]?.value);
 			if (user) { return done(null, user); }
 
 			const newUser = await UserService.create({
 				name: profile.displayName,
-				email: profile.email,
+				email: profile.emails[0]?.value,
 				password: generate({
 					length: 10,
 					numbers: true,

@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 
 import "./config/passport/local.js";
 import "./config/passport/google-oauth2.js";
+import "./config/passport/facebook.js";
 
 import connectSequelize from "connect-session-sequelize";
 import { db } from "./config/config.js";
