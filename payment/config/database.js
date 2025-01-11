@@ -9,11 +9,11 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const db = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASS,
+    process.env.PAYMENT_DB_NAME,
+    process.env.PAYMENT_DB_USER,
+    process.env.PAYMENT_DB_PASS,
     {
-        host: process.env.DB_HOST,
+        host: process.env.PAYMENT_DB_HOST,
         dialect: "mysql",
     }
 );

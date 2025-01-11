@@ -13,8 +13,8 @@ dotenv.config();
 const app = express();
 
 const sslOptions = {
-    key: fs.readFileSync(path.join(process.cwd(), "ssl", "key.pem")),
-    cert: fs.readFileSync(path.join(process.cwd(), "ssl", "cert.pem")),
+    key: fs.readFileSync(path.join(process.cwd(), "payment/ssl", "key.pem")),
+    cert: fs.readFileSync(path.join(process.cwd(), "payment/ssl", "cert.pem")),
 };
 
 app.use(bodyParser.json());
@@ -23,7 +23,7 @@ app.use(router);
 
 app.use(errorHandler);
 
-const HTTPS_PORT = process.env.PORT || 3001;
+const HTTPS_PORT = process.env.PAYMENT_PORT || 3001;
 
 const httpsServer = https.createServer(sslOptions, app);
 
