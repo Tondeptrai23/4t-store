@@ -13,6 +13,7 @@ authRoute.get("/register", authController.registerView);
 authRoute.post(
     "/login",
     passport.authenticate("local", {
+		successRedirect: "/",
         failureRedirect: "/login?invalid-credentials=true",
     }),
     authController.postLogin
@@ -31,7 +32,7 @@ authRoute.get(
 authRoute.get(
 	"/auth/google/callback",
 	passport.authenticate("google", {
-		failureRedirect: "/login",
+		failureRedirect: "/login?google-auth-failed=true",
 	}),
 	authController.googleCallback
 );

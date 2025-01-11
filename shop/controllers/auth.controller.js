@@ -7,9 +7,14 @@ class AuthController {
         if (request.isAuthenticated()) {
             return response.render("pages/auth/authenticated");
         }
-        const errorMsg = request.query["invalid-credentials"]
+		
+        let errorMsg = request.query["invalid-credentials"]
             ? "Email hoặc mật khẩu bạn nhập không chính xác. Xin vui lòng thử lại."
             : null;
+
+		errorMsg = request.query["google-auth-failed"]
+			? "Đăng nhập bằng Google thất bại. Vui lòng thử lại."
+			: errorMsg;
         return response.render("pages/auth/login", { errorMsg: errorMsg });
     }
 
@@ -94,7 +99,7 @@ class AuthController {
     // }
 
 	googleCallback(request, response) {
-		console.log(request.user);
+		// console.log(request.user);
 		response.redirect("/");
 	}
 }

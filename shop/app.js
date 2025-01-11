@@ -65,11 +65,18 @@ app.use(deserializeHandler);
 
 app.set("views", path.join(__dirname, "views"));
 
+// This middleware logs the request method and URL to the console for debugging purposes
+// Can be removed or commented out 
+app.use((req, _res, next) => {
+	console.log(req.method, req.url);
+	next();
+})
+
+app.use("/", router);
 app.get("/", (req, res) => {
     const isLoggedIn = req.isAuthenticated();
     res.render("index", { body: "pages/landing", isLoggedIn });
 });
-app.use("/", router);
 
 app.use(errorHandler);
 
