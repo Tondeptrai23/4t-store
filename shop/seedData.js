@@ -1,7 +1,9 @@
+import bcrypt from "bcrypt";
 import fs from "fs/promises";
+import path from "path";
 import db from "./models/index.model.js";
 import User from "./models/user.model.js";
-import bcrypt from "bcrypt";
+import { __dirname } from "./utils/utils.js";
 
 db.sync({ force: true })
     .then(async (res) => {
@@ -31,7 +33,10 @@ const seedData = async () => {
 
     await User.bulkCreate(users);
 
-    const data = await fs.readFile("./seedData.sql", "utf-8");
+    const data = await fs.readFile(
+        path.join(__dirname, "seedData.sql"),
+        "utf-8"
+    );
 
     const queries = data
         .split(/;\s*\n/)

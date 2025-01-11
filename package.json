@@ -7,7 +7,10 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "shop": "nodemon shop/server.js",
         "payment": "nodemon payment/app.js",
-        "start": "concurrently \"npm run shop\" \"npm run payment\""
+        "start": "concurrently \"npm run shop\" \"npm run payment\"",
+        "seed:shop": "node shop/seedData.js",
+        "seed:payment": "node payment/seedData.js",
+        "seed:all": "concurrently \"npm run seed:shop\" \"npm run seed:payment\""
     },
     "keywords": [],
     "author": "",
