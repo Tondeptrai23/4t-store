@@ -11,6 +11,10 @@ router.post("/register", authController.register);
 
 router.post("/transfer", verifyToken, transactionController.transfer);
 
+router.get("/balance", verifyToken, (req, res) => {
+    res.json("Balance: $1000");
+});
+
 router.get(
     "/transactions",
     verifyToken,
@@ -25,14 +29,14 @@ router.get(
 );
 
 router.get(
-    "/admin/stats/balance",
+    "/admin/stats/transactions",
     verifyToken,
     isAdmin,
-    transactionController.getAdminBalance
+    transactionController.getTransactionStatistics
 );
 
 router.get(
-    "/admin/balance",
+    "/admin/stats/balance",
     verifyToken,
     isAdmin,
     transactionController.getAdminBalance
