@@ -1,5 +1,8 @@
 import orderService from "../services/order.service.js";
 import OrderItemService from '../services/orderItems.service.js';
+import api from "../config/api.js";
+import bodyParser from "body-parser";
+import { body } from "express-validator";
 
 class OrderController{
     async getAll(req, res){
@@ -77,8 +80,27 @@ class OrderController{
 
     async payment(req, res){
         try{
-            const order = await orderService.payment(req.params.id);
-            res.status(200).send(order);
+            const isAuth = req.isAuthenticated();
+            if (!isAuth) {
+                return res.send("Not authenticated");
+            }
+            const orderData = {
+                amount: req.body.total,
+                orderId: req.body.orderId,
+                message: ''
+            };
+        
+            const response = await api.post(`/transfer`,orderData, {
+                headers: {
+                    Authorization: `Bearer ${req.user.paymentToken}`,
+                },
+            });
+
+            if (response.status === 400) {
+                return res.send(response.message);
+            }
+
+            res.send(response.data);
         }catch(error){
             res.status(400).send(error.message);
         }

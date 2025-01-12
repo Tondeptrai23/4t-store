@@ -120,14 +120,33 @@ $(document).ready(function () {
                         },
                         body: JSON.stringify(orderData)
                     });
+
+                  
                     
                     if (response.ok) {
                         const order = await response.json();
+
+                        const paymentData = {
+                            total: total,
+                            orderId: order.orderId
+                        }
+
+                        const responsePayment = await fetch('/api/order/payment',{
+                            method: 'POST',
+                            headers:{
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(paymentData)
+                        });
+
+                        const payment = responsePayment.json();
+                        
+                        console.log(payment)
+
                         try {
                             await fetch('/api/cart/clear', {
                                 method: 'POST'
                             });
-                            // fresh the page
                             window.location.reload();
                         } catch (error) {
                             console.error('Error clearing cart:', error);
