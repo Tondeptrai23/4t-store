@@ -35,47 +35,57 @@
 							<input type="email" class="form-control" id="email" name="email" required />
 						</div>
 
-						<div class="form-group mb-4">
+						<div class="form-group mb-4 position-relative">
 							<label for="password" class="form-label">
 								Mật khẩu
 							</label>
-							<input type="password" class="form-control" id="password" name="password" required />
+							<div class="input-group">
+								<input type="password" class="form-control" id="password" name="password" required />
+								<button type="button" class="btn btn-outline-secondary" id="togglePassword">
+									<i class="fa fa-eye"></i>
+								</button>
+							</div>
 						</div>
 
 						<% if (errorMsg) { %>
-						<div class="alert alert-danger" role="alert">
-							<%= errorMsg %>
-						</div>
-						<% } %>
+							<div class="alert alert-danger" role="alert">
+								<%= errorMsg %>
+							</div>
+							<% } %>
 
-						<button type="submit" class="btn btn-primary w-100 size-101">
-							Đăng nhập
-						</button>
+								<button type="submit" class="btn btn-primary w-100 size-101">
+									Đăng nhập
+								</button>
 
-						<div class="d-flex align-items-center my-4">
-							<hr class="flex-grow-1">
-							<span class="mx-3 text-muted">hoặc</span>
-							<hr class="flex-grow-1">
-						</div>
+								<div class="d-flex align-items-center my-4">
+									<hr class="flex-grow-1">
+									<span class="mx-3 text-muted">hoặc</span>
+									<hr class="flex-grow-1">
+								</div>
 
-						<a href="/auth/google" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2">
-							<img src="https://www.google.com/favicon.ico" alt="Google" width="18" height="18">
-							Đăng nhập với Google
-						</a>
+								<div class="row g-2">
+									<div class="col-6">
+										<a href="/auth/google" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2" style="height: 40px; gap: 8px;">
+											<img src="https://www.google.com/favicon.ico" alt="Google" width="18" height="18">
+											<span>Google</span>	
+										</a>
+									</div>
+									<div class="col-6">
+										<a href="/auth/facebook" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2" style="height: 40px; gap: 8px;">
+											<i class="fab fa-facebook-f"></i>
+											<span>Facebook</span>
+										</a>
+									</div>
+								</div>
 
-						<a href="/auth/facebook" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2">
-							<i class="fab fa-facebook-f"></i>
-							Đăng nhập với Facebook
-						</a>
-
-						<div class="text-center mt-3">
-							<p>
-								Bạn chưa có tài khoản?
-								<a href="/register" class="cl1">
-									Đăng ký tại đây
-								</a>
-							</p>
-						</div>
+								<div class="text-center mt-3">
+									<p>
+										Bạn chưa có tài khoản?
+										<a href="/register" class="cl1">
+											Đăng ký tại đây
+										</a>
+									</p>
+								</div>
 					</form>
 				</div>
 			</div>
@@ -83,6 +93,21 @@
 	</div>
 </body>
 <script>
+	$(document).ready(function () {
+		$('#togglePassword').on('click', function () {
+			const passwordInput = $('#password');
+			const icon = $(this).find('i');
+
+			if (passwordInput.attr('type') === 'password') {
+				passwordInput.attr('type', 'text');
+				icon.removeClass('fa-eye').addClass('fa-eye-slash');
+			} else {
+				passwordInput.attr('type', 'password');
+				icon.removeClass('fa-eye-slash').addClass('fa-eye');
+			}
+		});
+	});
+
 	// document.getElementById('loginForm').addEventListener('submit', async function(event) {
 	// 	event.preventDefault();
 
@@ -128,4 +153,5 @@
 	// 	}).appendTo('#loginForm');
 	// });
 </script>
+
 </html>
