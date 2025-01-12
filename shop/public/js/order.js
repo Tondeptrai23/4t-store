@@ -57,6 +57,7 @@ $(document).ready(function () {
     const confirmMessage = document.getElementById('confirmMessage');
     const confirmCheckoutButton = document.getElementById('confirmCheckout');
     const orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
+    const failModal = new bootstrap.Modal(document.getElementById('failPaymentModal'));
     let address = "";
     let flag = 0;
     let cartItems = [];
@@ -120,9 +121,6 @@ $(document).ready(function () {
                         },
                         body: JSON.stringify(orderData)
                     });
-
-                  
-                    
                     if (response.ok) {
                         const order = await response.json();
 
@@ -138,25 +136,27 @@ $(document).ready(function () {
                             },
                             body: JSON.stringify(paymentData)
                         });
-
-                        const payment = responsePayment.json();
                         
-                        console.log(payment)
-
-                        try {
-                            await fetch('/api/cart/clear', {
-                                method: 'POST'
-                            });
-                            window.location.reload();
-                        } catch (error) {
-                            console.error('Error clearing cart:', error);
+                        if (responsePayment.status === 400) {
+                            confirmModal.hide();
+                            failModal.show();
+                        } else{
+                            const payment = responsePayment.json(); 
+                            try {
+                                await fetch('/api/cart/clear', {
+                                    method: 'POST'
+                                });
+                                window.location.reload();
+                            } catch (error) {
+                                console.error('Error clearing cart:', error);
+                            }
+                            confirmModal.hide();
+                            orderModal.show();            
                         }
                     }
                 } catch (error) {
                     console.error('Error updating cart:', error);
                 }
-                confirmModal.hide();
-                orderModal.show();
             });
         }
     }

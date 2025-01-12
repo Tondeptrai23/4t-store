@@ -97,7 +97,7 @@ class OrderController{
             });
 
             if (response.status === 400) {
-                return res.send(response.message);
+                return res.status(400).send(response.message);
             }
 
             res.send(response.data);

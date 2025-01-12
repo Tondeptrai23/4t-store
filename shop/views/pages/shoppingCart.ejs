@@ -112,11 +112,11 @@
 					<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-checkout">
 						Tiến hành thanh toán
 					</button>
-					<div class="modal fade" id="addressModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="addressModal" aria-labelledby="addressModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+									<h5 class="modal-title" id="addressModalLabel">Thông báo</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
@@ -128,11 +128,11 @@
 							</div>
 						</div>
 					</div>
-					<div class="modal fade" id="orderModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="orderModal" aria-labelledby="orderModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+									<h5 class="modal-title" id="orderModalLabel">Thông báo</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
@@ -162,15 +162,31 @@
 							</div>
 						</div>
 					</div>
-					<div class="modal fade" id="emptyCartModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="emptyCartModal" aria-labelledby="emptyCartModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+									<h5 class="modal-title" id="emptyCartModalLabel">Thông báo</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
 									Giỏ hàng trống! 🛒
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="failPaymentModal" aria-labelledby="failPaymentModal" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="failPaymentModal">Thông báo</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									Tài khoản của bạn không đủ tiền. Xin vui lòng nạp thêm! 💵
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
