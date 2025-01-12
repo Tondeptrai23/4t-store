@@ -1,3 +1,4 @@
+import axios, { AxiosError } from "axios";
 import CartItemService from "../services/cart.service.js";
 import UserService from "../services/user.service.js";
 import { ModelError } from "../utils/errors.js";
@@ -49,6 +50,15 @@ class AuthController {
 
         try {
             const user = await UserService.create(data);
+
+            const res = await axios.post(
+                `${process.env.PAYMENT_SERVER_URL}/register`,
+                {
+                    username: email,
+                    password: password,
+                }
+            );
+
             request.login(user, (error) => {
                 if (error) {
                     console.log(user);
@@ -62,6 +72,11 @@ class AuthController {
             if (error instanceof ModelError) {
                 return response.render("pages/auth/register", {
                     errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác.",
+                });
+            } else if (error instanceof AxiosError) {
+                console.error("Error registering payment account:", error);
+                return response.render("pages/auth/register", {
+                    errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
                 });
             }
             throw new Error(error);

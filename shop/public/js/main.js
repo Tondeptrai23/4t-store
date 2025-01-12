@@ -87,49 +87,6 @@ $(document).ready(function () {
 });
 
 
-// (function () {
-//     "use strict";
-
-//     // filter items on button click
-//     var filterButtons = document.querySelectorAll('.filter-tope-group button');
-//     var itemsContainer = document.querySelector('.isotope-grid');
-//     var items = itemsContainer.querySelectorAll('.isotope-item');
-
-//     filterButtons.forEach(function (button) {
-//         button.addEventListener('click', function () {
-//             var filterValue = this.getAttribute('data-filter');
-
-//             filterButtons.forEach(function (btn) {
-//                 btn.classList.remove('how-active1');
-//             });
-//             this.classList.add('how-active1');
-
-//             items.forEach(function (item) {
-//                 if (filterValue === "*" || item.classList.contains(filterValue.substring(1))) {
-//                     item.style.display = "block"; 
-//                 } else {
-//                     item.style.display = "none"; 
-//                 }
-//             });
-//         });
-//     });
-
-
-//     var isotopeButtons = document.querySelectorAll('.filter-tope-group button');
-
-//     isotopeButtons.forEach(function(button) {
-//         button.addEventListener('click', function() {
-
-//             isotopeButtons.forEach(function(btn) {
-//                 btn.classList.remove('how-active1');
-//             });
-//             this.classList.add('how-active1');
-//         });
-//     });
-
-// })();
-
-
 (function ($) {
     "use strict";
 

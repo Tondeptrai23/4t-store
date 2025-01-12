@@ -34,13 +34,13 @@ class OrderController{
         
             const orderItems = cartItems.map(item => ({
                 quantity: item.quantity,
-                priceAtPurchase: item.price, 
+                priceAtPurchase: item.price * item.quantity, 
                 orderId: orderId,
                 productId: item.productId
             }));
         
             await OrderItemService.addOrderItems(orderItems);
-            
+
             res.status(201).send(order);
         } catch (error) {
             res.status(400).send(error.message);

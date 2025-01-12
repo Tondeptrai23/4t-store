@@ -67,8 +67,8 @@ class ProductController {
                 product,
                 category,
                 relatedProduct,
+                isLoggedIn,
                 rawMoney,
-                isLoggedIn: isLoggedIn,
                 parentCategory,
             });
         } catch (err) {

@@ -244,3 +244,20 @@ INSERT INTO product_images (imageId, productId, contentType, displayOrder, path,
 ('5033', '5033', 'image/jpeg', 1, 'ao-khoac-track-den.jpg', NOW(), NOW()),
 ('5034', '5034', 'image/jpeg', 1, 'ao-khoac-varsity-trang.jpg', NOW(), NOW()),
 ('5035', '5035', 'image/jpeg', 1, 'ao-khoac-utility-trang.jpg', NOW(), NOW());
+
+INSERT INTO orders (orderId, userId, status, total, createdAt, updatedAt) VALUES
+('ORD001', '2', 'delivered', 1197000, DATE_SUB(NOW(), INTERVAL 30 DAY), DATE_SUB(NOW(), INTERVAL 27 DAY)),
+('ORD002', '2', 'delivered', 899000, DATE_SUB(NOW(), INTERVAL 25 DAY), DATE_SUB(NOW(), INTERVAL 22 DAY)),
+('ORD003', '2', 'delivered', 1598000, DATE_SUB(NOW(), INTERVAL 20 DAY), DATE_SUB(NOW(), INTERVAL 17 DAY)),
+('ORD004', '2', 'processing', 2097000, DATE_SUB(NOW(), INTERVAL 5 DAY), DATE_SUB(NOW(), INTERVAL 4 DAY)),
+('ORD005', '2', 'pending', 1299000, NOW(), NOW());
+
+INSERT INTO order_items (orderItemId, orderId, productId, quantity, priceAtPurchase) VALUES
+('OI001', 'ORD001', '1011', 2, 399000),
+('OI002', 'ORD001', '1012', 1, 399000),
+('OI003', 'ORD002', '2011', 1, 899000),
+('OI004', 'ORD003', '3011', 2, 799000),
+('OI005', 'ORD004', '4011', 1, 899000),
+('OI006', 'ORD004', '4012', 1, 799000),
+('OI007', 'ORD004', '4013', 1, 399000),
+('OI008', 'ORD005', '5011', 1, 1299000);
