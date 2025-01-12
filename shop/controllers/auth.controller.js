@@ -1,7 +1,9 @@
+import { AxiosError } from "axios";
+import passport from "passport";
+import api from "../config/api.js";
 import CartItemService from "../services/cart.service.js";
 import UserService from "../services/user.service.js";
 import { ModelError } from "../utils/errors.js";
-import passport from "passport";
 
 class AuthController {
 	loginView(request, response) {
@@ -96,26 +98,40 @@ class AuthController {
 			role: "user",
 		};
 
-		try {
-			const user = await UserService.create(data);
-			request.login(user, (error) => {
-				if (error) {
-					console.log(user);
-					return response.render("pages/auth/register", {
-						errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
-					});
-				}
-				response.redirect("/");
-			});
-		} catch (error) {
-			if (error instanceof ModelError) {
-				return response.render("pages/auth/register", {
-					errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác.",
-				});
-			}
-			throw new Error(error);
-		}
-	}
+        try {
+            const user = await UserService.create(data);
+
+            const res = await api.post(`/register`, {
+                username: email,
+                password: password,
+            });
+
+            const userToLogin = JSON.parse(JSON.stringify(user));
+
+            userToLogin.paymentToken = res.data.token;
+
+            request.login(userToLogin, (error) => {
+                if (error) {
+                    return response.render("pages/auth/register", {
+                        errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
+                    });
+                }
+                response.redirect("/");
+            });
+        } catch (error) {
+            if (error instanceof ModelError) {
+                return response.render("pages/auth/register", {
+                    errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác.",
+                });
+            } else if (error instanceof AxiosError) {
+                console.error("Error registering payment account:", error);
+                return response.render("pages/auth/register", {
+                    errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
+                });
+            }
+            throw new Error(error);
+        }
+    }
 
 	async afterLogin(request, response) {
 		const { cartData } = request.body;

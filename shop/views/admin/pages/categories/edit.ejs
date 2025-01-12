@@ -1,0 +1,167 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h2 class="page-title">Chỉnh sửa danh mục</h2>
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">Thông tin danh mục</strong>
+                </div>
+                <div class="card-body">
+                    <form id="editCategoryForm" class="needs-validation" enctype="multipart/form-data" novalidate>
+                        <input type="hidden" name="categoryId" value="<%= category.categoryId %>" />
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="name">Tên danh mục</label>
+                                    <input type="text" id="name" name="name" class="form-control" value="<%= category.name %>" required />
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập tên danh mục.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% if (selectedParentCategoryId !== null) { %>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="category">Danh mục cha</label>
+                                        <select class="custom-select" id="category" name="parentCategoryId" required>
+                                            <option selected disabled value="">
+                                                Chọn danh mục cha...
+                                            </option>
+                                            <% categories.forEach(function(category) { %>
+                                                <option value="<%= category.categoryId %>" <%= category.categoryId == selectedParentCategoryId ? "selected" : "" %> >
+                                                    <%= category.name %>
+                                                </option>
+                                            <% }); %>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Vui lòng chọn danh mục cha.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="alert alert-info" role="alert">
+                                <strong>Đây là danh mục cha</strong>
+                            </div>
+                        <% } %>
+                        
+                        
+                        
+                        <div class="form-group mb-3">
+                            <label for="description">Mô tả</label>
+                            <textarea class="form-control" id="description" name="description" rows="4" required><%= category.description %></textarea>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập mô tả danh mục.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Cập nhật danh mục</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('style') %>
+<style>
+    .image-preview-container {
+        position: relative;
+        margin: 10px;
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .image-preview-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+</style>
+
+<%- contentFor('script') %>
+<script>
+    $(document).ready(function () {
+        $("#category").on("change", function () {
+            const selectedCategoryId = $(this).val();
+            const subcategorySelect = $("#subcategory");
+
+            // Nếu người dùng chọn "Không chọn danh mục cha"
+            if (selectedCategoryId === "null" || selectedCategoryId === "") {
+                subcategorySelect.prop("disabled", true); // Vô hiệu hóa subcategory select
+                subcategorySelect.val(""); // Đặt lại giá trị subcategory
+            } else {
+                subcategorySelect.prop("disabled", false); // Kích hoạt subcategory select
+
+                // Ẩn tất cả các tùy chọn trước
+                subcategorySelect.find("option").hide();
+                subcategorySelect.find("option:first").show(); // Giữ lại lựa chọn mặc định
+
+                // Hiển thị các subcategory có thuộc tính "data-parent" phù hợp
+                subcategorySelect
+                    .find('option[data-parent="' + selectedCategoryId + '"]')
+                    .show();
+
+                // Đặt lại giá trị subcategory
+                subcategorySelect.val("");
+            }
+        });
+
+
+        $("#editCategoryForm").on("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            $.ajax({
+                url: "/admin/categories/" + formData.get("categoryId"),
+                type: "PUT",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thành công!",
+                            text: "Đã cập nhật danh mục thành công",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "/admin/categories";
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: response.message || "Không thể cập nhật danh mục"
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi!",
+                        text: "Đã xảy ra lỗi khi cập nhật danh mục"
+                    });
+                }
+            });
+        });
+
+        // Initialize Select2 for better dropdown experience
+        $(".custom-select").select2({
+            theme: "bootstrap4",
+        });
+    });
+</script>
