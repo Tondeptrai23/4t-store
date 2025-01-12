@@ -47,16 +47,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             }
 
-            const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+            const modal = new bootstrap.Modal(document.getElementById('addedProductModal'));
             modal.show();            
         });
     });
-
+    let cartItems = [];
     if (isLoggedIn) {
         try {
             const response = await fetch('/api/cart');
             if (response.ok) {
-                const cartItems = await response.json();
+                cartItems = await response.json();
                 updateCartUI(cartItems, isLoggedIn);
                 updateCartTable(cartItems);
             }
@@ -150,19 +150,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } catch (error) {
                     console.error('Error updating cart:', error);
                 }
-            }
-        });
-    }
-
-    const checkoutButton = document.querySelector('.js-checkout');
-    if (checkoutButton) {
-        checkoutButton.addEventListener('click', function (event) {
-            if (!isLoggedIn) {
-                event.preventDefault();
-                redirectToLogin();
-            } else {
-                // Proceed with checkout
-                window.location.href = '/cart';
             }
         });
     }

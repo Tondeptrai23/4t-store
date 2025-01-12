@@ -25,7 +25,8 @@ class OrderService {
         try {
             const order = await Order.create(orderData);
             return order;
-        } catch (error) {
+        }
+        catch (error) {
             throw new Error("Error creating order: " + error.message);
         }
     };

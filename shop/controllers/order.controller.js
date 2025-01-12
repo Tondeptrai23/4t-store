@@ -1,4 +1,5 @@
 import orderService from "../services/order.service.js";
+import OrderItemService from '../services/orderItems.service.js';
 
 class OrderController{
     async getAll(req, res){
@@ -20,12 +21,31 @@ class OrderController{
     }
 
     async create(req, res){
-        try{
-            const order = await orderService.create(req.body);
+        try {
+            const orderData = {
+                total: req.body.total,
+                address: req.body.address,
+                userId: req.user.userId
+            };
+            const cartItems = req.body.cart;
+        
+            const order = await orderService.create(orderData);
+            const orderId = order.orderId;
+        
+            const orderItems = cartItems.map(item => ({
+                quantity: item.quantity,
+                priceAtPurchase: item.price, 
+                orderId: orderId,
+                productId: item.productId
+            }));
+        
+            await OrderItemService.addOrderItems(orderItems);
+            
             res.status(201).send(order);
-        }catch(error){
+        } catch (error) {
             res.status(400).send(error.message);
         }
+        
     }
 
     async update(req, res){

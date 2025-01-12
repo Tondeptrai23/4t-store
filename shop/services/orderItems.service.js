@@ -20,12 +20,11 @@ class OrderItemService {
             throw new Error("Error fetching order item: " + error.message);
         }
     };
-    create = async (orderItemData) => {
+    addOrderItems = async (orderItems) => {
         try {
-            const orderItem = await OrderItem.create(orderItemData);
-            return orderItem;
+            await OrderItem.bulkCreate(orderItems);
         } catch (error) {
-            throw new Error("Error creating order item: " + error.message);
+            throw new Error("Error adding order items: " + error.message);
         }
     };
     update = async (orderItemId, orderItemData) => {

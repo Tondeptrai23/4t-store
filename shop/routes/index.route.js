@@ -12,8 +12,8 @@ router.use(authRoute);
 router.use(userRoute);
 router.use(productRoute);
 router.use(cartRenderRoute);
-router.use(orderRoute);
 
+router.use("/api/order",orderRoute);
 router.use("/api/cart", cartRoute);
 
 export default router;
