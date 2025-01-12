@@ -41,8 +41,8 @@
 
 				<% if (isLoggedIn) { %>
 				<script>
-					if (localStorage.getItem('cart')) {
-						const cart = JSON.parse(localStorage.getItem('cart'));
+					const cart = JSON.parse(localStorage.getItem('cart'));
+					if (cart !== null && cart?.length > 0) {
 						$.ajax({
 							url: '/api/afterLogin',
 							method: 'POST',

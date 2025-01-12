@@ -1,6 +1,7 @@
 import CartItemService from "../services/cart.service.js";
 import UserService from "../services/user.service.js";
 import { ModelError } from "../utils/errors.js";
+import passport from "passport";
 
 class AuthController {
 	loginView(request, response) {
@@ -35,6 +36,46 @@ class AuthController {
 			}
 			response.redirect("/");
 		});
+	}
+
+	localAuthenticate(request, response, next) {
+		const redirectTo = request.session.redirectTo || "/";
+		delete request.session.redirectTo;
+
+		const authenticator = passport.authenticate("local", (err, user, info) => {
+			if (err) { return next(err); }
+			if (!user) {
+				return response.redirect("/login?invalid-credentials=true");
+			}
+			request.logIn(user, (err) => {
+				if (err) { return next(err); }
+				return response.redirect(redirectTo);
+			});
+		});
+		authenticator(request, response, next);
+	}
+
+	oauth2Authenticator(provider, options) {
+		return (request, response, next) => {
+			const redirectTo = request.session.redirectTo || "/";
+			delete request.session.redirectTo;
+
+			const state = redirectTo ? Buffer.from(JSON.stringify({ redirectTo })).toString("base64") : undefined;
+			const authenticator = passport.authenticate(provider, { ...options, state });
+			authenticator(request, response, next);
+		};
+	}
+
+	oauth2Callback() {
+		return (request, response) => {
+			const { state } = request.query;
+			const { redirectTo } = JSON.parse(Buffer.from(state, "base64").toString("utf-8"));
+			console.log(redirectTo);
+			if (typeof redirectTo === "string") {
+				return response.redirect(redirectTo);
+			}
+			return response.redirect("/");
+		};
 	}
 
 	async checkEmail(request, response) {
@@ -77,7 +118,7 @@ class AuthController {
 	}
 
 	async afterLogin(request, response) {
-		const { redirectUrl, cartData } = request.body;
+		const { cartData } = request.body;
 		if (cartData) {
 			const cartItems = cartData;
 			for (let i = 0; i < cartItems.length; i++) {
@@ -89,14 +130,13 @@ class AuthController {
 				);
 			}
 		}
-		// response.redirect(redirectUrl);
 	}
 
 	// status(request, response) {
 	// 	return request.user ? response.json(request.user) : response.sendStatus(401);
 	// }
 
-	successRedirect(_request, response) {
+	successRedirect(request, response) {
 		response.redirect("/");
 	}
 }
