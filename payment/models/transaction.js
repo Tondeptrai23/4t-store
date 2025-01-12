@@ -3,7 +3,7 @@ import sequelize from "../config/database.js";
 
 const Transaction = sequelize.define("Transaction", {
     fromUserId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
             model: "Users",
@@ -11,7 +11,7 @@ const Transaction = sequelize.define("Transaction", {
         },
     },
     toUserId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
             model: "Users",
