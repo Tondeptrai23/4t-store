@@ -19,14 +19,14 @@ const seedData = async () => {
             userId: "1",
             name: "John Admin",
             email: "admin@example.com",
-            password: await bcrypt.hash("admin123", salt),
+            password: await bcrypt.hash("admin", salt),
             role: "admin",
         },
         {
             userId: "2",
             name: "Jane User",
             email: "user@example.com",
-            password: await bcrypt.hash("user123", salt),
+            password: await bcrypt.hash("user", salt),
             role: "user",
         },
     ];

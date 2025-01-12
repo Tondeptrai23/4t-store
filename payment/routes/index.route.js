@@ -11,9 +11,7 @@ router.post("/register", authController.register);
 
 router.post("/transfer", verifyToken, transactionController.transfer);
 
-router.get("/balance", verifyToken, (req, res) => {
-    res.json("Balance: $1000");
-});
+router.get("/balance", verifyToken, transactionController.getBalance);
 
 router.get(
     "/transactions",
@@ -33,13 +31,6 @@ router.get(
     verifyToken,
     isAdmin,
     transactionController.getTransactionStatistics
-);
-
-router.get(
-    "/admin/stats/balance",
-    verifyToken,
-    isAdmin,
-    transactionController.getAdminBalance
 );
 
 export default router;

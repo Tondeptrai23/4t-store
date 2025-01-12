@@ -5,8 +5,12 @@ import User from "./models/user.js";
 
 async function seedTransactions() {
     try {
-        const admin = await User.findOne({ where: { username: "admin" } });
-        const user = await User.findOne({ where: { username: "user1" } });
+        const admin = await User.findOne({
+            where: { username: "admin@example.com" },
+        });
+        const user = await User.findOne({
+            where: { username: "user@example.com" },
+        });
 
         if (!admin || !user) {
             throw new Error("Users must be seeded first");
@@ -88,7 +92,7 @@ async function seed() {
 
         await User.create({
             id: 1,
-            username: "admin",
+            username: "admin@example.com",
             password: adminPassword,
             isAdmin: true,
             balance: 0,
@@ -96,7 +100,7 @@ async function seed() {
 
         await User.create({
             id: 2,
-            username: "user1",
+            username: "user@example.com",
             password: userPassword,
             balance: 100000,
         });

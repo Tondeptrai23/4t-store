@@ -128,13 +128,15 @@ class TransactionController {
         });
     }
 
-    async getAdminBalance(req, res) {
-        const admin = await User.findOne({
-            where: { isAdmin: true },
+    async getBalance(req, res) {
+        const user = await User.findOne({
+            where: {
+                id: req.user.id,
+            },
             attributes: ["balance"],
         });
 
-        res.json({ success: true, balance: admin.balance });
+        res.json({ success: true, balance: user.balance });
     }
 
     async getUserStatistics(req, res) {
