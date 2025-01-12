@@ -26,6 +26,12 @@ const Transaction = sequelize.define("Transaction", {
         type: DataTypes.ENUM("pending", "completed", "failed"),
         defaultValue: "pending",
     },
+    message: {
+        type: DataTypes.STRING,
+    },
+    orderId: {
+        type: DataTypes.STRING,
+    },
 });
 
 export default Transaction;

@@ -13,7 +13,7 @@ class TransactionController {
         const t = await db.transaction();
 
         try {
-            const { amount } = req.body;
+            const { amount, message, orderId } = req.body;
             const userId = req.user.id;
 
             // Validate amount
@@ -53,6 +53,8 @@ class TransactionController {
                     toUserId: admin.id,
                     amount,
                     status: "pending",
+                    message,
+                    orderId,
                 },
                 { transaction: t }
             );
@@ -216,7 +218,15 @@ class TransactionController {
 export class TransactionFilterBuilder extends FilterBuilder {
     constructor(requestQuery) {
         super(requestQuery);
-        this._allowFields = ["status", "fromUserId", "toUserId", "createdAt"];
+        this._allowFields = [
+            "status",
+            "fromUserId",
+            "toUserId",
+            "createdAt",
+            "updatedAt",
+            "amount",
+            "orderId",
+        ];
     }
 }
 
