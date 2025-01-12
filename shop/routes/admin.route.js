@@ -2,6 +2,8 @@ import express from "express";
 import expressLayouts from "express-ejs-layouts";
 import adminCategoryController from "../controllers/adminCategory.controller.js";
 import adminProductController from "../controllers/adminProduct.controller.js";
+import adminUserController from "../controllers/adminUser.controller.js";
+
 import { isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -27,5 +29,8 @@ router.post(
     "/categories/bulk-delete",
     adminCategoryController.bulkDeleteCategories
 );
+
+
+router.get("/users", adminUserController.listUsers);
 
 export default router;
