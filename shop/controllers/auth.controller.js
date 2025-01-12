@@ -57,9 +57,12 @@ class AuthController {
                 password: password,
             });
 
-            request.login(user, (error) => {
+            const userToLogin = JSON.parse(JSON.stringify(user));
+
+            userToLogin.paymentToken = res.data.token;
+
+            request.login(userToLogin, (error) => {
                 if (error) {
-                    console.log(user);
                     return response.render("pages/auth/register", {
                         errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
                     });

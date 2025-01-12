@@ -74,6 +74,15 @@ class OrderController{
             res.status(400).send(error.message);
         }
     }
+
+    async payment(req, res){
+        try{
+            const order = await orderService.payment(req.params.id);
+            res.status(200).send(order);
+        }catch(error){
+            res.status(400).send(error.message);
+        }
+    }
 }
 
 export default new OrderController();

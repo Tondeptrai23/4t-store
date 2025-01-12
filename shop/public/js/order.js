@@ -120,6 +120,7 @@ $(document).ready(function () {
                         },
                         body: JSON.stringify(orderData)
                     });
+                    
                     if (response.ok) {
                         const order = await response.json();
                         try {
