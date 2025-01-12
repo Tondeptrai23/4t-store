@@ -53,6 +53,14 @@ $(document).ready(function () {
   
     // Checkout logic
     const checkoutButton = document.querySelector('.js-checkout');
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCheckoutButton = document.getElementById('confirmCheckout');
+    const orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
+    let address = "";
+    let flag = 0;
+    let cartItems = [];
+
     if (checkoutButton) {
         checkoutButton.addEventListener('click', async function (event) {
             if (!isLoggedIn) {
@@ -60,8 +68,6 @@ $(document).ready(function () {
                 redirectToLogin();
             } else {
                 event.preventDefault();
-                let flag = 0;
-                let cartItems = [];
                 try {
                     const response = await fetch('/api/cart');
                     if (response.ok) {
@@ -73,10 +79,12 @@ $(document).ready(function () {
                 } catch (error) {
                     console.error('Error fetching cart items:', error);
                 }
-                const addressModal = new bootstrap.Modal(document.getElementById('addressModal'));
-                const orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
 
-                const address = $('#adress').val().trim();
+                address = $('#adress').val().trim();
+                const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+                confirmMessage.textContent = `Xác nhận thanh toán giỏ hàng với số tiền là: ${total.toLocaleString('vi-VN')} VND`;
+                const addressModal = new bootstrap.Modal(document.getElementById('addressModal'));
+
                 // Check if cart is empty
                 if (flag === 0) {
                     const emptyCartModal = new bootstrap.Modal(document.getElementById('emptyCartModal'));
@@ -87,32 +95,50 @@ $(document).ready(function () {
                 if (!selectedProvinceName || !selectedDistrictName || !selectedWardName || !address) {
                     addressModal.show();
                 } else {
-                    try {
-                        const addressData = `${address}, ${selectedWardName}, ${selectedDistrictName}, ${selectedProvinceName}`;
-                        const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
-                        const orderData = {
-                            address: addressData,
-                            total: total,
-                            cart: cartItems
-                        };
-
-                        const response = await fetch('/api/order/create', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(orderData)
-                        });
-                        if (response.ok) {
-                            const order = await response.json();
-                        }
-                    } catch (error) {
-                        console.error('Error updating cart:', error);
-                    }
-                    orderModal.show();
+                    confirmModal.show();
                 }
             }
         });
+
+        if(confirmCheckoutButton){
+            confirmCheckoutButton.addEventListener('click',async function () {
+                try {
+                    confirmModal.show();
+                    const addressData = `${address}, ${selectedWardName}, ${selectedDistrictName}, ${selectedProvinceName}`;
+
+                    const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+                    const orderData = {
+                        address: addressData,
+                        total: total,
+                        cart: cartItems
+                    };
+
+                    const response = await fetch('/api/order/create', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData)
+                    });
+                    if (response.ok) {
+                        const order = await response.json();
+                        try {
+                            await fetch('/api/cart/clear', {
+                                method: 'POST'
+                            });
+                            // fresh the page
+                            window.location.reload();
+                        } catch (error) {
+                            console.error('Error clearing cart:', error);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating cart:', error);
+                }
+                confirmModal.hide();
+                orderModal.show();
+            });
+        }
     }
 });
 

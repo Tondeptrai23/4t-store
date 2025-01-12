@@ -66,6 +66,15 @@ class CartController {
             res.status(400).send(error.message);
         }
     }
+
+    async clearCart(req, res) {
+        try {
+            await CartItemService.clearCart(req.user.userId);
+            res.status(200).send([]);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
+    }
 }
 
 export default new CartController();
