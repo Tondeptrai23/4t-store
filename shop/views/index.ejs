@@ -38,5 +38,22 @@
         <script src="/js/main.js"></script>
         <script type="module" src="/js/cart.js"></script>
         <script src="/js/product.js"></script>
+
+				<% if (isLoggedIn) { %>
+				<script>
+					if (localStorage.getItem('cart')) {
+						const cart = JSON.parse(localStorage.getItem('cart'));
+						$.ajax({
+							url: '/api/afterLogin',
+							method: 'POST',
+							data: {
+								cartData: cart,
+							},
+						});
+					}
+					localStorage.setItem('cart', JSON.stringify([]));
+					localStorage.removeItem('redirectAfterLogin');
+				</script>
+				<% } %>
     </body>
 </html>

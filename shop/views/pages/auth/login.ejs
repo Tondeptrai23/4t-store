@@ -27,7 +27,7 @@
 				<div class="card p-4 shadow-sm">
 					<h2 class="text-center mb-4">Đăng nhập</h2>
 
-					<form id="loginForm">
+					<form id="loginForm" action="/login" method="POST">
 						<div class="form-group mb-3">
 							<label for="email" class="form-label">
 								Email
@@ -83,35 +83,49 @@
 	</div>
 </body>
 <script>
-	document.getElementById('loginForm').addEventListener('submit', async function(event) {
-		event.preventDefault();
+	// document.getElementById('loginForm').addEventListener('submit', async function(event) {
+	// 	event.preventDefault();
 
-		const email = document.getElementById('email').value;
-		const password = document.getElementById('password').value;
-		const cartData = localStorage.getItem('cart');
-		const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+	// 	const email = document.getElementById('email').value;
+	// 	const password = document.getElementById('password').value;
+	// 	const cartData = localStorage.getItem('cart');
+	// 	const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
 
-		const response = await fetch('/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				email: email,
-				password: password,
-				cartData: cartData,
-				redirectUrl: redirectUrl
-			})
-		});
+	// 	const response = await fetch('/login', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json'
+	// 		},
+	// 		body: JSON.stringify({
+	// 			email: email,
+	// 			password: password,
+	// 			cartData: cartData,
+	// 			redirectUrl: redirectUrl
+	// 		})
+	// 	});
 
-		if (response.ok) {
-			localStorage.setItem('cart', JSON.stringify([]));
-			localStorage.removeItem('redirectAfterLogin');
-			window.location.href = redirectUrl;
-		} else {
-			const errorText = await response.text();
-			alert('Login failed: ' + errorText);
-		}
+	// 	if (response.ok) {
+	// 		localStorage.setItem('cart', JSON.stringify([]));
+	// 		localStorage.removeItem('redirectAfterLogin');
+	// 		window.location.href = redirectUrl;
+	// 	} else {
+	// 		const errorText = await response.text();
+	// 		alert('Login failed: ' + errorText);
+	// 	}
+	// });
+
+	$(document).ready(function() {
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'cartData',
+			value: localStorage.getItem('cart')
+		}).appendTo('#loginForm');
+
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'redirectUrl',
+			value: localStorage.getItem('redirectAfterLogin') || '/'
+		}).appendTo('#loginForm');
 	});
 </script>
 </html>

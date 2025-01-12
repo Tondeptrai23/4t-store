@@ -10,13 +10,14 @@ authRoute.post("/api/checkEmail", authController.checkEmail);
 authRoute.get("/login", authController.loginView);
 authRoute.get("/register", authController.registerView);
 
+authRoute.post("/api/afterLogin", authController.afterLogin);
+
 authRoute.post(
 	"/login",
 	passport.authenticate("local", {
-		successRedirect: "/",
 		failureRedirect: "/login?invalid-credentials=true",
 	}),
-	authController.postLogin
+	authController.successRedirect
 );
 
 authRoute.post("/register", authController.register);
@@ -34,7 +35,7 @@ authRoute.get(
 	passport.authenticate("google", {
 		failureRedirect: "/login?google-auth-failed=true",
 	}),
-	authController.googleCallback
+	authController.successRedirect
 );
 
 authRoute.get(
@@ -47,7 +48,7 @@ authRoute.get(
 	passport.authenticate('facebook', {
 		failureRedirect: '/login?facebook-auth-failed=true',
 	}),
-	authController.facebookCallback
+	authController.successRedirect
 );
 
 export default authRoute;
