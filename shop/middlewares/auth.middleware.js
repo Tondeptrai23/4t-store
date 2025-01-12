@@ -15,7 +15,6 @@ export function deserializeHandler(error, request, response, next) {
 
 export function isAdmin(request, response, next) {
     if (request.isAuthenticated() && request.user.role === "admin") {
-        console.log("Admin: ", request.user);
         next();
     } else {
         response.status(403).render("index", {

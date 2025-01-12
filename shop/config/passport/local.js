@@ -6,22 +6,23 @@ import UserService from "../../services/user.service.js";
 import { DeserializeError } from "../../utils/errors.js";
 
 passport.serializeUser((user, done) => {
-    done(null, {
-        user: user.user,
-        paymentToken: user.paymentToken,
-    });
+    done(null, user);
 });
 
-passport.deserializeUser(async ({ user, paymentToken }, done) => {
+passport.deserializeUser(async (user, done) => {
     try {
         const existingUser = await UserService.findById(user.userId);
         if (!existingUser) {
             return done(new DeserializeError("User not found"), null);
         }
 
+        const { password, ...userWithoutPassword } = JSON.parse(
+            JSON.stringify(existingUser)
+        );
+
         return done(null, {
-            user: existingUser,
-            paymentToken: paymentToken,
+            ...userWithoutPassword,
+            paymentToken: user.paymentToken,
         });
     } catch (error) {
         return done(new DeserializeError(error), null);
@@ -50,8 +51,11 @@ export default passport.use(
                     password: password,
                 });
 
+                const { password: passwordUser, ...userWithoutPassword } =
+                    JSON.parse(JSON.stringify(user));
+
                 return done(null, {
-                    user: user,
+                    ...userWithoutPassword,
                     paymentToken: res.data.token,
                 });
             } catch (error) {
