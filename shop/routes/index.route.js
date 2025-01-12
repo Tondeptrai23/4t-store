@@ -5,6 +5,7 @@ import cartRoute from "./cart.route.js";
 import cartRenderRoute from "./cartRender.route.js";
 import productRoute from "./product.route.js";
 import userRoute from "./user.route.js";
+import allCategoryRoute from "./allCategory.route.js"
 
 const router = Router();
 
@@ -13,6 +14,7 @@ router.use(userRoute);
 router.use(productRoute);
 router.use("/admin", adminRoute);
 router.use(cartRenderRoute);
+router.use(allCategoryRoute);
 
 router.use("/api/cart", cartRoute);
 
