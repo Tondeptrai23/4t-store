@@ -10,6 +10,25 @@
 
 3. Create a `.env` file based on the `.env.sample` file.
 
+### Signed SSL Certificate
+
+Create the ssl directory inside the payment directory:
+
+```bash
+# Create ssl directory
+mkdir payment/ssl
+cd payment/ssl
+```
+
+Run the following command to generate a self-signed SSL certificate.
+
+```bash
+# Generate SSL certificates
+openssl genrsa -out key.pem 2048
+openssl req -new -key key.pem -out csr.pem
+openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem
+```
+
 ### Execution
 
 Before any coding or running, run this below command to install all the dependencies.
