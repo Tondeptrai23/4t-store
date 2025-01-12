@@ -1,4 +1,5 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import api from "../config/api.js";
 import CartItemService from "../services/cart.service.js";
 import UserService from "../services/user.service.js";
 import { ModelError } from "../utils/errors.js";
@@ -51,13 +52,10 @@ class AuthController {
         try {
             const user = await UserService.create(data);
 
-            const res = await axios.post(
-                `${process.env.PAYMENT_SERVER_URL}/register`,
-                {
-                    username: email,
-                    password: password,
-                }
-            );
+            const res = await api.post(`/register`, {
+                username: email,
+                password: password,
+            });
 
             request.login(user, (error) => {
                 if (error) {
