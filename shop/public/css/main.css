@@ -1812,6 +1812,12 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     height: 100%;
     cursor: pointer;
   }
+  .bton-num-product-up,
+  .bton-num-product-down {
+    width: 45px;
+    height: 100%;
+    cursor: pointer;
+  }
   
   .num-product {
     width: calc(100% - 90px);
