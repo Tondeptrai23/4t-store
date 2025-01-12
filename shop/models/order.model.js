@@ -27,6 +27,7 @@ Order.init(
         address: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: "",
         },
     },
     {

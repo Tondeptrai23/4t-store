@@ -142,4 +142,8 @@ $(document).ready(function () {
     }
 });
 
+function redirectToLogin() {
+    window.location.href = "/login";
+}
+
 

@@ -315,6 +315,3 @@ function updateQuantity(event) {
     }
 }
 
-function redirectToLogin() {
-    window.location.href = "/login";
-}
