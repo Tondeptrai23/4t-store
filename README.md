@@ -10,6 +10,25 @@
 
 3. Create a `.env` file based on the `.env.sample` file.
 
+### Signed SSL Certificate
+
+Create the ssl directory inside the payment directory:
+
+```bash
+# Create ssl directory
+mkdir payment/ssl
+cd payment/ssl
+```
+
+Run the following command to generate a self-signed SSL certificate.
+
+```bash
+# Generate SSL certificates
+openssl genrsa -out key.pem 2048
+openssl req -new -key key.pem -out csr.pem
+openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem
+```
+
 ### Execution
 
 Before any coding or running, run this below command to install all the dependencies.
@@ -18,27 +37,35 @@ Before any coding or running, run this below command to install all the dependen
 npm install
 ```
 
-To run the server, run this below command.
+To run both servers, run this below command.
 
 ```bash
 npm start
 ```
 
-To run the server in development mode, run this below command.
+Or you can run each server separately.
 
 ```bash
-npm run dev
+npm run start:shop
+npm run start:payment
 ```
 
 ### Data Initialization
 
-By default, sequelize will create the tables based on the models. If you want to initialize the data, you can run the following command.
+By default, sequelize will create the tables based on the models. If you want to initialize the data for both servers, you can run the following command.
 
 ```bash
-npm run seed
+npm run seed:all
 ```
 
 Sometimes, you may want to reset the database when sequelize cannot drop the tables. You should drop the database manually in MySQL workbench.
+
+Or you can seed two servers separately.
+
+```bash
+npm run seed:shop
+npm run seed:payment
+```
 
 ### Helper Classes Instructions
 

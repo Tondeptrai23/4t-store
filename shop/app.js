@@ -5,8 +5,8 @@ import passport from "passport";
 
 import multer from "multer";
 import path from "path";
-import { fileURLToPath } from "url";
 import "./config/passport/local.js";
+import { __dirname } from "./utils/utils.js";
 
 import connectSequelize from "connect-session-sequelize";
 import { db } from "./config/config.js";
@@ -24,13 +24,9 @@ const sessionStore = new SequelizeStore({
 });
 sessionStore.sync();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/utils", express.static(path.join(__dirname, "utils")));
 app.set("view engine", "ejs");
 
 app.use(

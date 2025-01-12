@@ -1,0 +1,32 @@
+.error-container {
+    background-color: #f8f9fa;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+}
+
+.error-content {
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #dc3545;
+    font-family: "Montserrat", sans-serif;
+}
+
+.error-title {
+    font-size: 2rem;
+    color: #343a40;
+    font-family: "Playfair Display", serif;
+}
+
+.error-description {
+    color: #6c757d;
+    font-size: 1.1rem;
+    font-family: "Roboto", sans-serif;
+}

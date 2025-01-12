@@ -1,7 +1,9 @@
+import bcrypt from "bcrypt";
 import fs from "fs/promises";
+import path from "path";
 import db from "./models/index.model.js";
 import User from "./models/user.model.js";
-import bcrypt from "bcrypt";
+import { __dirname } from "./utils/utils.js";
 
 db.sync({ force: true })
     .then(async (res) => {
@@ -17,21 +19,24 @@ const seedData = async () => {
             userId: "1",
             name: "John Admin",
             email: "admin@example.com",
-            password: await bcrypt.hash("admin123", salt),
+            password: await bcrypt.hash("admin", salt),
             role: "admin",
         },
         {
             userId: "2",
             name: "Jane User",
             email: "user@example.com",
-            password: await bcrypt.hash("user123", salt),
+            password: await bcrypt.hash("user", salt),
             role: "user",
         },
     ];
 
     await User.bulkCreate(users);
 
-    const data = await fs.readFile("./seedData.sql", "utf-8");
+    const data = await fs.readFile(
+        path.join(__dirname, "seedData.sql"),
+        "utf-8"
+    );
 
     const queries = data
         .split(/;\s*\n/)
