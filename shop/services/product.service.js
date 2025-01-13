@@ -1,5 +1,6 @@
 import Image from "../models/image.model.js";
 import Product from "../models/product.model.js";
+import SubCategory from "../models/subCategory.model.js";
 import {
     FilterBuilder,
     PaginationBuilder,
@@ -124,6 +125,10 @@ class ProductService {
                     {
                         model: Image,
                         as: "images",
+                    },
+                    {
+                        model: SubCategory,
+                        as: "sub_category",
                     },
                 ],
             });

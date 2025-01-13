@@ -96,7 +96,27 @@ class OrderService {
     };
     getById = async (orderId) => {
         try {
-            const order = await Order.findByPk(orderId);
+            const order = await Order.findByPk(orderId, {
+                include: [
+                    {
+                        model: OrderItem,
+                        as: "orderItems",
+                        required: false,
+                        include: [
+                            {
+                                model: Product,
+                                as: "product",
+                                required: false,
+                                include: {
+                                    model: Image,
+                                    as: "images",
+                                    required: false,
+                                },
+                            },
+                        ],
+                    },
+                ],
+            });
             if (!order) {
                 throw new Error(`Order with ID ${orderId} not found`);
             }

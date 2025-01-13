@@ -1,3 +1,4 @@
+import Order from "../models/order.model.js";
 import OrderItem from "../models/orderItem.model.js";
 
 class OrderItemService {
@@ -18,6 +19,39 @@ class OrderItemService {
             return orderItem;
         } catch (error) {
             throw new Error("Error fetching order item: " + error.message);
+        }
+    };
+    getByProductId = async (productId, page = 1, limit = 5) => {
+        try {
+            const offset = (page - 1) * limit;
+
+            const { count, rows: orderItems } = await OrderItem.findAndCountAll(
+                {
+                    where: {
+                        productId,
+                    },
+                    include: [
+                        {
+                            model: Order,
+                            attributes: ["orderId", "status", "createdAt"],
+                        },
+                    ],
+                    limit,
+                    offset,
+                }
+            );
+
+            return {
+                orderItems,
+                pagination: {
+                    totalItems: count,
+                    currentPage: page,
+                    totalPages: Math.ceil(count / limit),
+                    limit,
+                },
+            };
+        } catch (error) {
+            throw new Error("Error fetching order items: " + error.message);
         }
     };
     addOrderItems = async (orderItems) => {

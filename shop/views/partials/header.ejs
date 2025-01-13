@@ -1,73 +1,89 @@
 <header class="header-v2">
-	<div class="container-menu-desktop trans-03">
-		<div class="wrap-menu-desktop">
-			<nav class="limiter-menu-desktop p-l-45">
-				<!-- Logo desktop -->
-				<div class="logo">
-					<div class="icon-header-item cl2 hov-cl1 trans-04 js-show-sidebar">
-						<i class="fa fa-bars"></i>
-					</div>
-				</div>
+    <div class="container-menu-desktop trans-03">
+        <div class="wrap-menu-desktop">
+            <nav class="limiter-menu-desktop p-l-45">
+                <!-- Logo desktop -->
+                <div class="logo">
+                    <div
+                        class="icon-header-item cl2 hov-cl1 trans-04 js-show-sidebar"
+                    >
+                        <i class="fa fa-bars"></i>
+                    </div>
+                </div>
 
-				<!-- Menu desktop -->
-				<div class="menu-desktop">
-					<ul class="main-menu">
-						<li class="active-menu">
-							<a href="/">Trang chủ</a>
-						</li>
+                <!-- Menu desktop -->
+                <div class="menu-desktop">
+                    <ul class="main-menu">
+                        <li class="active-menu">
+                            <a href="/">Trang chủ</a>
+                        </li>
 
-						<li>
-							<a href="/product">Cửa hàng</a>
-						</li>
-						<li>
-							<a href="/#about-us">Về chúng tôi</a>
-						</li>
-					</ul>
-				</div>
+                        <li>
+                            <a href="/product">Cửa hàng</a>
+                        </li>
+                        <li>
+                            <a href="/#about-us">Về chúng tôi</a>
+                        </li>
+                    </ul>
+                </div>
 
-				<% if (!isLoggedIn) { %>
-					<div class="menu-login">
-						<ul class="main-menu">
-							<li><a href="/login">Đăng nhập</a></li>
-							<li><a href="/register">Đăng ký</a></li>
-						</ul>
-					</div>
-				<% } else { %>
-					<div class="menu-login">
-						<ul class="main-menu">
-							<li class="dropdown">
-								<div class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								  <img src='https://placehold.co/600x400' alt="Avatar" class="avatar">
-								</div>
-								<div class="dropdown-menu dropdown-menu-right">
-									<div>
-										<a href="/orders" style="padding-left: 14px;">Xem đơn hàng</a>
-									</div>
-									<div>
-										<a href="/profile" style="padding-left: 14px;">Đổi tên</a>
-									</div>
-									<div>
-										<a href="/profile/change-password" style="padding-left: 14px;">Đổi mật khẩu</a>
-									</div>
-									<div>
-										<a href="/logout" style="padding-left: 14px; color: red;">Đăng xuất</a>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
-				<% } %>
+                <% if (!isLoggedIn) { %>
+                <div class="menu-login">
+                    <ul class="main-menu">
+                        <li><a href="/login">Đăng nhập</a></li>
+                        <li><a href="/register">Đăng ký</a></li>
+                    </ul>
+                </div>
+                <% } else { %>
+                <div class="menu-login">
+                    <ul class="main-menu">
+                        <li class="dropdown">
+                            <button
+                                class="nav-link dropdown-toggle"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <img
+                                    src="https://placehold.co/600x400"
+                                    alt="Avatar"
+                                    class="avatar"
+                                />
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-item">
+                                    <a href="/orders">Xem đơn hàng</a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/profile">Đổi tên</a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a href="/change-password">Đổi mật khẩu</a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a class="text-danger" href="/logout">
+                                        Đăng xuất
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <% } %>
 
-				<!-- Icon header and Login menu -->
-				<div class="wrap-icon-header flex-w flex-r-m h-full">
-					<div class="flex-c-m h-full p-l-18 p-r-25 bor5">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart"
-							data-notify="2">
-							<i class="fas fa-shopping-cart"></i>
-						</div>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</div>
+                <!-- Icon header and Login menu -->
+                <div class="wrap-icon-header flex-w flex-r-m h-full">
+                    <div class="flex-c-m h-full p-l-18 p-r-25 bor5">
+                        <div
+                            class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart"
+                            data-notify="2"
+                        >
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
 </header>

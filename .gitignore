@@ -4,3 +4,4 @@ node_modules
 template
 */public/images
 ssl
+.prettierignore
