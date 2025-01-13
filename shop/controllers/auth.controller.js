@@ -41,7 +41,7 @@ class AuthController {
     }
 
     async register(request, response) {
-        const { name, email, password } = request.body;
+        const { name, email, password,cartData } = request.body;
         const data = {
             name,
             email,
@@ -61,11 +61,27 @@ class AuthController {
 
             userToLogin.paymentToken = res.data.token;
 
-            request.login(userToLogin, (error) => {
+            request.login(userToLogin, async (error) => {
                 if (error) {
                     return response.render("pages/auth/register", {
                         errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
                     });
+                }
+                if (cartData) {
+                    try {
+                        const cartItems = JSON.parse(cartData);
+                        for (let i = 0; i < cartItems.length; i++) {
+                            const cartItem = cartItems[i];
+                            await CartItemService.addCartItem(
+                                request.user.userId,
+                                cartItem.productId,
+                                cartItem.quantity
+                            );
+                        }
+                    } catch (error) {
+                        console.error("Error syncing cart data:", error);
+                        return response.status(500).send("Error syncing cart data");
+                    }
                 }
                 response.redirect("/");
             });
