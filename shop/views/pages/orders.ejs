@@ -1,4 +1,5 @@
-<div class="container mt-5">
+<!-- Keep existing table structure -->
+<div class="container mt-5 mb-5">
     <table class="table table-centered">
         <thead>
             <tr>
@@ -38,7 +39,7 @@
                 <td class="<%= order.status %>">
                     <strong>
                         <% const statusMap = { pending: "Chờ xử lý", processing:
-                        "Đang xử lý", delivered: "Đã giao", cancelled: "Đã hủy",
+                        "Đang xử lý", delivered: "Đã giao", cancelled: "Đã hủy"
                         }; %> <%= statusMap[order.status] %>
                     </strong>
                 </td>
@@ -46,12 +47,111 @@
             <% }); %>
         </tbody>
     </table>
+
+    <!-- Add Pagination -->
+    <div id="pagination-container" class="d-flex justify-content-center mt-4">
+        <nav aria-label="Orders pagination">
+            <ul class="pagination">
+                <!-- Previous button -->
+                <li
+                    class="page-item <%= currentPage === 1 ? 'disabled' : '' %>"
+                >
+                    <a
+                        class="page-link"
+                        href="#"
+                        data-page="<%= currentPage - 1 %>"
+                        aria-label="Previous"
+                    >
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <!-- First page -->
+                <li class="page-item <%= currentPage === 1 ? 'active' : '' %>">
+                    <a class="page-link" href="#" data-page="1">1</a>
+                </li>
+
+                <!-- Show dots if there are many pages -->
+                <% if (currentPage > 4) { %>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                <% } %>
+
+                <!-- Pages around current page -->
+                <% for (let i = Math.max(2, currentPage - 2); i <=
+                Math.min(totalPages - 1, currentPage + 2); i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="#" data-page="<%= i %>">
+                        <%= i %>
+                    </a>
+                </li>
+                <% } %>
+
+                <!-- Show dots if there are many pages -->
+                <% if (currentPage < totalPages - 3) { %>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                <% } %>
+
+                <!-- Last page -->
+                <% if (totalPages > 1) { %>
+                <li
+                    class="page-item <%= currentPage === totalPages ? 'active' : '' %>"
+                >
+                    <a class="page-link" href="#" data-page="<%= totalPages %>">
+                        <%= totalPages %>
+                    </a>
+                </li>
+                <% } %>
+
+                <!-- Next button -->
+                <li
+                    class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>"
+                >
+                    <a
+                        class="page-link"
+                        href="#"
+                        data-page="<%= currentPage + 1 %>"
+                        aria-label="Next"
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 
-<script>
-    function viewOrderDetails(orderId) {
-        // Điều hướng đến trang chi tiết đơn hàng
-        console.log("View order details for order ID:", orderId);
-        window.location.href = `/orders/${orderId}`;
+<script src="/js/list-order.js"></script>
+
+<!-- Add CSS for status colors -->
+<style>
+    .pending {
+        color: #ffc107;
     }
-</script>
+    .processing {
+        color: #17a2b8;
+    }
+    .delivered {
+        color: #28a745;
+    }
+    .cancelled {
+        color: #dc3545;
+    }
+
+    .pagination .page-link {
+        color: #333;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #333;
+        border-color: #333;
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+    }
+</style>
