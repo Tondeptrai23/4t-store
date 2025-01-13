@@ -101,13 +101,37 @@ $(document).ready(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     return `
-                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="text-muted sr-only">Thao tác</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="/admin/products/edit/${row.productId}">Sửa</a>
-                        <a class="dropdown-item text-danger delete-product" href="#" data-id="${row.productId}">Xóa</a>
-                    </div>`;
+                        <button
+                            class="btn btn-sm dropdown-toggle more-horizontal"
+                            type="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            <span class="text-muted sr-only">Thao tác</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a
+                                class="dropdown-item"
+                                href="/admin/products/detail/${row.productId}"
+                            >
+                                Xem chi tiết
+                            </a>
+                            <a
+                                class="dropdown-item"
+                                href="/admin/products/edit/${row.productId}"
+                            >
+                                Sửa
+                            </a>
+                            <a
+                                class="dropdown-item text-danger delete-product"
+                                href="#"
+                                data-id="${row.productId}"
+                            >
+                                Xóa
+                            </a>
+                        </div>
+                    `;
                 },
             },
         ],

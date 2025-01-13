@@ -42,7 +42,7 @@ class OrderController {
 
             const orderItems = cartItems.map((item) => ({
                 quantity: item.quantity,
-                priceAtPurchase: item.price * item.quantity,
+                priceAtPurchase: item.price,
                 orderId: orderId,
                 productId: item.productId,
             }));

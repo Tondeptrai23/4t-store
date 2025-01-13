@@ -1,4 +1,5 @@
 import categoryService from "../services/category.service.js";
+import orderItemsService from "../services/orderItems.service.js";
 import productService from "../services/product.service.js";
 import subCategoryService from "../services/subCategory.service.js";
 
@@ -28,6 +29,35 @@ class AdminProductController {
             });
         } catch (error) {
             console.error("Error loading create product form:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async showProductDetail(req, res) {
+        try {
+            const productId = req.params.id;
+            const product = await productService.getById(productId);
+
+            // Get order history for this product
+            const orderHistory = await orderItemsService.getByProductId(
+                productId
+            );
+            // Transform order history data
+            const transformedOrderHistory = orderHistory.map((item) => ({
+                orderId: item.order.orderId,
+                status: item.order.status,
+                createdAt: item.order.createdAt,
+                quantity: item.quantity,
+                total: item.quantity * item.priceAtPurchase,
+            }));
+
+            res.render("admin/pages/products/detail", {
+                layout: "admin/layouts/main",
+                product,
+                orderHistory: transformedOrderHistory,
+            });
+        } catch (error) {
+            console.error("Error in showProductDetail:", error);
             res.status(500).send("Internal Server Error");
         }
     }

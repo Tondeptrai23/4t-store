@@ -26,6 +26,7 @@ router.get(
     adminDashboardController.getTransactions
 );
 
+router.get("/products/detail/:id", adminProductController.showProductDetail);
 router.get("/products", adminProductController.listProducts);
 router.get("/products/create", adminProductController.showCreateForm);
 router.post("/products/create", adminProductController.createProduct);
