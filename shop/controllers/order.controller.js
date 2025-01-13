@@ -8,10 +8,12 @@ class OrderController {
             const { count, orders, pagination } = await orderService.getAll(
                 req.query
             );
+			const transformedOrders = transformOrderStatus(orders);
+
             res.status(200).send({
                 success: true,
                 count,
-                orders,
+                orders: transformedOrders,
                 pagination,
             });
         } catch (error) {
@@ -116,5 +118,21 @@ class OrderController {
         }
     }
 }
+
+function transformOrderStatus(orders) {
+	const statusMap = {
+		pending: "Chờ xử lý",
+		processing: "Đang xử lý",
+		delivered: "Đã giao",
+		cancelled: "Đã hủy",
+	};
+
+	return orders.map((order) => {
+		const orderData = order.toJSON();
+		orderData.status = statusMap[orderData.status];
+		return orderData;
+	});
+}
+
 
 export default new OrderController();

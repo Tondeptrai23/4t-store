@@ -49,6 +49,8 @@ router.post(
 );
 
 router.get("/orders/:orderId", adminOrderController.orderDetails);
+router.post("/orders/:orderId/deliver", adminOrderController.deliverOrder);
+router.get("/orders", adminOrderController.listOrders);
 
 router.get("/users/:id", adminUserController.getUserDetail);
 

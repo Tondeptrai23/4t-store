@@ -192,6 +192,19 @@ class OrderService {
             throw new Error("Error fetching orders: " + error.message);
         }
     };
+
+	updateStatus = async (orderId, status) => {
+		try {
+			const order = await Order.findByPk(orderId);
+			if (!order) {
+				throw new Error(`Order with ID ${orderId} not found`);
+			}
+			await order.update({ status });
+			return order;
+		} catch (error) {
+			throw new Error("Error updating order status: " + error.message);
+		}
+	};
 }
 
 export default new OrderService();
