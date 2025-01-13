@@ -47,14 +47,24 @@
 							<label for="password" class="form-label">
 								Mật khẩu
 							</label>
-							<input type="password" class="form-control" id="password" name="password" required />
+							<div class="input-group">
+								<input type="password" class="form-control" id="password" name="password" required />
+								<button type="button" class="btn btn-outline-secondary" id="togglePassword">
+									<i class="fa fa-eye"></i>
+								</button>
+							</div>
 						</div>
 
 						<div class="form-group mb-4">
 							<label for="confirmPassword" class="form-label">
 								Xác nhận mật khẩu
 							</label>
-							<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+							<div class="input-group">
+								<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+								<button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword">
+									<i class="fa fa-eye"></i>
+								</button>
+							</div>
 							<div id="password-feedback" class="invalid-feedback"></div>
 						</div>
 
@@ -67,6 +77,31 @@
 						<button type="submit" class="btn btn-primary w-100 size-101">
 							Đăng ký
 						</button>
+
+						<div class="d-flex align-items-center my-4">
+							<hr class="flex-grow-1">
+							<span class="mx-3 text-muted">hoặc</span>
+							<hr class="flex-grow-1">
+						</div>
+						
+						<div class="row g-2">
+							<div class="col-6">
+								<a href="/auth/google"
+									class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
+									style="height: 40px; gap: 8px;">
+									<img src="https://www.google.com/favicon.ico" alt="Google" width="18" height="18">
+									<span>Google</span>
+								</a>
+							</div>
+							<div class="col-6">
+								<a href="/auth/facebook"
+									class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+									style="height: 40px; gap: 8px;">
+									<i class="fab fa-facebook-f"></i>
+									<span>Facebook</span>
+								</a>
+							</div>
+						</div>
 
 						<div class="text-center mt-3">
 							<p>
@@ -159,6 +194,27 @@
 				}
 			});
 		});
+
+		function setupPasswordToggle(buttonId, inputId) {
+			document.getElementById(buttonId).addEventListener('click', function() {
+				const passwordInput = document.getElementById(inputId);
+				const icon = this.querySelector('i');
+				
+				if (passwordInput.type === 'password') {
+					passwordInput.type = 'text';
+					icon.classList.remove('fa-eye');
+					icon.classList.add('fa-eye-slash');
+				} else {
+					passwordInput.type = 'password';
+					icon.classList.remove('fa-eye-slash');
+					icon.classList.add('fa-eye');
+				}
+			});
+		}
+
+		// Setup toggle for both password fields
+		setupPasswordToggle('togglePassword', 'password');
+		setupPasswordToggle('toggleConfirmPassword', 'confirmPassword');
 	</script>
 </body>
 
