@@ -195,7 +195,7 @@ console.log("product.js loaded");
                     currentPage - 1,
                     false,
                     currentPage === 1,
-                    "Prev"
+                    "&#8592;"
                 )
             );
             items.push(createPageItem(1, currentPage === 1));
@@ -227,7 +227,7 @@ console.log("product.js loaded");
                     currentPage + 1,
                     false,
                     currentPage === totalPages,
-                    "Next"
+                    "&#8594;"
                 )
             );
 
