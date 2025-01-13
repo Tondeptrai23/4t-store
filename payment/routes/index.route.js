@@ -20,6 +20,19 @@ router.get(
 );
 
 router.get(
+    "/transactions/:orderId",
+    verifyToken,
+    transactionController.getTransactionByOrderId
+);
+
+router.get(
+    "/admin/balance/:username",
+    verifyToken,
+    isAdmin,
+    transactionController.getUserBalance
+);
+
+router.get(
     "/admin/stats/users",
     verifyToken,
     isAdmin,

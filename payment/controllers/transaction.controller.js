@@ -128,6 +128,53 @@ class TransactionController {
         });
     }
 
+    async getTransactionByOrderId(req, res) {
+        const orderId = req.params.orderId;
+
+        const transaction = await Transaction.findOne({
+            where: { orderId },
+            include: [
+                {
+                    model: User,
+                    as: "fromUser",
+                    attributes: ["id", "username"],
+                },
+                {
+                    model: User,
+                    as: "toUser",
+                    attributes: ["id", "username"],
+                },
+            ],
+        });
+
+        if (!transaction) {
+            return res.status(404).json({
+                success: false,
+                message: "Transaction not found",
+            });
+        }
+
+        res.json({ success: true, transaction });
+    }
+
+    async getUserBalance(req, res) {
+        const username = req.params.username;
+
+        const user = await User.findOne({
+            where: { username },
+            attributes: ["balance"],
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        res.json({ success: true, balance: user.balance });
+    }
+
     async getBalance(req, res) {
         const user = await User.findOne({
             where: {

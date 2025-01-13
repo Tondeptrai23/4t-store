@@ -2,7 +2,6 @@ import { Op } from "sequelize";
 import Category from "../models/category.model.js";
 import Image from "../models/image.model.js";
 import Product from "../models/product.model.js";
-import SubCategory from "../models/subCategory.model.js";
 
 class CategoryService {
     getAll = async () => {
@@ -18,7 +17,7 @@ class CategoryService {
     };
     getById = async (categoryId) => {
         try {
-            const category = await SubCategory.findByPk(categoryId);
+            const category = await Category.findByPk(categoryId);
             if (!category) {
                 throw new Error(`Category with ID ${categoryId} not found`);
             }
@@ -76,7 +75,6 @@ class CategoryService {
 
     update = async (categoryId, categoryData) => {
         try {
-           
             const category = await Category.findByPk(categoryId);
 
             if (!category) {
@@ -86,7 +84,6 @@ class CategoryService {
             await category.update(categoryData);
 
             return await Category.findByPk(categoryId);
-
         } catch (error) {
             throw new Error("Failed to update category: " + error.message);
         }

@@ -66,7 +66,7 @@ $(document).ready(function () {
                     </div>`;
                 },
             },
-           
+
             { data: "name", name: "name" },
 
             { data: "description", name: "description" },
@@ -79,10 +79,10 @@ $(document).ready(function () {
                 },
             },
 
-            { 
-                data: "parentName", 
-                name: "parentName" ,
-                orderable: false
+            {
+                data: "parentName",
+                name: "parentName",
+                orderable: false,
             },
 
             {
@@ -94,14 +94,14 @@ $(document).ready(function () {
                         <span class="text-muted sr-only">Thao tác</span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="/admin/categories/detail/${row.categoryId}">Xem chi tiết</a>
                         <a class="dropdown-item" href="/admin/categories/edit/${row.categoryId}">Sửa</a>
                         <a class="dropdown-item text-danger delete-product" href="#" data-id="${row.categoryId}">Xóa</a>
                     </div>`;
                 },
             },
         ],
-        order: [[1, "asc"]]
-        
+        order: [[1, "asc"]],
     });
 
     $("#selectAll").change(function () {
