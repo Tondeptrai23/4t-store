@@ -14,4 +14,6 @@ cartRoute.post("/update", cartController.updateCartItem);
 
 cartRoute.post("/sync", cartController.syncCart);
 
+cartRoute.post("/clear", cartController.clearCart);
+
 export default cartRoute;

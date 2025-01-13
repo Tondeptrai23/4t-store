@@ -99,6 +99,14 @@ class CartItemService{
             throw new Error("Error deleting cartItem: " + error.message);
         }
     };
+
+    clearCart = async (userId) => {
+        try {
+            await CartItem.destroy({ where: { userId } });
+        } catch (error) {
+            throw new Error("Error clearing cart: " + error.message);
+        }
+    }
 }
 
 export default new CartItemService();

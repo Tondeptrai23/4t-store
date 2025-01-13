@@ -88,13 +88,13 @@
                         <div class="flex-w flex-r-m p-b-10">
                             <div class="size-204 flex-w flex-m respon6-next">
                                 <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                    <div class="bton-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 fa fa-minus"></i>
                                     </div>
 
                                     <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
 
-                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                    <div class="bton-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 fa fa-plus"></i>
                                     </div>
                                 </div>    
@@ -105,8 +105,8 @@
                                         data-product-image="<%= product.images[0].path %>">
                                     Thêm vào giỏ hàng
                                 </button>  
-                                
-                                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                                <div class="modal fade" id="addedProductModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -199,13 +199,13 @@
                             <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
                                 <div class="row">
                         <% } %>
-                                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
                                         <div class="block2">
                                             <div class="block2-pic hov-img0">
                                                 <img src="/images/<%= relatedProduct[i].images[0].path %>" 
                                                     alt="<%= relatedProduct[i].name %>">
                                             </div>
-
+                
                                             <div class="block2-txt flex-w flex-t p-t-14">
                                                 <div class="block2-txt-child1 flex-col">
                                                     <a href="/products/<%= relatedProduct[i].productId %>"
