@@ -1,23 +1,73 @@
+import allCategoryService from "../services/allCategory.service.js";
 import categoryService from "../services/category.service.js";
 import productService from "../services/product.service.js";
-import allCategoryService from "../services/allCategory.service.js";
 import subCategoryService from "../services/subCategory.service.js";
 
 class AdminCategoryController {
+    categoryDetail = async (req, res) => {
+        try {
+            const categoryId = req.params.id;
+
+            // Check if it's a main category or subcategory
+            let category,
+                subcategories = [],
+                parentCategory = null;
+
+            try {
+                category = await categoryService.getById(categoryId);
+            } catch (error) {
+                category = null;
+            }
+
+            if (!category) {
+                category = await subCategoryService.getById(categoryId);
+
+                if (category) {
+                    parentCategory = await categoryService.getById(
+                        category.parentId
+                    );
+                }
+            } else {
+                subcategories = await subCategoryService.getByCategoryId(
+                    categoryId
+                );
+            }
+
+            // Fetch products in this category
+            const productQuery = {
+                categoryId: categoryId,
+            };
+            const { products } =
+                await productService.getFilteredSortedAndPaginatedProducts(
+                    productQuery
+                );
+
+            res.render("admin/pages/categories/detail", {
+                layout: "admin/layouts/main",
+                category,
+                subcategories,
+                parentCategory,
+                products,
+            });
+        } catch (error) {
+            console.error("Category Detail Error:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    };
+
     async listCategories(req, res) {
         try {
-
-            const response = await allCategoryService.getFilteredSortedAndPaginatedCategories(
-                req.query
-            );
+            const response =
+                await allCategoryService.getFilteredSortedAndPaginatedCategories(
+                    req.query
+                );
 
             const categories = response.categories || [];
 
             res.render("admin/pages/categories/list", {
                 layout: "admin/layouts/main",
-                categories
+                categories,
             });
-
         } catch (error) {
             console.error("Error fetching categories:", error);
             res.status(500).send("Internal Server Error");
@@ -27,10 +77,10 @@ class AdminCategoryController {
     async showCreateForm(req, res) {
         try {
             const categories = await categoryService.getAll();
-          
+
             res.render("admin/pages/categories/create", {
                 layout: "admin/layouts/main",
-                categories
+                categories,
             });
         } catch (error) {
             console.error("Error loading create category form:", error);
@@ -46,17 +96,17 @@ class AdminCategoryController {
 
             console.log(categoryData.isParentCategory);
 
-            if(!categoryData.isParentCategory){
+            if (!categoryData.isParentCategory) {
                 newCategory = await subCategoryService.create({
-                   ...categoryData,
-                   parentId: categoryData.parentCategoryId || null
-                })
+                    ...categoryData,
+                    parentId: categoryData.parentCategoryId || null,
+                });
             } else {
                 newCategory = await categoryService.create({
-                    ...categoryData
+                    ...categoryData,
                 });
             }
-            
+
             res.status(201).json({
                 success: true,
                 message: "Category created successfully",
@@ -73,25 +123,24 @@ class AdminCategoryController {
 
     async showEditForm(req, res) {
         try {
-
             const { id } = req.params;
             let category = await categoryService.getParentCategory(id);
 
-            console.log("Test category :", category)
+            console.log("Test category :", category);
 
-            if(!category){
+            if (!category) {
                 category = await subCategoryService.getById(id);
             }
 
             const selectedParentCategoryId = category.parentId || null;
 
             const categories = await categoryService.getAll();
-           
+
             res.render("admin/pages/categories/edit", {
                 layout: "admin/layouts/main",
                 category,
                 categories,
-                selectedParentCategoryId
+                selectedParentCategoryId,
             });
         } catch (error) {
             console.error("Error loading edit category form:", error);
@@ -101,25 +150,24 @@ class AdminCategoryController {
 
     async updateCategory(req, res) {
         try {
-
             const { id } = req.params;
             const categoryData = req.body;
 
-            console.log("Test category data :", categoryData)
+            console.log("Test category data :", categoryData);
 
             let updatedCategory;
 
-            if(categoryData.parentCategoryId){
+            if (categoryData.parentCategoryId) {
                 updatedCategory = await subCategoryService.update(id, {
-                   ...categoryData,
-                   parentId: categoryData.parentCategoryId || null
-                })
+                    ...categoryData,
+                    parentId: categoryData.parentCategoryId || null,
+                });
             } else {
                 updatedCategory = await categoryService.update(id, {
-                    ...categoryData
+                    ...categoryData,
                 });
             }
-            
+
             res.json({
                 success: true,
                 message: "Category updated successfully",
@@ -173,4 +221,3 @@ class AdminCategoryController {
 }
 
 export default new AdminCategoryController();
-

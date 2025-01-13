@@ -1,0 +1,60 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2>Category Detail</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    <h3><%= category.name %></h3>
+
+                    <% if (category.description) { %>
+                    <p><%= category.description %></p>
+                    <% } %> <% if (parentCategory) { %>
+                    <p>Parent Category: <%= parentCategory.name %></p>
+                    <% } %>
+                </div>
+            </div>
+
+            <% if (subcategories && subcategories.length > 0) { %>
+            <div class="card mt-3">
+                <div class="card-header">Subcategories</div>
+                <div class="card-body">
+                    <ul>
+                        <% subcategories.forEach(function(subcat) { %>
+                        <li><%= subcat.name %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            </div>
+            <% } %> <% if (products && products.length > 0) { %>
+            <div class="card mt-3">
+                <div class="card-header">Products</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.forEach(function(product) { %>
+                            <tr>
+                                <td><%= product.name %></td>
+                                <td><%= product.price %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('script') %>
+<script></script>
+<%- contentFor('style') %>
+<script></script>

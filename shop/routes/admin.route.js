@@ -35,6 +35,7 @@ router.put("/products/:id", adminProductController.updateProduct);
 router.delete("/products/:id", adminProductController.deleteProduct);
 router.post("/products/bulk-delete", adminProductController.bulkDeleteProducts);
 
+router.get("/categories/detail/:id", adminCategoryController.categoryDetail);
 router.get("/categories", adminCategoryController.listCategories);
 router.get("/categories/create", adminCategoryController.showCreateForm);
 router.post("/categories/create", adminCategoryController.createCategory);
