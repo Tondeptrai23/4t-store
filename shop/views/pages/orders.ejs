@@ -1,0 +1,57 @@
+<div class="container mt-5">
+    <table class="table table-centered">
+        <thead>
+            <tr>
+                <th scope="col">Danh sách đơn hàng</th>
+                <th scope="col">Tổng tiền</th>
+                <th scope="col">Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% orders.forEach((order, index) => { %>
+            <tr>
+                <td>
+                    <% order.orderItems.forEach((item) => { %>
+                    <div class="d-flex align-items-center mb-2">
+                        <img
+                            src="/images/<%= item.product.images[0].path %>"
+                            alt="<%= item.product.name %>"
+                            style="width: 50px; height: 70px"
+                        />
+                        <p class="ml-2">
+                            <%= new Intl.NumberFormat('vi-VN', { style:
+                            'currency', currency: 'VND'
+                            }).format(item.product.price) %> - SL: <%=
+                            item.quantity %>
+                            <br />
+                            Size: <%= item.product.size %>
+                        </p>
+                    </div>
+                    <% }); %>
+                </td>
+                <td>
+                    <strong>
+                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency',
+                        currency: 'VND' }).format(order.total) %>
+                    </strong>
+                </td>
+                <td class="<%= order.status %>">
+                    <strong>
+                        <% const statusMap = { pending: "Chờ xử lý", processing:
+                        "Đang xử lý", delivered: "Đã giao", cancelled: "Đã hủy",
+                        }; %> <%= statusMap[order.status] %>
+                    </strong>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function viewOrderDetails(orderId) {
+        // Điều hướng đến trang chi tiết đơn hàng
+        console.log("View order details for order ID:", orderId);
+        window.location.href = `/orders/${orderId}`;
+    }
+</script>
