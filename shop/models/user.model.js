@@ -29,6 +29,10 @@ User.init(
             type: DataTypes.ENUM("user", "admin"),
             defaultValue: "user",
         },
+		provider: {
+			type: DataTypes.ENUM("local", "facebook", "google"),
+			defaultValue: "local",
+		}
     },
     {
         sequelize: db,

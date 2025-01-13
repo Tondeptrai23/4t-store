@@ -31,6 +31,13 @@ class AuthController {
 		return response.render("pages/auth/register", { errorMsg: null });
 	}
 
+	changePasswordView(request, response) {
+		if (!request.isAuthenticated()) {
+			return response.redirect("/login");
+		}
+		return response.render("index", { body: "pages/auth/change-password", isLoggedIn: true });
+	}
+
 	logout(request, response) {
 		request.logout((error) => {
 			if (error) {
@@ -99,58 +106,43 @@ class AuthController {
 			email,
 			password,
 			role: "user",
+			provider: "local",
 		};
 
-        try {
-            const user = await UserService.create(data);
+		try {
+			const user = await UserService.create(data);
 
-            const res = await api.post(`/register`, {
-                username: email,
-                password: password,
-            });
+			const res = await api.post(`/register`, {
+				username: email,
+				password: password,
+			});
 
-            const userToLogin = JSON.parse(JSON.stringify(user));
+			const userToLogin = JSON.parse(JSON.stringify(user));
 
-            userToLogin.paymentToken = res.data.token;
+			userToLogin.paymentToken = res.data.token;
 
-            request.login(userToLogin, async (error) => {
-                if (error) {
-                    return response.render("pages/auth/register", {
-                        errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
-                    });
-                }
-                if (cartData) {
-                    try {
-                        const cartItems = JSON.parse(cartData);
-                        for (let i = 0; i < cartItems.length; i++) {
-                            const cartItem = cartItems[i];
-                            await CartItemService.addCartItem(
-                                request.user.userId,
-                                cartItem.productId,
-                                cartItem.quantity
-                            );
-                        }
-                    } catch (error) {
-                        console.error("Error syncing cart data:", error);
-                        return response.status(500).send("Error syncing cart data");
-                    }
-                }
-                response.redirect("/");
-            });
-        } catch (error) {
-            if (error instanceof ModelError) {
-                return response.render("pages/auth/register", {
-                    errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác.",
-                });
-            } else if (error instanceof AxiosError) {
-                console.error("Error registering payment account:", error);
-                return response.render("pages/auth/register", {
-                    errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
-                });
-            }
-            throw new Error(error);
-        }
-    }
+			request.login(userToLogin, async (error) => {
+				if (error) {
+					return response.render("pages/auth/register", {
+						errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
+					});
+				}
+				response.redirect("/");
+			});
+		} catch (error) {
+			if (error instanceof ModelError) {
+				return response.render("pages/auth/register", {
+					errorMsg: "Email đã tồn tại. Vui lòng sử dụng email khác.",
+				});
+			} else if (error instanceof AxiosError) {
+				console.error("Error registering payment account:", error);
+				return response.render("pages/auth/register", {
+					errorMsg: "Đăng ký thất bại. Vui lòng thử lại.",
+				});
+			}
+			throw new Error(error);
+		}
+	}
 
 	async afterLogin(request, response) {
 		const { cartData } = request.body;

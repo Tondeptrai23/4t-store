@@ -30,12 +30,12 @@ passport.use(
 						email: profile.emails[0]?.value,
 						password: Buffer.from('hiddehiddenfacebook_n_' + profile.emails[0]?.value).toString('base64'),
 						role: "user",
+						provider: 'facebook',
 					});
 					user = newUser;
 				}
 
-				const isMatch = await bcrypt.compare(Buffer.from('hiddenfacebook_' + profile.emails[0]?.value).toString('base64'), user.password);
-				if (!isMatch) { return done(null, false); }
+				if (user.provider !== 'facebook') { done(null, false); }
 
 				const res = await api.post(`/login`, {
 					username: user.dataValues.email,

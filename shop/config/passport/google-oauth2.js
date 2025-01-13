@@ -25,12 +25,12 @@ passport.use(new GoogleStrategy({
 					email: profile.email,
 					password: Buffer.from('hiddengoogle_' + profile.email).toString('base64'),
 					role: "user",
+					provider: 'google',
 				});
 				user = newUser;
 			}
 
-			const isMatch = await bcrypt.compare(Buffer.from('hiddengoogle_' + profile.email).toString('base64'), user.password);
-			if (!isMatch) { return done(null, false); }
+			if (user.provider !== 'google') { done(null, false); }
 
 			const res = await api.post(`/login`, {
 				username: user.dataValues.email,

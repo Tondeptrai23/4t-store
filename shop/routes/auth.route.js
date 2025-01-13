@@ -32,6 +32,7 @@ authRoute.post(
 authRoute.post("/register", authController.register);
 authRoute.get("/logout", authController.logout);
 // authRoute.get("/status", authController.status);
+authRoute.get("/change-password", authController.changePasswordView);
 
 authRoute.get(
 	"/auth/google",
