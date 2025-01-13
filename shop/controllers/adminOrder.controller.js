@@ -50,6 +50,21 @@ class AdminOrderController {
             res.status(500).send("Internal Server Error");
         }
     }
+
+	async listOrders(req, res) {
+		try {
+			const { orders } = await orderService.getAll();
+			const transformedOrders = transformOrderStatus(orders);
+
+			res.render("admin/pages/orders/list", {
+				layout: "admin/layouts/main",
+				orders: transformedOrders,
+			});
+		} catch (error) {
+			console.error("Error fetching orders:", error);
+			res.status(500).send("Internal Server Error");
+		}
+	}
 }
 
 function transformOrderStatus(orders) {

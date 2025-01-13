@@ -49,6 +49,7 @@ router.post(
 );
 
 router.get("/orders/:orderId", adminOrderController.orderDetails);
+router.get("/orders", adminOrderController.listOrders);
 
 router.get("/users/:id", adminUserController.getUserDetail);
 
