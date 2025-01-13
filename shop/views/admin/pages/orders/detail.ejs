@@ -135,8 +135,15 @@
                                     </tfoot>
                                 </table>
                             </div>
+
+														<% if (order.status==='Đang xử lý' ) { %>
+															<a href="#" class="btn btn-secondary order-deliver-button" data-order-id="<%= order.orderId %>">
+																<i class="fe fe-truck fe-16 mr-2"></i>
+																Xác nhận giao hàng
+															</a>
+															<% } %>
                         </div>
-                    </div>
+                    </div>										
                 </div>
 
                 <!-- Transaction Info Card -->
@@ -250,5 +257,27 @@
 
 <%- contentFor('script') %>
 <script>
-    // Add any necessary JavaScript here
+	$(document).on('click', '.order-deliver-button', function (e) {
+			const orderId = $(this).data('order-id');
+			confirmOrder(orderId);
+			location.reload();
+		});
+
+		function confirmOrder(orderId) {
+			$.ajax({
+				url: `/admin/orders/${orderId}/deliver`,
+				type: 'POST',
+				success: function (response) {
+					if (response.success) {
+						showNotification("Đã giao hàng thành công", "success");
+						orderTable.ajax.reload();
+					} else {
+						showNotification("Giao hàng thất bại", "error");
+					}
+				},
+				error: function () {
+					showNotification("Đã xảy ra lỗi khi giao hàng", "error");
+				}
+			});
+		}
 </script>

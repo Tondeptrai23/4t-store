@@ -45,9 +45,23 @@
 											<%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND' }).format(order.total) %>
 										</td>
 										<td>
-											<a href="/admin/orders/<%= order.orderId %>" class="btn btn-sm btn-primary">
-												Chi tiết
-											</a>
+											
+											<button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="text-muted sr-only">
+													Thao tác
+												</span>
+											</button>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="/admin/orders/<%= order.orderId %>" class="dropdown-item">
+													Chi tiết
+												</a>
+												<% if (order.status === 'Đang xử lý') { %>
+													<a class="dropdown-item" href="#" onclick="confirmOrder('<%= order.orderId %>')">
+														Giao hàng
+													</a>
+												<% } %>
+											</div>
 										</td>
 									</tr>
 									<% }); %>

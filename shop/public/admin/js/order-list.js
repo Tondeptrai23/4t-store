@@ -78,15 +78,59 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 render: function (data, type, row) {
-                    return `
-                        <a href="/admin/orders/${row.orderId}" class="btn btn-sm btn-primary">
-                            Chi tiết
-                        </a>`;
+					return `
+                        <button
+                            class="btn btn-sm dropdown-toggle more-horizontal"
+                            type="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            <span class="text-muted sr-only">Thao tác</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a
+                                class="dropdown-item"
+                                href="/admin/orders/${row.orderId}"
+                            >
+                                Xem chi tiết
+                            </a>
+							${row.status === 'Đang xử lý' ? `
+							<a class="dropdown-item order-deliver-button" href="#" data-order-id="${row.orderId}">
+								Giao hàng
+							</a>` : ''}
+                        </div>
+						
+                    `;
                 },
             },
         ],
         order: [[1, "desc"]],
     });
+
+	$(document).on('click', '.order-deliver-button', function (e) {
+		e.preventDefault();
+		const orderId = $(this).data('order-id');
+		confirmOrder(orderId);
+	});
+
+	function confirmOrder(orderId) {
+		$.ajax({
+			url: `/admin/orders/${orderId}/deliver`,
+			type: 'POST',
+			success: function (response) {
+				if (response.success) {
+					showNotification("Đã giao hàng thành công", "success");
+					orderTable.ajax.reload();
+				} else {
+					showNotification("Giao hàng thất bại", "error");
+				}
+			},
+			error: function () {
+				showNotification("Đã xảy ra lỗi khi giao hàng", "error");
+			}
+		});
+	}
 
     function showNotification(message, type) {
         const $modal = $("#notificationModal");
