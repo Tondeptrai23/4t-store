@@ -15,10 +15,10 @@ class AuthController {
 			? "Email hoặc mật khẩu bạn nhập không chính xác. Xin vui lòng thử lại."
 			: null;
 		errorMsg = request.query["google-auth-failed"]
-			? "Đăng nhập bằng Google thất bại. Vui lòng thử lại."
+			? "Đăng nhập bằng Google thất bại. Có thế do bạn từ chối cung cấp email hoặc đã tồn tại một tài khoản sử dụng email của bạn. Vui lòng thử lại."
 			: errorMsg;
 		errorMsg = request.query["facebook-auth-failed"]
-			? "Đăng nhập bằng Facebook thất bại. Vui lòng thử lại."
+			? "Đăng nhập bằng Facebook thất bại. Có thế do bạn từ chối cung cấp email hoặc đã tồn tại một tài khoản sử dụng email của bạn. Vui lòng thử lại."
 			: errorMsg;
 
 		return response.render("pages/auth/login", { errorMsg: errorMsg });

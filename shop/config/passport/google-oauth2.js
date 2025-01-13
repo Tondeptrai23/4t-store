@@ -1,7 +1,7 @@
+import bcrypt from "bcrypt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import passport from "passport";
 import UserService from "../../services/user.service.js";
-import { generate } from "generate-password";
 import api from "../../config/api.js";
 
 passport.use(new GoogleStrategy({
@@ -15,28 +15,26 @@ passport.use(new GoogleStrategy({
 			if (!profile.email) { return done(null, false); }
 			let user = await UserService.findByEmail(profile.email);
 			if (!user) {
-				const generatedPassword = generate({
-					length: 10,
-					numbers: true,
-				});
-
 				const res = await api.post(`/register`, {
 					username: profile.email,
-					password: Buffer.from('hidden_' + profile.email).toString('base64'),
+					password: Buffer.from('hiddengoogle_' + profile.email).toString('base64'),
 				});
 
 				const newUser = await UserService.create({
 					name: profile.displayName,
 					email: profile.email,
-					password: generatedPassword,
+					password: Buffer.from('hiddengoogle_' + profile.email).toString('base64'),
 					role: "user",
 				});
 				user = newUser;
 			}
 
+			const isMatch = await bcrypt.compare(Buffer.from('hiddengoogle_' + profile.email).toString('base64'), user.password);
+			if (!isMatch) { return done(null, false); }
+
 			const res = await api.post(`/login`, {
 				username: user.dataValues.email,
-				password: Buffer.from('hidden_' + user.dataValues.email).toString('base64'),
+				password: Buffer.from('hiddengoogle_' + user.dataValues.email).toString('base64'),
 			});
 
 			const { password: passwordUser, ...userWithoutPassword } = user.dataValues;

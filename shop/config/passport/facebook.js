@@ -1,4 +1,4 @@
-import { generate } from "generate-password";
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import UserService from "../../services/user.service.js";
@@ -20,28 +20,26 @@ passport.use(
                     profile.emails[0]?.value
                 );
 				if (!user) {
-					const generatedPassword = generate({
-						length: 10,
-						numbers: true,
-					});
-
 					const res = await api.post(`/register`, {
 						username: profile.emails[0]?.value,
-						password: Buffer.from('hidden_' + profile.emails[0]?.value).toString('base64'),
+						password: Buffer.from('hiddenfacebook_' + profile.emails[0]?.value).toString('base64'),
 					});
 
 					const newUser = await UserService.create({
 						name: profile.displayName,
 						email: profile.emails[0]?.value,
-						password: generatedPassword,
+						password: Buffer.from('hiddehiddenfacebook_n_' + profile.emails[0]?.value).toString('base64'),
 						role: "user",
 					});
 					user = newUser;
 				}
 
+				const isMatch = await bcrypt.compare(Buffer.from('hiddenfacebook_' + profile.emails[0]?.value).toString('base64'), user.password);
+				if (!isMatch) { return done(null, false); }
+
 				const res = await api.post(`/login`, {
 					username: user.dataValues.email,
-					password: Buffer.from('hidden_' + user.dataValues.email).toString('base64'),
+					password: Buffer.from('hiddenfacebook_' + user.dataValues.email).toString('base64'),
 				});
 
 				const { password: passwordUser, ...userWithoutPassword } = user.dataValues;
