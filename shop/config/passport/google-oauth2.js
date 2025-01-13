@@ -2,6 +2,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import passport from "passport";
 import UserService from "../../services/user.service.js";
 import { generate } from "generate-password";
+import api from "../../config/api.js";
 
 passport.use(new GoogleStrategy({
 	clientID: process.env.GOOGLE_CLIENT_ID,
@@ -11,19 +12,39 @@ passport.use(new GoogleStrategy({
 },
 	async function (request, accessToken, refreshToken, profile, done) {
 		try {
-			const user = await UserService.findByEmail(profile.email);
-			if (user) { return done(null, user); }
-
-			const newUser = await UserService.create({
-				name: profile.displayName,
-				email: profile.email,
-				password: generate({
+			if (!profile.email) { return done(null, false); }
+			let user = await UserService.findByEmail(profile.email);
+			if (!user) {
+				const generatedPassword = generate({
 					length: 10,
 					numbers: true,
-				}),
-				role: "user",
+				});
+
+				const res = await api.post(`/register`, {
+					username: profile.email,
+					password: Buffer.from('hidden_' + profile.email).toString('base64'),
+				});
+
+				const newUser = await UserService.create({
+					name: profile.displayName,
+					email: profile.email,
+					password: generatedPassword,
+					role: "user",
+				});
+				user = newUser;
+			}
+
+			const res = await api.post(`/login`, {
+				username: user.dataValues.email,
+				password: Buffer.from('hidden_' + user.dataValues.email).toString('base64'),
 			});
-			return done(null, newUser);
+
+			const { password: passwordUser, ...userWithoutPassword } = user.dataValues;
+
+			return done(null, {
+				...userWithoutPassword,
+				paymentToken: res.data.token,
+			});
 		} catch (error) {
 			return done(error, null);
 		}
