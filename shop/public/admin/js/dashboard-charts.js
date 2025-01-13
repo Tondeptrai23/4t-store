@@ -1,7 +1,6 @@
-// In public/admin/js/dashboard-charts.js
-
 let revenueChart;
-let statusChart;
+let orderStatusChart;
+let transactionStatusChart;
 
 document.addEventListener("DOMContentLoaded", function () {
     initializeCharts();
@@ -57,11 +56,11 @@ function initializeCharts() {
         },
     });
 
-    // Initialize Status Chart
-    const statusCtx = document
+    // Initialize Order Status Chart
+    const orderStatusCtx = document
         .getElementById("orderStatusChart")
         .getContext("2d");
-    statusChart = new Chart(statusCtx, {
+    orderStatusChart = new Chart(orderStatusCtx, {
         type: "doughnut",
         data: {
             labels: ["Đã giao", "Đang xử lý", "Chờ xử lý", "Đã hủy"],
@@ -87,6 +86,36 @@ function initializeCharts() {
             },
         },
     });
+
+    // Initialize Transaction Status Chart
+    const transactionStatusCtx = document
+        .getElementById("transactionStatusChart")
+        .getContext("2d");
+    transactionStatusChart = new Chart(transactionStatusCtx, {
+        type: "doughnut",
+        data: {
+            labels: ["Hoàn thành", "Đang chờ", "Thất bại"],
+            datasets: [
+                {
+                    data: [0, 0, 0],
+                    backgroundColor: [
+                        "#28A745", // Success - Green
+                        "#FFC107", // Pending - Yellow
+                        "#DC3545", // Failed - Red
+                    ],
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom",
+                },
+            },
+        },
+    });
 }
 
 function loadDashboardData() {
@@ -97,6 +126,7 @@ function loadDashboardData() {
         container.style.opacity = "0.5";
     });
 
+    // Get main dashboard data
     fetch(`/admin/api/dashboard-data?period=${period}`)
         .then((response) => response.json())
         .then((data) => {
@@ -104,8 +134,17 @@ function loadDashboardData() {
         })
         .catch((error) => {
             console.error("Error loading dashboard data:", error);
-            // Show error message to user
             alert("Không thể tải dữ liệu biểu đồ. Vui lòng thử lại sau.");
+        });
+
+    // Get transaction statistics
+    fetch(`/admin/api/payment/transactions?period=${period}`)
+        .then((response) => response.json())
+        .then((data) => {
+            updateTransactionChart(data);
+        })
+        .catch((error) => {
+            console.error("Error loading transaction data:", error);
         })
         .finally(() => {
             // Hide loading state
@@ -123,30 +162,18 @@ function updateCharts(data) {
     revenueChart.data.datasets[0].data = data.revenueData.values;
     revenueChart.update();
 
-    // Update status chart
-    statusChart.data.datasets[0].data = data.orderStatusData;
-    statusChart.update();
-
-    // Update summary metrics if they exist
-    updateMetrics(data.metrics);
+    // Update order status chart
+    orderStatusChart.data.datasets[0].data = data.orderStatusData;
+    orderStatusChart.update();
 }
 
-function updateMetrics(metrics) {
-    if (!metrics) return;
-
-    // Update each metric if the element exists
-    Object.keys(metrics).forEach((key) => {
-        const element = document.getElementById(`metric-${key}`);
-        if (element) {
-            let value = metrics[key];
-            if (typeof value === "number") {
-                // Format currency values
-                value = new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                }).format(value);
-            }
-            element.textContent = value;
-        }
-    });
+function updateTransactionChart(data) {
+    // Update transaction status chart with completed, pending, and failed counts
+    transactionStatusChart.data.datasets[0].data = [
+        data.completedTransactions,
+        data.pendingTransactions,
+        data.totalTransactions -
+            (data.completedTransactions + data.pendingTransactions),
+    ];
+    transactionStatusChart.update();
 }

@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import api from "../config/api.js";
 import { db } from "../config/config.js";
 import Order from "../models/order.model.js";
 import OrderItem from "../models/orderItem.model.js";
@@ -37,6 +38,23 @@ class AdminDashboardController {
             });
             const successRate = (deliveredOrders / totalOrders) * 100;
 
+            const [userStatsResponse, transactionStatsResponse] =
+                await Promise.all([
+                    api.get("/admin/stats/users", {
+                        headers: {
+                            Authorization: `Bearer ${req.user.paymentToken}`,
+                        },
+                    }),
+                    api.get("/admin/stats/transactions", {
+                        headers: {
+                            Authorization: `Bearer ${req.user.paymentToken}`,
+                        },
+                    }),
+                ]);
+
+            const userStats = userStatsResponse.data;
+            const transactionStats = transactionStatsResponse.data;
+
             res.render("admin/pages/dashboard", {
                 layout: "admin/layouts/main",
                 totalOrders,
@@ -45,6 +63,10 @@ class AdminDashboardController {
                 ordersByStatus,
                 recentOrders: transformOrderStatus(recentOrders),
                 successRate,
+                paymentStats: {
+                    userStats,
+                    transactionStats,
+                },
             });
         } catch (error) {
             console.error("Dashboard Error:", error);
@@ -120,6 +142,71 @@ class AdminDashboardController {
         } catch (error) {
             console.error("Error fetching dashboard data:", error);
             res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getPaymentUserStats(req, res) {
+        try {
+            const response = await api.get("/admin/stats/users", {
+                headers: {
+                    Authorization: `Bearer ${req.user.paymentToken}`,
+                },
+            });
+
+            res.json(response.data);
+        } catch (error) {
+            console.error("Error fetching payment user stats:", error);
+            res.status(500).json({
+                error: "Failed to fetch payment user statistics",
+            });
+        }
+    }
+
+    async getPaymentTransactionStats(req, res) {
+        try {
+            const response = await api.get("/admin/stats/transactions", {
+                headers: {
+                    Authorization: `Bearer ${req.user.paymentToken}`,
+                },
+            });
+            res.json(response.data);
+        } catch (error) {
+            console.error("Error fetching payment transaction stats:", error);
+            res.status(500).json({
+                error: "Failed to fetch payment transaction statistics",
+            });
+        }
+    }
+
+    async getTransactions(req, res) {
+        try {
+            const period = parseInt(req.query.period) || 30;
+            const endDate = new Date();
+            const startDate = new Date(
+                endDate.getTime() - period * 24 * 60 * 60 * 1000
+            );
+
+            const response = await api.get(
+                `/transactions?updatedAt=[between]${startDate},${endDate}&size=1000`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${req.user.paymentToken}`,
+                    },
+                }
+            );
+
+            res.json({
+                totalTransactions: response.data.transactions.length,
+                completedTransactions: response.data.transactions.filter(
+                    (transaction) => transaction.status === "completed"
+                ).length,
+                pendingTransactions: response.data.transactions.filter(
+                    (transaction) => transaction.status === "pending"
+                ).length,
+            });
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+            res.status(500).json({ error: "Failed to fetch transactions" });
         }
     }
 }

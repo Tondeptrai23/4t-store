@@ -164,6 +164,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    const paymentCards = document.querySelectorAll(".payment-stat-card");
+    paymentCards.forEach((card) => {
+        if (card.querySelector(".h3").textContent === "0") {
+            card.querySelector(".small").textContent = "Unable to load data";
+            card.querySelector(".small").classList.add("text-danger");
+        }
+    });
+
     // Initialize dashboard with default period
     updateDashboardData(document.getElementById("period-select").value);
 });

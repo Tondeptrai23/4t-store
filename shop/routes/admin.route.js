@@ -12,6 +12,18 @@ router.use(expressLayouts);
 
 router.get("/", adminDashboardController.dashboard);
 router.get("/api/dashboard-data", adminDashboardController.getDashboardData);
+router.get(
+    "/api/payment/user-stats",
+    adminDashboardController.getPaymentUserStats
+);
+router.get(
+    "/api/payment/transaction-stats",
+    adminDashboardController.getPaymentTransactionStats
+);
+router.get(
+    "/api/payment/transactions",
+    adminDashboardController.getTransactions
+);
 
 router.get("/products", adminProductController.listProducts);
 router.get("/products/create", adminProductController.showCreateForm);

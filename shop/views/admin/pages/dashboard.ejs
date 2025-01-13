@@ -106,9 +106,169 @@
                 </div>
             </div>
 
-            <!-- Charts Row -->
+            <div class="col-12 mb-4">
+                <h2 class="h3 mb-4">Thống kê thanh toán</h2>
+                <div class="row">
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Tổng người dùng
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%=
+                                            paymentStats.userStats.totalUsers %>
+                                        </span>
+                                        <div class="small text-muted">
+                                            <%=
+                                            paymentStats.userStats.newUsersToday
+                                            %> người dùng mới hôm nay
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fe fe-users text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Số dư Admin
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%= new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency', currency: 'VND'
+                                            }).format(paymentStats.userStats.adminBalance)
+                                            %>
+                                        </span>
+                                        <div class="small text-muted">
+                                            <%= new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency', currency: 'VND'
+                                            }).format(paymentStats.userStats.balanceFluctuationToday)
+                                            %> biến động hôm nay
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i
+                                            class="fe fe-credit-card text-muted"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Tổng giao dịch
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%=
+                                            paymentStats.transactionStats.totalTransactions
+                                            %>
+                                        </span>
+                                        <div class="small text-muted">
+                                            <%=
+                                            paymentStats.transactionStats.completedTransactions
+                                            %> đã hoàn thành
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i
+                                            class="fe fe-trending-up text-muted"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Giao dịch đang chờ
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%=
+                                            paymentStats.transactionStats.pendingTransactions
+                                            %>
+                                        </span>
+                                        <div class="small text-warning">
+                                            Cần xử lý
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i
+                                            class="fe fe-alert-circle text-muted"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Status and Transaction Status Charts Row -->
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Trạng thái đơn hàng</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 300px"
+                            >
+                                <canvas id="orderStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Trạng thái giao dịch</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 300px"
+                            >
+                                <canvas id="transactionStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Chart Row -->
+            <div class="row">
+                <div class="col-12">
                     <div class="card shadow mb-4">
                         <div class="card-header">
                             <strong>Biểu đồ doanh thu</strong>
@@ -119,21 +279,6 @@
                                 style="position: relative; height: 350px"
                             >
                                 <canvas id="revenueChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow mb-4">
-                        <div class="card-header">
-                            <strong>Trạng thái đơn hàng</strong>
-                        </div>
-                        <div class="card-body">
-                            <div
-                                class="chart-container"
-                                style="position: relative; height: 350px"
-                            >
-                                <canvas id="orderStatusChart"></canvas>
                             </div>
                         </div>
                     </div>
