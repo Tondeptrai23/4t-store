@@ -36,8 +36,10 @@ class AdminCategoryController {
             // Fetch products in this category
             const productQuery = {
                 categoryId: categoryId,
+                page: req.query.page || 1,
+                size: req.query.size || 10,
             };
-            const { products } =
+            const { products, count, pagination } =
                 await productService.getFilteredSortedAndPaginatedProducts(
                     productQuery
                 );
@@ -48,6 +50,11 @@ class AdminCategoryController {
                 subcategories,
                 parentCategory,
                 products,
+                pagination: {
+                    ...pagination,
+                    currentPage: productQuery.page,
+                    totalProducts: count,
+                },
             });
         } catch (error) {
             console.error("Category Detail Error:", error);

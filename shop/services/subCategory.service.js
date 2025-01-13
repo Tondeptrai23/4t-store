@@ -18,7 +18,7 @@ class SubCategoryService {
     getByCategoryId = async (categoryId) => {
         try {
             const subcategories = await SubCategory.findAll({
-                where: { parentCategoryId: categoryId },
+                where: { parentId: categoryId },
             });
             return subcategories.map((subcat) => subcat.toJSON());
         } catch (error) {
