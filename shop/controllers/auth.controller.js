@@ -21,7 +21,10 @@ class AuthController {
             ? "Đăng nhập bằng Facebook thất bại. Có thế do bạn từ chối cung cấp email hoặc đã tồn tại một tài khoản sử dụng email của bạn. Vui lòng thử lại."
             : errorMsg;
 
-        return response.render("pages/auth/login", { errorMsg: errorMsg });
+        return response.render("pages/auth/login", {
+            errorMsg: errorMsg,
+            query: request.query,
+        });
     }
 
     registerView(request, response) {
@@ -41,6 +44,38 @@ class AuthController {
         });
     }
 
+    async changePassword(request, response) {
+        if (!request.isAuthenticated()) {
+            return response.redirect("/login");
+        }
+
+        const { currentPassword, newPassword } = request.body;
+
+        const user = await UserService.findById(request.user.userId);
+
+        if (!user) {
+            return response.status(404).json({ success: false });
+        }
+
+        const isPasswordValid = await UserService.validatePassword(
+            user,
+            currentPassword
+        );
+
+        if (!isPasswordValid) {
+            return response.status(401).json({ success: false });
+        }
+
+        await UserService.updatePassword(user.userId, newPassword);
+
+        request.logout((error) => {
+            if (error) {
+                throw new Error(error);
+            }
+            response.redirect("/login?password-changed=true");
+        });
+    }
+
     logout(request, response) {
         request.logout((error) => {
             if (error) {
@@ -51,7 +86,13 @@ class AuthController {
     }
 
     localAuthenticate(request, response, next) {
-        const redirectTo = request.session.redirectTo || "/";
+        let redirectTo = request.session.redirectTo || "/";
+        if (
+            redirectTo.includes("/change-password") ||
+            redirectTo.includes("/login")
+        ) {
+            redirectTo = "/";
+        }
         delete request.session.redirectTo;
 
         const authenticator = passport.authenticate(
@@ -79,7 +120,13 @@ class AuthController {
 
     oauth2Authenticator(provider, options) {
         return (request, response, next) => {
-            const redirectTo = request.session.redirectTo || "/";
+            let redirectTo = request.session.redirectTo || "/";
+            if (
+                redirectTo.includes("/change-password") ||
+                redirectTo.includes("/login")
+            ) {
+                redirectTo = "/";
+            }
             delete request.session.redirectTo;
 
             const state = redirectTo
