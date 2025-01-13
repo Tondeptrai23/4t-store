@@ -1,18 +1,12 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
 class AuthController {
     async login(req, res) {
-        const { username, password } = req.body;
+        const { username } = req.body;
 
         const user = await User.findOne({ where: { username } });
         if (!user) {
-            return res.status(401).json({ message: "Invalid credentials" });
-        }
-
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
@@ -32,7 +26,7 @@ class AuthController {
     }
 
     async register(req, res) {
-        const { username, password } = req.body;
+        const { username } = req.body;
 
         const DEFAULT_BALANCE = 500000;
 
@@ -41,12 +35,8 @@ class AuthController {
             return res.status(400).json({ message: "Username already exists" });
         }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
         const user = await User.create({
             username,
-            password: hashedPassword,
             balance: DEFAULT_BALANCE,
             isAdmin: false,
         });

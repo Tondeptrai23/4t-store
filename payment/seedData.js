@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import db from "./config/database.js";
 import Transaction from "./models/transaction.js";
 import User from "./models/user.js";
@@ -86,14 +85,9 @@ async function seed() {
         await db.drop();
         await db.sync({ force: true });
 
-        const salt = await bcrypt.genSalt(10);
-        const adminPassword = await bcrypt.hash("admin", salt);
-        const userPassword = await bcrypt.hash("user", salt);
-
         await User.create({
             id: 1,
             username: "admin@example.com",
-            password: adminPassword,
             isAdmin: true,
             balance: 0,
         });
@@ -101,7 +95,6 @@ async function seed() {
         await User.create({
             id: 2,
             username: "user@example.com",
-            password: userPassword,
             balance: 100000,
         });
 

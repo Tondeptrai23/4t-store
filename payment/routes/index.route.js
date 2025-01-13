@@ -1,13 +1,17 @@
 import { Router } from "express";
 import authController from "../controllers/auth.controller.js";
 import transactionController from "../controllers/transaction.controller.js";
-import { isAdmin, verifyToken } from "../middlewares/auth.middleware.js";
+import {
+    isAdmin,
+    verifyConnection,
+    verifyToken,
+} from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/login", authController.login);
+router.post("/login", verifyConnection, authController.login);
 
-router.post("/register", authController.register);
+router.post("/register", verifyConnection, authController.register);
 
 router.post("/transfer", verifyToken, transactionController.transfer);
 
