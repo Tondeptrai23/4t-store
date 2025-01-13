@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import User from "./user.js";
 
 const Transaction = sequelize.define("Transaction", {
     fromUserId: {
@@ -32,6 +33,16 @@ const Transaction = sequelize.define("Transaction", {
     orderId: {
         type: DataTypes.STRING,
     },
+});
+
+Transaction.belongsTo(User, {
+    foreignKey: "fromUserId",
+    as: "fromUser",
+});
+
+Transaction.belongsTo(User, {
+    foreignKey: "toUserId",
+    as: "toUser",
 });
 
 export default Transaction;

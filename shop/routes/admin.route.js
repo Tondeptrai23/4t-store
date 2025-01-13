@@ -2,7 +2,9 @@ import express from "express";
 import expressLayouts from "express-ejs-layouts";
 import adminDashboardController from "../controllers/admin.controller.js";
 import adminCategoryController from "../controllers/adminCategory.controller.js";
+import adminOrderController from "../controllers/adminOrder.controller.js";
 import adminProductController from "../controllers/adminProduct.controller.js";
+import adminUserController from "../controllers/adminUser.controller.js";
 import { isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -25,6 +27,7 @@ router.get(
     adminDashboardController.getTransactions
 );
 
+router.get("/products/detail/:id", adminProductController.showProductDetail);
 router.get("/products", adminProductController.listProducts);
 router.get("/products/create", adminProductController.showCreateForm);
 router.post("/products/create", adminProductController.createProduct);
@@ -33,6 +36,7 @@ router.put("/products/:id", adminProductController.updateProduct);
 router.delete("/products/:id", adminProductController.deleteProduct);
 router.post("/products/bulk-delete", adminProductController.bulkDeleteProducts);
 
+router.get("/categories/detail/:id", adminCategoryController.categoryDetail);
 router.get("/categories", adminCategoryController.listCategories);
 router.get("/categories/create", adminCategoryController.showCreateForm);
 router.post("/categories/create", adminCategoryController.createCategory);
@@ -43,5 +47,9 @@ router.post(
     "/categories/bulk-delete",
     adminCategoryController.bulkDeleteCategories
 );
+
+router.get("/orders/:orderId", adminOrderController.orderDetails);
+
+router.get("/users/:id", adminUserController.getUserDetail);
 
 export default router;
