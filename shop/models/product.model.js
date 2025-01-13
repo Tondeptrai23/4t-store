@@ -34,6 +34,8 @@ Product.init(
     {
         sequelize: db,
         modelName: "product",
+        paranoid: true,
+        deletedAt: "destroyTime",
     }
 );
 

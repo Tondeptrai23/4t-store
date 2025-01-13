@@ -17,6 +17,36 @@ class AdminProductController {
         }
     }
 
+    async listDeletedProducts(req, res) {
+        try {
+            res.render("admin/pages/products/deleted-list", {
+                layout: "admin/layouts/main",
+            });
+        } catch (error) {
+            console.error("Error fetching deleted products:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async getDeletedProducts(req, res) {
+        try {
+            const result =
+                await productService.getFilteredSortedAndPaginatedDeletedProducts(
+                    req.query
+                );
+            res.status(200).json({
+                success: true,
+                data: result,
+            });
+        } catch (error) {
+            console.error("Error fetching deleted products:", error);
+            res.status(500).json({
+                success: false,
+                message: "Failed to fetch deleted products",
+            });
+        }
+    }
+
     async showCreateForm(req, res) {
         try {
             const categories = await categoryService.getAll();

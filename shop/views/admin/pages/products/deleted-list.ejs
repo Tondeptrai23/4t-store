@@ -1,0 +1,82 @@
+<!-- views/products/deleted-list.ejs -->
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <h2 class="h5 page-title">Quản lý sản phẩm đã xóa</h2>
+                </div>
+                <div class="col-auto">
+                    <a href="/admin/products" class="btn btn-primary">
+                        Quay lại danh sách sản phẩm
+                    </a>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table datatables" id="deletedProductTable">
+                        <thead>
+                            <tr>
+                                <th>Hình ảnh</th>
+                                <th>Tên</th>
+                                <th>Giá</th>
+                                <th>Kích thước</th>
+                                <th>Màu sắc</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày xóa</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Modal -->
+<div
+    class="modal fade"
+    id="notificationModal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông báo</h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center">
+                    <div class="pr-3">
+                        <span id="notificationIcon" class="fe fe-24"></span>
+                    </div>
+                    <div>
+                        <p class="mb-0" id="notificationMessage"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                >
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('style') %> <%- contentFor('script') %>
+<script src="/admin/js/product-deleted-list.js"></script>

@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Image from "../models/image.model.js";
 import Product from "../models/product.model.js";
 import SubCategory from "../models/subCategory.model.js";
@@ -57,6 +58,63 @@ class ProductService {
         } catch (error) {
             throw new Error(
                 "Error fetching products with images: " + error.message
+            );
+        }
+    };
+
+    getFilteredSortedAndPaginatedDeletedProducts = async (requestQuery) => {
+        try {
+            const filterBuilder = new ProductFilterBuilder(requestQuery);
+            const filterCriteria = filterBuilder.build();
+
+            const sortBuilder = new ProductSortBuilder(requestQuery);
+            const sortCriteria = sortBuilder.build();
+
+            const paginationBuilder = new PaginationBuilder(requestQuery);
+            const { limit, offset } = paginationBuilder.build();
+
+            const products = await Product.findAll({
+                paranoid: false,
+                where: {
+                    ...filterCriteria,
+                    destroyTime: {
+                        [Op.ne]: null,
+                    },
+                },
+                order: [...sortCriteria],
+                limit,
+                offset,
+                include: [
+                    {
+                        model: Image,
+                        as: "images",
+                        required: false,
+                    },
+                ],
+            });
+
+            const totalCount = await Product.count({
+                paranoid: false,
+                where: {
+                    ...filterCriteria,
+                    destroyTime: {
+                        [Op.ne]: null,
+                    },
+                },
+            });
+
+            return {
+                count: totalCount,
+                products: products.map((product) => product.toJSON()),
+                pagination: {
+                    limit,
+                    offset,
+                    totalPages: Math.ceil(totalCount / limit),
+                },
+            };
+        } catch (error) {
+            throw new Error(
+                "Error fetching deleted products: " + error.message
             );
         }
     };
