@@ -45,15 +45,15 @@ $(document).ready(function () {
 
     /*==================================================================
     [ +/- num product ]*/
-    $(document).off('click', '.btn-num-product-down');
-    $(document).off('click', '.btn-num-product-up');
+    $(document).off('click', '.bton-num-product-down');
+    $(document).off('click', '.bton-num-product-up');
     
-    $(document).on('click', '.btn-num-product-down', function () {
+    $(document).on('click', '.bton-num-product-down', function () {
         var numProduct = Number($(this).next().val());
         if (numProduct > 1) $(this).next().val(numProduct - 1).trigger('change');
     });
     
-    $(document).on('click', '.btn-num-product-up', function () {
+    $(document).on('click', '.bton-num-product-up', function () {
         var numProduct = Number($(this).prev().val());
         $(this).prev().val(numProduct + 1).trigger('change');
     });

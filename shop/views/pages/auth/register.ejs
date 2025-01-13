@@ -27,7 +27,7 @@
 				<div class="card p-4 shadow-sm">
 					<h2 class="text-center mb-4">Đăng ký</h2>
 
-					<form action="/register" method="post" id="registerForm">
+					<form id="registerForm">
 						<div class="form-group mb-3">
 							<label for="name" class="form-label">
 								Họ và tên
@@ -124,6 +124,40 @@
 
 			passwordInput.on('input', checkPasswords);
 			confirmPasswordInput.on('input', checkPasswords);
+
+			document.getElementById('registerForm').addEventListener('submit', async function(event) {
+				event.preventDefault();
+
+				const name = document.getElementById('name').value;
+				const email = document.getElementById('email').value;
+				const password = document.getElementById('password').value;
+				const cartData = localStorage.getItem('cart');
+				const confirmPassword = document.getElementById('confirmPassword').value;
+				const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+
+				const response = await fetch('/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						name: name,
+						email: email,
+						password: password,
+						confirmPassword: confirmPassword,
+						cartData: cartData
+					})
+				});
+
+				if (response.ok) {
+					localStorage.setItem('cart', JSON.stringify([]));
+					localStorage.removeItem('redirectAfterLogin');
+					window.location.href = redirectUrl;
+				} else {
+					const errorText = await response.text();
+					alert('Login failed: ' + errorText);
+				}
+			});
 		});
 	</script>
 </body>
