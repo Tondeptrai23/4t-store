@@ -5,6 +5,7 @@ import adminCategoryController from "../controllers/adminCategory.controller.js"
 import adminOrderController from "../controllers/adminOrder.controller.js";
 import adminProductController from "../controllers/adminProduct.controller.js";
 import adminUserController from "../controllers/adminUser.controller.js";
+
 import { isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -50,6 +51,16 @@ router.post(
     adminCategoryController.bulkDeleteCategories
 );
 
+router.get("/users", adminUserController.listUsers);
+router.get("/users/query", adminUserController.getUsers);
+router.get("/users/create", adminUserController.showCreateForm);
+router.post("/users/create", adminUserController.createUser);
+router.get("/users/edit/:id", adminUserController.showEditForm);
+router.put("/users/:id", adminUserController.updateUser);
+router.delete("/users/:id", adminUserController.deleteUser);
+router.post("/users/bulk-delete", adminUserController.bulkDeleteUsers);
+router.get("/users/deleted", adminUserController.listDeletedUsers);
+router.get("/users/deleted/query", adminUserController.getDeleteUsers);
 router.get("/orders/:orderId", adminOrderController.orderDetails);
 router.post("/orders/:orderId/deliver", adminOrderController.deliverOrder);
 router.get("/orders", adminOrderController.listOrders);

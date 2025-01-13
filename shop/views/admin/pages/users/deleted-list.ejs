@@ -1,0 +1,62 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <h2 class="h5 page-title">Quản lý người dùng</h2>
+                </div>
+                <div class="col-auto">
+                    <a href="/admin/users" class="btn btn-primary">
+                        Quay lại danh sách người dùng
+                    </a>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table datatables" id="userTable">
+                        <thead>
+                            <tr>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Phân quyền</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach(function(user, index) { %>
+                            <tr>
+                               
+                                <td><%= user.name %></td>
+                                
+                                <td><%= user.email %></td>
+
+                                <td><%= user.role %></td>
+                               
+                                <td>
+                                    <%= new
+                                    Date(user.createdAt).toLocaleDateString('vi-VN')
+                                    %>
+                                </td>
+
+                                <td>
+                                    <%= new
+                                    Date(user.deletedAt).toLocaleDateString('vi-VN')
+                                    %>
+                                </td>
+                                
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('style') %>
+
+<%- contentFor('script') %>
+<script src="/admin/js/user-deleted-list.js"></script>

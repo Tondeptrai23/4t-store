@@ -1,0 +1,295 @@
+<%- contentFor('body') %>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <h2 class="h5 page-title">Quản lý người dùng</h2>
+                </div>
+                <div class="col-auto">
+                    <a href="/admin/users/create" class="btn btn-primary">
+                        Thêm người dùng mới
+                    </a>
+                    <a href="/admin/users/deleted" class="btn btn-primary">
+                        Người dùng đã xóa
+                    </a>
+                    <button id="bulkDelete" class="btn btn-danger ml-2">
+                        <i class="fe fe-trash-2 fe-16"></i>
+                        Xóa đã chọn
+                    </button>
+                    
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table datatables" id="userTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 40px">
+                                    <div class="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            class="custom-control-input"
+                                            id="selectAll"
+                                        />
+                                        <label
+                                            class="custom-control-label"
+                                            for="selectAll"
+                                        ></label>
+                                    </div>
+                                </th>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Phân quyền</th>
+                                <th>Ngày tạo</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach(function(user, index) { %>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            class="custom-control-input"
+                                            id="check<%= index %>"
+                                            value="<%= user.userId %>"
+                                        />
+                                        <label
+                                            class="custom-control-label"
+                                            for="check<%= index %>"
+                                        ></label>
+                                    </div>
+                                </td>
+                                
+                                <td><%= user.name %></td>
+                                
+                                <td><%= user.email %></td>
+
+                                <td><%= user.role %></td>
+                               
+                                <td>
+                                    <%= new
+                                    Date(user.createdAt).toLocaleDateString('vi-VN')
+                                    %>
+                                </td>
+                                <td>
+                                    <button
+                                        class="btn btn-sm dropdown-toggle more-horizontal"
+                                        type="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <span class="text-muted sr-only">
+                                            Thao tác
+                                        </span>
+                                    </button>
+                                    <div
+                                        class="dropdown-menu dropdown-menu-right"
+                                    >
+                                        <a
+                                            class="dropdown-item"
+                                            href="/admin/users/edit/<%= user.userId %>"
+                                        >
+                                            Sửa
+                                        </a>
+                                        <a
+                                            class="dropdown-item text-danger"
+                                            href="#"
+                                            onclick="deleteProduct('<%= user.userId %>')"
+                                        >
+                                            Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="defaultModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="defaultModalLabel">Xác nhận xóa</h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Bạn có chắc chắn muốn xóa người dùng này? Hành động này không
+                    thể hoàn tác.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn mb-2 btn-secondary"
+                    data-dismiss="modal"
+                >
+                    Hủy
+                </button>
+                <button
+                    type="button"
+                    class="btn mb-2 btn-danger"
+                    id="confirmDelete"
+                >
+                    Xóa
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bulk Delete Modal -->
+<div
+    class="modal fade"
+    id="bulkDeleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="defaultModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa nhiều</h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Bạn có chắc chắn muốn xóa những người dùng đã chọn? Hành động
+                    này không thể hoàn tác.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn mb-2 btn-secondary"
+                    data-dismiss="modal"
+                >
+                    Hủy
+                </button>
+                <button
+                    type="button"
+                    class="btn mb-2 btn-danger"
+                    id="confirmBulkDelete"
+                >
+                    Xóa tất cả
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Modal -->
+<div
+    class="modal fade"
+    id="notificationModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="defaultModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông báo</h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center">
+                    <div class="pr-3">
+                        <span id="notificationIcon" class="fe fe-24"></span>
+                    </div>
+                    <div>
+                        <p class="mb-0" id="notificationMessage"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                >
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('style') %>
+<style>
+    .custom-control {
+        padding-left: 1.5rem;
+        margin: 0;
+    }
+    .custom-control-input {
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        width: 1rem;
+        height: 1.15625rem;
+        opacity: 0;
+    }
+    .custom-control-label {
+        position: relative;
+        margin-bottom: 0;
+        vertical-align: top;
+    }
+    .custom-control-label::before {
+        position: absolute;
+        top: 0.07812rem;
+        left: -1.5rem;
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        pointer-events: none;
+        content: "";
+        background-color: #fff;
+        border: 1px solid #b4c4d3;
+    }
+    .custom-checkbox .custom-control-label::before {
+        border-radius: 3px;
+    }
+</style>
+
+<%- contentFor('script') %>
+<script src="/admin/js/user-list.js"></script>

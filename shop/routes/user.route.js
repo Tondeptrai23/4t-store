@@ -3,7 +3,6 @@ import userController from "../public/assets/user.controller.js";
 
 const userRoute = Router();
 
-userRoute.get("/users", userController.getAll);
 
 userRoute.get("/users/db", userController.getAllDb);
 
