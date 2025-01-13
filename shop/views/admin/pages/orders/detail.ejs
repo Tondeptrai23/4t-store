@@ -136,14 +136,20 @@
                                 </table>
                             </div>
 
-														<% if (order.status==='Đang xử lý' ) { %>
-															<a href="#" class="btn btn-secondary order-deliver-button" data-order-id="<%= order.orderId %>">
-																<i class="fe fe-truck fe-16 mr-2"></i>
-																Xác nhận giao hàng
-															</a>
-															<% } %>
+                            <% if (order.status === 'Đang xử lý') { %>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-toggle="modal"
+                                data-target="#deliveryConfirmationModal"
+                                data-order-id="<%= order.orderId %>"
+                            >
+                                <i class="fe fe-truck fe-16 mr-2"></i>
+                                Xác nhận giao hàng
+                            </button>
+                            <% } %>
                         </div>
-                    </div>										
+                    </div>
                 </div>
 
                 <!-- Transaction Info Card -->
@@ -245,6 +251,59 @@
     </div>
 </div>
 
+<div
+    class="modal fade"
+    id="deliveryConfirmationModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="deliveryConfirmationModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deliveryConfirmationModalLabel">
+                    Xác nhận giao hàng
+                </h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xác nhận giao hàng cho đơn hàng
+                <span id="confirmOrderId"></span>
+                ? Hành động này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                >
+                    Hủy
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="confirmDeliveryBtn"
+                >
+                    <span
+                        class="spinner-border spinner-border-sm d-none mr-2"
+                        role="status"
+                        aria-hidden="true"
+                    ></span>
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%- contentFor('style') %>
 <style>
     .badge {
@@ -255,29 +314,55 @@
     }
 </style>
 
-<%- contentFor('script') %>
+<%- contentFor('script') %> <%- contentFor('script') %>
 <script>
-	$(document).on('click', '.order-deliver-button', function (e) {
-			const orderId = $(this).data('order-id');
-			confirmOrder(orderId);
-			location.reload();
-		});
+    $(document).ready(function () {
+        let currentOrderId = null;
 
-		function confirmOrder(orderId) {
-			$.ajax({
-				url: `/admin/orders/${orderId}/deliver`,
-				type: 'POST',
-				success: function (response) {
-					if (response.success) {
-						showNotification("Đã giao hàng thành công", "success");
-						orderTable.ajax.reload();
-					} else {
-						showNotification("Giao hàng thất bại", "error");
-					}
-				},
-				error: function () {
-					showNotification("Đã xảy ra lỗi khi giao hàng", "error");
-				}
-			});
-		}
+        // When the modal is about to be shown, update the order ID
+        $("#deliveryConfirmationModal").on("show.bs.modal", function (event) {
+            const button = $(event.relatedTarget);
+            currentOrderId = button.data("order-id");
+            $("#confirmOrderId").text(currentOrderId);
+        });
+
+        // Handle delivery confirmation
+        $("#confirmDeliveryBtn").on("click", function () {
+            const $btn = $(this);
+            const $spinner = $btn.find(".spinner-border");
+
+            // Disable button and show spinner
+            $btn.prop("disabled", true);
+            $spinner.removeClass("d-none");
+
+            $.ajax({
+                url: `/admin/orders/${currentOrderId}/deliver`,
+                type: "POST",
+                success: function (response) {
+                    if (response.success) {
+                        // Hide modal
+                        $("#deliveryConfirmationModal").modal("hide");
+
+                        // Show success notification
+                        showNotification("Đã giao hàng thành công", "success");
+
+                        // Reload page after a short delay
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showNotification("Giao hàng thất bại", "error");
+                    }
+                },
+                error: function () {
+                    showNotification("Đã xảy ra lỗi khi giao hàng", "error");
+                },
+                complete: function () {
+                    // Re-enable button and hide spinner
+                    $btn.prop("disabled", false);
+                    $spinner.addClass("d-none");
+                },
+            });
+        });
+    });
 </script>

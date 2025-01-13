@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    let currentOrderId = null;
+
     const orderTable = $("#orderTable").DataTable({
         processing: true,
         serverSide: true,
@@ -26,8 +28,14 @@ $(document).ready(function () {
                 return {
                     page: Math.floor(d.start / d.length) + 1,
                     size: d.length,
-                    sort: d.order && d.order[0] ? d.columns[d.order[0].column].name : null,
-                    order: d.order && d.order[0] ? d.order[0].dir.toUpperCase() : null,
+                    sort:
+                        d.order && d.order[0]
+                            ? d.columns[d.order[0].column].name
+                            : null,
+                    order:
+                        d.order && d.order[0]
+                            ? d.order[0].dir.toUpperCase()
+                            : null,
                     search: d.search && d.search.value ? d.search.value : null,
                 };
             },
@@ -56,12 +64,14 @@ $(document).ready(function () {
                 name: "status",
                 render: function (data) {
                     const statusClass = {
-                        'Đã giao': 'success',
-                        'Đã hủy': 'danger',
-                        'Đang xử lý': 'warning',
-                        'Chờ xử lý': 'info'
+                        "Đã giao": "success",
+                        "Đã hủy": "danger",
+                        "Đang xử lý": "warning",
+                        "Chờ xử lý": "info",
                     };
-                    return `<span class="badge badge-${statusClass[data] || 'secondary'}">${data}</span>`;
+                    return `<span class="badge badge-${
+                        statusClass[data] || "secondary"
+                    }">${data}</span>`;
                 },
             },
             {
@@ -78,7 +88,7 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 render: function (data, type, row) {
-					return `
+                    return `
                         <button
                             class="btn btn-sm dropdown-toggle more-horizontal"
                             type="button"
@@ -95,12 +105,15 @@ $(document).ready(function () {
                             >
                                 Xem chi tiết
                             </a>
-							${row.status === 'Đang xử lý' ? `
-							<a class="dropdown-item order-deliver-button" href="#" data-order-id="${row.orderId}">
-								Giao hàng
-							</a>` : ''}
+                            ${
+                                row.status === "Đang xử lý"
+                                    ? `
+                            <a class="dropdown-item order-deliver-button" href="#" data-order-id="${row.orderId}">
+                                Giao hàng
+                            </a>`
+                                    : ""
+                            }
                         </div>
-						
                     `;
                 },
             },
@@ -108,29 +121,50 @@ $(document).ready(function () {
         order: [[1, "desc"]],
     });
 
-	$(document).on('click', '.order-deliver-button', function (e) {
-		e.preventDefault();
-		const orderId = $(this).data('order-id');
-		confirmOrder(orderId);
-	});
+    // When delivery confirmation is clicked
+    $(document).on("click", ".order-deliver-button", function (e) {
+        e.preventDefault();
+        currentOrderId = $(this).data("order-id");
+        $("#confirmOrderId").text(currentOrderId);
+        $("#deliveryConfirmationModal").modal("show");
+    });
 
-	function confirmOrder(orderId) {
-		$.ajax({
-			url: `/admin/orders/${orderId}/deliver`,
-			type: 'POST',
-			success: function (response) {
-				if (response.success) {
-					showNotification("Đã giao hàng thành công", "success");
-					orderTable.ajax.reload();
-				} else {
-					showNotification("Giao hàng thất bại", "error");
-				}
-			},
-			error: function () {
-				showNotification("Đã xảy ra lỗi khi giao hàng", "error");
-			}
-		});
-	}
+    // Handle delivery confirmation
+    $("#confirmDeliveryBtn").on("click", function () {
+        const $btn = $(this);
+        const $spinner = $btn.find(".spinner-border");
+
+        // Disable button and show spinner
+        $btn.prop("disabled", true);
+        $spinner.removeClass("d-none");
+
+        $.ajax({
+            url: `/admin/orders/${currentOrderId}/deliver`,
+            type: "POST",
+            success: function (response) {
+                if (response.success) {
+                    // Hide modal
+                    $("#deliveryConfirmationModal").modal("hide");
+
+                    // Show success notification
+                    showNotification("Đã giao hàng thành công", "success");
+
+                    // Reload DataTable
+                    orderTable.ajax.reload(null, false); // false means keep current page
+                } else {
+                    showNotification("Giao hàng thất bại", "error");
+                }
+            },
+            error: function () {
+                showNotification("Đã xảy ra lỗi khi giao hàng", "error");
+            },
+            complete: function () {
+                // Re-enable button and hide spinner
+                $btn.prop("disabled", false);
+                $spinner.addClass("d-none");
+            },
+        });
+    });
 
     function showNotification(message, type) {
         const $modal = $("#notificationModal");
@@ -166,4 +200,11 @@ $(document).ready(function () {
             $modal.modal("hide");
         }, 2000);
     }
+
+    // Close dropdown when clicking outside
+    $(document).on("click", function (e) {
+        if (!$(e.target).closest(".dropdown").length) {
+            $(".dropdown-menu").removeClass("show");
+        }
+    });
 });
