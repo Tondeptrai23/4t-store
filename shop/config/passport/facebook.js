@@ -40,7 +40,6 @@ passport.use(
                             "hiddehiddenfacebook_n_" + profile.emails[0]?.value
                         ).toString("base64"),
                         role: "user",
-                        provider: "facebook",
                     });
                     user = newUser;
                 }

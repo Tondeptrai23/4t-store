@@ -140,18 +140,15 @@ class AuthController {
         };
     }
 
-    oauth2Callback() {
-        return (request, response) => {
-            const { state } = request.query;
-            const { redirectTo } = JSON.parse(
-                Buffer.from(state, "base64").toString("utf-8")
-            );
-            console.log(redirectTo);
-            if (typeof redirectTo === "string") {
-                return response.redirect(redirectTo);
-            }
-            return response.redirect("/");
-        };
+    oauth2Callback(request, response) {
+        const { state } = request.query;
+        const { redirectTo } = JSON.parse(
+            Buffer.from(state, "base64").toString("utf-8")
+        );
+        if (typeof redirectTo === "string") {
+            return response.redirect(redirectTo);
+        }
+        return response.redirect("/");
     }
 
     async checkEmail(request, response) {
