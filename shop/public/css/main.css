@@ -384,7 +384,22 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   .header-v3 .main-menu > li > a {
     color: #fff;
   }
-  
+  .table-centered th, .table-centered td {
+    vertical-align: top;
+    font-family: 'Roboto', sans-serif;
+  }
+  .pending {
+    color: orange;
+  }
+  .processing {
+      color: blue;
+  }
+  .cancelled {
+      color: red;
+  }
+  .delivered {
+      color: green;
+  }
   /*---------------------------------------------*/
   .sub-menu {
     list-style-type: none;

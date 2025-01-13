@@ -1,6 +1,7 @@
 import api from "../config/api.js";
 import orderService from "../services/order.service.js";
 import OrderItemService from "../services/orderItems.service.js";
+import { convertVietnameseCurrency } from "../utils/utils.js";
 
 class OrderController {
     async getAll(req, res) {
@@ -75,8 +76,12 @@ class OrderController {
 
     async getByUserId(req, res) {
         try {
+            if (!req.isAuthenticated()) {
+                return res.send("Not authenticated");
+            }
+            const isLoggedIn = req.isAuthenticated();
             const orders = await orderService.getByUserId(req.user.userId);
-            res.status(200).send(orders);
+            res.render("index", {body:'pages/orders', orders: orders, isLoggedIn: isLoggedIn}); 
         } catch (error) {
             res.status(400).send(error.message);
         }
