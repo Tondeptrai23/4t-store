@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch((error) => {
                 console.error("Error updating dashboard:", error);
                 // Show error notification
-                showNotification("error", "Failed to update dashboard data");
             })
             .finally(() => {
                 // Hide loading states

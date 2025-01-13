@@ -1,6 +1,6 @@
 import express from "express";
 import expressLayouts from "express-ejs-layouts";
-import adminController from "../controllers/admin.controller.js";
+import adminDashboardController from "../controllers/admin.controller.js";
 import adminCategoryController from "../controllers/adminCategory.controller.js";
 import adminProductController from "../controllers/adminProduct.controller.js";
 import { isAdmin } from "../middlewares/auth.middleware.js";
@@ -10,7 +10,8 @@ const router = express.Router();
 router.use(isAdmin);
 router.use(expressLayouts);
 
-router.get("/", adminController.dashboard);
+router.get("/", adminDashboardController.dashboard);
+router.get("/api/dashboard-data", adminDashboardController.getDashboardData);
 
 router.get("/products", adminProductController.listProducts);
 router.get("/products/create", adminProductController.showCreateForm);

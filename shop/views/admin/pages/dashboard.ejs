@@ -3,16 +3,14 @@
         <div class="col-12">
             <div class="row align-items-center mb-2">
                 <div class="col">
-                    <p class="h5 page-title">Welcome!</p>
+                    <h2 class="h5 page-title">Dashboard</h2>
                 </div>
                 <div class="col-auto">
-                    <div class="d-flex">
-                        <select class="custom-select" id="period-select">
-                            <option value="7">Last 7 days</option>
-                            <option value="30">Last 30 days</option>
-                            <option value="90">Last 90 days</option>
-                        </select>
-                    </div>
+                    <select class="form-control" id="period-select">
+                        <option value="7">7 ngày qua</option>
+                        <option value="30" selected>30 ngày qua</option>
+                        <option value="90">90 ngày qua</option>
+                    </select>
                 </div>
             </div>
 
@@ -24,7 +22,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h3 class="h6 mb-0 text-muted">
-                                        Total Revenue
+                                        Tổng doanh thu
                                     </h3>
                                     <p class="fw-bold mb-0 text-primary">
                                         ₫<%= new
@@ -47,7 +45,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h3 class="h6 mb-0 text-muted">
-                                        Total Orders
+                                        Tổng đơn hàng
                                     </h3>
                                     <p class="fw-bold mb-0 text-primary">
                                         <%= totalOrders %>
@@ -68,7 +66,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h3 class="h6 mb-0 text-muted">
-                                        Average Order
+                                        Trung bình đơn hàng
                                     </h3>
                                     <p class="fw-bold mb-0 text-primary">
                                         ₫<%= new
@@ -91,7 +89,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h3 class="h6 mb-0 text-muted">
-                                        Success Rate
+                                        Tỷ lệ thành công
                                     </h3>
                                     <p class="fw-bold mb-0 text-primary">
                                         <%= successRate.toFixed(1) %>%
@@ -113,7 +111,7 @@
                 <div class="col-md-8">
                     <div class="card shadow mb-4">
                         <div class="card-header">
-                            <strong>Revenue Trend</strong>
+                            <strong>Biểu đồ doanh thu</strong>
                         </div>
                         <div class="card-body">
                             <div
@@ -128,7 +126,7 @@
                 <div class="col-md-4">
                     <div class="card shadow mb-4">
                         <div class="card-header">
-                            <strong>Order Status</strong>
+                            <strong>Trạng thái đơn hàng</strong>
                         </div>
                         <div class="card-body">
                             <div
@@ -145,19 +143,19 @@
             <!-- Recent Orders Table -->
             <div class="card shadow mb-4">
                 <div class="card-header">
-                    <strong class="card-title">Recent Orders</strong>
+                    <strong class="card-title">Đơn hàng gần đây</strong>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                    <th>Action</th>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Ngày</th>
+                                    <th>Khách hàng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Số tiền</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -172,7 +170,7 @@
                                     <td><%= order.userId %></td>
                                     <td>
                                         <span
-                                            class="badge badge-<%= order.status === 'delivered' ? 'success' : order.status === 'processing' ? 'warning' : order.status === 'cancelled' ? 'danger' : 'info' %>"
+                                            class="badge badge-<%= order.status === 'Chờ xử lý' ? 'success' : order.status === 'Đang xử lý' ? 'warning' : order.status === 'Đã hủy' ? 'danger' : 'info' %>"
                                         >
                                             <%= order.status %>
                                         </span>
@@ -187,7 +185,7 @@
                                             href="/admin/orders/<%= order.orderId %>"
                                             class="btn btn-sm btn-primary"
                                         >
-                                            View
+                                            Xem
                                         </a>
                                     </td>
                                 </tr>
@@ -205,3 +203,6 @@
 <style></style>
 
 <%- contentFor('script') %>
+<script></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/admin/js/dashboard-charts.js"></script>
