@@ -61,7 +61,7 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     return `
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="check${row.userId}" value="${row.productId}">
+                        <input type="checkbox" class="custom-control-input" id="check${row.userId}" value="${row.userId}">
                         <label class="custom-control-label" for="check${row.userId}"></label>
                     </div>`;
                 },
@@ -105,7 +105,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".text-danger", function (e) {
         e.preventDefault();
-        selectedProductId = $(this)
+        selectedUserId = $(this)
             .closest("tr")
             .find('input[type="checkbox"]')
             .val();
@@ -120,7 +120,7 @@ $(document).ready(function () {
                 success: function (response) {
                     $("#deleteModal").modal("hide");
                     if (response.success) {
-                        $("#productTable").DataTable().ajax.reload();
+                        $("#userTable").DataTable().ajax.reload();
                         showNotification("Xóa người dùng thành công", "success");
                     } else {
                         showNotification("Xóa người dùng thất bại", "error");
@@ -157,7 +157,7 @@ $(document).ready(function () {
             success: function (response) {
                 $("#bulkDeleteModal").modal("hide");
                 if (response.success) {
-                    $("#productTable").DataTable().ajax.reload();
+                    $("#userTable").DataTable().ajax.reload();
                     $("#selectAll").prop("checked", false);
                     showNotification("Xóa các người dùng thành công", "success");
                 } else {

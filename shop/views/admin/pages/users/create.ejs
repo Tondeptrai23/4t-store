@@ -1,258 +1,211 @@
 <%- contentFor('body') %>
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <h2 class="page-title">Thêm người dùng mới</h2>
-            <p class="text-muted">
-                Thêm người dùng mới vào hệ thống với thông tin chi tiết.
-            </p>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h2 class="page-title">Thêm người dùng mới</h2>
+                <p class="text-muted">
+                    Thêm người dùng mới vào hệ thống với thông tin chi tiết.
+                </p>
 
-            <div class="card shadow mb-4">
-                <div class="card-header">
-                    <strong class="card-title">Thông tin người dùng</strong>
-                </div>
-                <div class="card-body">
-                    <form
-                        id="createProductForm"
-                        class="needs-validation"
-                        enctype="multipart/form-data"
-                        novalidate
-                    >
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label for="name">Tên người dùng</label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        name="name"
-                                        class="form-control"
-                                        required
-                                    />
-                                    <div class="invalid-feedback">
-                                        Vui lòng nhập tên người dùng.
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <strong class="card-title">Thông tin người dùng</strong>
+                    </div>
+                    <div class="card-body">
+                        <form id="createUserForm" class="needs-validation" enctype="multipart/form-data" novalidate>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="name">Tên người dùng</label>
+                                        <input type="text" id="name" name="name" class="form-control" required />
+                                        <div class="invalid-feedback">
+                                            Vui lòng nhập tên người dùng.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label for="email">Email</label>
-                                    <input
-                                        type="text"
-                                        id="email"
-                                        name="email"
-                                        class="form-control"
-                                        required
-                                    />
-                                    <div class="invalid-feedback">
-                                        Vui lòng nhập email người dùng.
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="email">Email</label>
+                                        <input type="text" id="email" name="email" class="form-control" required
+                                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+                                        <div class="invalid-feedback">
+                                            Vui lòng nhập email hợp lệ.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label for="role">Phân quyền</label>
-                                    <select
-                                        class="custom-select"
-                                        id="role"
-                                        name="role"
-                                        required
-                                    >
-                                        <option selected disabled value="">
-                                            Chọn phân quyền...
-                                        </option>
-                                        <option value="admin">Quản trị viên (Admin)</option>
-                                        <option value="user">Người dùng (User)</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Vui lòng chọn phân quyền.
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="role">Phân quyền</label>
+                                        <select class="custom-select" id="role" name="role" required>
+                                            <option selected disabled value="">
+                                                Chọn phân quyền...
+                                            </option>
+                                            <option value="admin">Quản trị viên (Admin)</option>
+                                            <option value="user">Người dùng (User)</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Vui lòng chọn phân quyền.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label for="password">Mật khẩu</label>
-                            <div class="input-group">
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    id="password"
-                                    name="password"
-                                    required
-                                />
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
+
+                            <div class="form-group mb-3">
+                                <label for="password">Mật khẩu</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        required />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập mật khẩu.
                                 </div>
                             </div>
-                            <div class="invalid-feedback">
-                                Vui lòng nhập mật khẩu.
-                            </div>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label for="confirmPassword">Xác nhận mật khẩu</label>
-                            <div class="input-group">
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    required
-                                />
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
+
+                            <div class="form-group mb-3">
+                                <label for="confirmPassword">Xác nhận mật khẩu</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="confirmPassword"
+                                        name="confirmPassword" required />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            id="toggleConfirmPassword">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập lại mật khẩu để xác nhận.
+                                </div>
+                                <div class="invalid-feedback" id="passwordMismatch" style="display: none;">
+                                    Mật khẩu không khớp.
                                 </div>
                             </div>
-                            <div class="invalid-feedback">
-                                Vui lòng nhập lại mật khẩu để xác nhận.
-                            </div>
-                            <div class="invalid-feedback" id="passwordMismatch" style="display: none;">
-                                Mật khẩu không khớp.
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">
-                            Tạo tài khoản
-                        </button>
-                    </form>
+
+                            <button type="submit" class="btn btn-primary">
+                                Tạo tài khoản
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<%- contentFor('style') %>
-<style>
-    .image-preview-container {
-        position: relative;
-        margin: 10px;
-        width: 150px;
-        height: 150px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
+    <%- contentFor('style') %>
+       
 
-    .image-preview-container img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: cover;
-    }
+        <%- contentFor('script') %>
+            <script>
+                $(document).ready(function () {
+                    // Toggle visibility of password and confirm password
+                    $("#togglePassword").on("click", function () {
+                        const passwordField = $("#password");
+                        const type = passwordField.attr("type") === "password" ? "text" : "password";
+                        passwordField.attr("type", type);
+                        $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+                    });
 
-    .remove-image {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: rgba(255, 0, 0, 0.7);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 25px;
-        height: 25px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-    }
-</style>
+                    $("#toggleConfirmPassword").on("click", function () {
+                        const confirmPasswordField = $("#confirmPassword");
+                        const type = confirmPasswordField.attr("type") === "password" ? "text" : "password";
+                        confirmPasswordField.attr("type", type);
+                        $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+                    });
 
-<%- contentFor('script') %>
-<script>
-    $(document).ready(function () {
-        // Toggle visibility of password and confirm password
-        $("#togglePassword").on("click", function () {
-            const passwordField = $("#password");
-            const type = passwordField.attr("type") === "password" ? "text" : "password";
-            passwordField.attr("type", type);
-            $(this).find("i").toggleClass("fa-eye fa-eye-slash");
-        });
+                    // Form validation and submission
+                    const form = $("#createUserForm")[0];
 
-        $("#toggleConfirmPassword").on("click", function () {
-            const confirmPasswordField = $("#confirmPassword");
-            const type = confirmPasswordField.attr("type") === "password" ? "text" : "password";
-            confirmPasswordField.attr("type", type);
-            $(this).find("i").toggleClass("fa-eye fa-eye-slash");
-        });
+                    form.addEventListener(
+                        "submit",
+                        function (event) {
+                            event.preventDefault(); // Ngăn form submit mặc định
+                            event.stopPropagation();
 
-        // Form validation and submission
-        const form = $("#createProductForm")[0];
+                            const emailField = $("#email");
+                            const passwordField = $("#password");
+                            const confirmPasswordField = $("#confirmPassword");
 
-        form.addEventListener(
-            "submit",
-            function (event) {
-                event.preventDefault();
-                event.stopPropagation();
+                            const email = emailField.val();
+                            const password = passwordField.val();
+                            const confirmPassword = confirmPasswordField.val();
+                            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-                // Check if passwords match
-                const password = $("#password").val();
-                const confirmPassword = $("#confirmPassword").val();
-                
-                if (password !== confirmPassword) {
-                    $("#passwordMismatch").show();
-                } else {
-                    $("#passwordMismatch").hide();
+                            let isValid = true;
 
-                    if (form.checkValidity()) {
-                        const formData = new FormData(form);
+                            // Kiểm tra email hợp lệ
+                            if (!emailPattern.test(email)) {
+                                emailField[0].setCustomValidity("Email không hợp lệ");
+                                isValid = false;
+                            } else {
+                                emailField[0].setCustomValidity(""); // Xóa lỗi khi hợp lệ
+                            }
 
-                        $.ajax({
-                            url: "/admin/users/create",
-                            type: "POST",
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function (response) {
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Thành công!",
-                                        text: "Đã tạo tài khoản thành công",
-                                        confirmButtonText: "OK",
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            window.location.href =
-                                                "/admin/users";
+                            // Kiểm tra mật khẩu khớp
+                            if (password !== confirmPassword) {
+                                $("#passwordMismatch").show();
+                                passwordField.addClass("is-invalid");
+                                confirmPasswordField.addClass("is-invalid");
+                                isValid = false;
+                            } else {
+                                $("#passwordMismatch").hide();
+                                passwordField.removeClass("is-invalid");
+                                confirmPasswordField.removeClass("is-invalid");
+                            }
+
+                            // Nếu tất cả điều kiện đều hợp lệ, submit form
+                            if (isValid && form.checkValidity()) {
+                                const formData = new FormData(form);
+
+                                $.ajax({
+                                    url: "/admin/users/create",
+                                    type: "POST",
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (response) {
+                                        if (response.success) {
+                                            Swal.fire({
+                                                icon: "success",
+                                                title: "Thành công!",
+                                                text: "Đã tạo tài khoản thành công",
+                                                confirmButtonText: "OK",
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    window.location.href = "/admin/users";
+                                                }
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "Lỗi!",
+                                                text: response.message || "Không thể tạo tài khoản",
+                                            });
                                         }
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Lỗi!",
-                                        text:
-                                            response.message ||
-                                            "Không thể tạo tài khoản",
-                                    });
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Lỗi!",
-                                    text: "Đã xảy ra lỗi khi tạo tài khoản",
+                                    },
+                                    error: function (xhr, status, error) {
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Lỗi!",
+                                            text: xhr.responseJSON?.message || error || "Đã xảy ra lỗi khi tạo tài khoản",
+                                        });
+                                    },
                                 });
-                            },
-                        });
-                    }
-                }
+                            }
 
-                form.classList.add("was-validated");
-            },
-            false
-        );
-    });
-</script>
+                            form.classList.add("was-validated");
+                        },
+                        false
+                    );
+                });
+            </script>

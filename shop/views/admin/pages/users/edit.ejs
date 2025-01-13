@@ -1,0 +1,130 @@
+<%- contentFor('body') %>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h2 class="page-title">Chỉnh sửa người dùng</h2>
+                <p class="text-muted">
+                    Chỉnh sửa thông tin người dùng trong hệ thống.
+                </p>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <strong class="card-title">Thông tin người dùng</strong>
+                    </div>
+                    <div class="card-body">
+                        <form id="editUserForm" class="needs-validation" enctype="multipart/form-data" novalidate>
+                            <!-- Hidden userId field -->
+                            <input type="hidden" name="userId" value="<%= user.userId %>">
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="name">Tên người dùng</label>
+                                        <input type="text" id="name" name="name" class="form-control" value="<%= user.name %>" required />
+                                        <div class="invalid-feedback">
+                                            Vui lòng nhập tên người dùng.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" readonly />
+                                        <div class="invalid-feedback">
+                                            Vui lòng nhập email hợp lệ.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="role">Phân quyền</label>
+                                        <select class="custom-select" id="role" name="role" required>
+                                            <option value="" disabled>Chọn phân quyền...</option>
+                                            <option value="admin" <% if (user.role==='admin' ) { %> selected <% } %>>Quản trị viên (Admin)</option>
+                                            <option value="user" <% if (user.role==='user' ) { %> selected <% } %>>Người dùng (User)</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Vui lòng chọn phân quyền.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                Cập nhật
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- contentFor('style') %>
+
+<%- contentFor('script') %>
+    <script>
+        $(document).ready(function () {
+
+            // Form validation and submission
+            const form = $("#editUserForm")[0];
+
+            form.addEventListener(
+                "submit",
+                function (event) {
+                    event.preventDefault(); // Ngăn form submit mặc định
+                    event.stopPropagation();
+
+                    // Nếu tất cả điều kiện đều hợp lệ, submit form
+                    if (form.checkValidity()) {
+                        const formData = new FormData(form);
+
+                        $.ajax({
+                            url: "/admin/users/" + formData.get("userId"),
+                            type: "PUT",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Thành công!",
+                                        text: "Đã cập nhật thành công",
+                                        confirmButtonText: "OK",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "/admin/users";
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Lỗi!",
+                                        text: response.message || "Không thể cập nhật tài khoản",
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Lỗi!",
+                                    text: xhr.responseJSON?.message || error || "Đã xảy ra lỗi khi tạo tài khoản",
+                                });
+                            },
+                        });
+                    }
+
+                    form.classList.add("was-validated");
+                },
+                false
+            );
+        });
+    </script>
+

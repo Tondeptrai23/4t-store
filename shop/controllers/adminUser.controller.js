@@ -1,67 +1,72 @@
 import userService from '../services/user.service.js'
 
-class AdminCategoryController {
+class AdminUserController {
     async listUsers(req, res) {
         try {
 
-            const users = await userService.getAll();
+            const users = await userService.getExistingUsers();
 
             console.log(users);
 
             res.render("admin/pages/users/list", {
-                 layout: "admin/layouts/main",
-                 users
+                layout: "admin/layouts/main",
+                users
             });
-            
+
         } catch (error) {
             console.error("Error fetching users:", error);
             res.status(500).send("Internal Server Error");
         }
     }
 
-    async showCreateForm(req, res) {
+    async listDeletedUsers(req, res) {
         try {
-            const categories = await categoryService.getAll();
-          
-            res.render("admin/pages/categories/create", {
+
+            const users = await userService.getDeletedUsers();
+
+            console.log(users);
+
+            res.render("admin/pages/users/deleted-list", {
                 layout: "admin/layouts/main",
-                categories
+                users
             });
+
         } catch (error) {
-            console.error("Error loading create category form:", error);
+            console.error("Error fetching deleted users:", error);
             res.status(500).send("Internal Server Error");
         }
     }
 
-    async createCategory(req, res) {
+    async showCreateForm(req, res) {
         try {
-            const categoryData = req.body;
 
-            let newCategory;
-
-            console.log(categoryData.isParentCategory);
-
-            if(!categoryData.isParentCategory){
-                newCategory = await subCategoryService.create({
-                   ...categoryData,
-                   parentId: categoryData.parentCategoryId || null
-                })
-            } else {
-                newCategory = await categoryService.create({
-                    ...categoryData
-                });
-            }
-            
-            res.status(201).json({
-                success: true,
-                message: "Category created successfully",
-                product: newCategory,
+            res.render("admin/pages/users/create", {
+                layout: "admin/layouts/main"
             });
         } catch (error) {
-            console.error("Error creating category :", error);
+            console.error("Error loading create user form:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async createUser(req, res) {
+        try {
+
+            const userData = req.body;
+            console.log(userData);
+
+            const newUser = await userService.create(userData);
+
+            res.status(201).json({
+                success: true,
+                message: "User created successfully",
+                user: newUser
+            });
+        } catch (error) {
+            console.error("Error creating user :", error.message);
             res.status(500).json({
                 success: false,
-                message: "Failed to create category",
+                message: error.message,
             });
         }
     }
@@ -70,102 +75,97 @@ class AdminCategoryController {
         try {
 
             const { id } = req.params;
-            let category = await categoryService.getParentCategory(id);
+            let user = await userService.findById(id);
 
-            console.log("Test category :", category)
-
-            if(!category){
-                category = await subCategoryService.getById(id);
-            }
-
-            const selectedParentCategoryId = category.parentId || null;
-
-            const categories = await categoryService.getAll();
-           
-            res.render("admin/pages/categories/edit", {
+            res.render("admin/pages/users/edit", {
                 layout: "admin/layouts/main",
-                category,
-                categories,
-                selectedParentCategoryId
+                user
             });
         } catch (error) {
-            console.error("Error loading edit category form:", error);
+            console.error("Error loading edit user form:", error);
             res.status(500).send("Internal Server Error");
         }
     }
 
-    async updateCategory(req, res) {
+    async updateUser(req, res) {
         try {
-
             const { id } = req.params;
-            const categoryData = req.body;
-
-            console.log("Test category data :", categoryData)
-
-            let updatedCategory;
-
-            if(categoryData.parentCategoryId){
-                updatedCategory = await subCategoryService.update(id, {
-                   ...categoryData,
-                   parentId: categoryData.parentCategoryId || null
-                })
-            } else {
-                updatedCategory = await categoryService.update(id, {
-                    ...categoryData
+            const { name, role } = req.body;
+    
+            // Kiểm tra dữ liệu đầu vào
+            if (!name || !role) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Name and role are required",
                 });
             }
-            
+    
+            console.log("Test update user", name, role);
+    
+            // Gọi service để cập nhật người dùng
+            const updatedUser = await userService.update(id, { name, role });
+    
+            // Nếu không tìm thấy người dùng, trả về lỗi
+            if (!updatedUser) {
+                return res.status(404).json({
+                    success: false,
+                    message: `User with ID ${id} not found`,
+                });
+            }
+    
+            // Trả về kết quả sau khi cập nhật
             res.json({
                 success: true,
-                message: "Category updated successfully",
-                product: updatedCategory,
+                message: "User updated successfully",
+                user: updatedUser,
             });
         } catch (error) {
-            console.error("Error updating category:", error);
+            console.error("Error updating user:", error);
             res.status(500).json({
                 success: false,
-                message: "Failed to update category",
+                message: "Failed to update user",
             });
         }
     }
+    
 
-    async deleteCategory(req, res) {
+    async deleteUser(req, res) {
         try {
             const { id } = req.params;
-            await categoryService.deleteById(id);
-            await subCategoryService.deleteById(id);
+            console.log("User " + id + " deleted");
+            await userService.deleteById(id);
 
             res.json({
                 success: true,
-                message: "Category deleted successfully",
+                message: "User deleted successfully",
             });
         } catch (error) {
-            console.error("Error deleting category:", error);
+            console.error("Error deleting user:", error);
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: "Failed to delete category",
+                message: "Failed to delete user",
             });
         }
     }
 
-    async bulkDeleteCategories(req, res) {
+    async bulkDeleteUsers(req, res) {
         try {
             const { ids } = req.body;
-            await categoryService.bulkDelete(ids);
-            await subCategoryService.bulkDelete(ids);
+            await userService.bulkDelete(ids);
+
             res.json({
                 success: true,
-                message: "Categories deleted successfully",
+                message: "Users deleted successfully",
             });
         } catch (error) {
-            console.error("Error bulk deleting categories:", error);
+            console.error("Error bulk deleting users:", error);
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: "Failed to delete categories",
+                message: "Failed to delete users",
             });
         }
     }
 }
 
-export default new AdminCategoryController();
+export default new AdminUserController();
 

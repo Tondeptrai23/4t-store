@@ -65,6 +65,12 @@ class ProductService {
         console.log("Query in service:", JSON.stringify(requestQuery));
 
         try {
+
+            const {sort, order} = requestQuery;
+            const sortField = sort || 'name';
+
+            console.log("order" + order)
+           
             // Process filtered products
             const filterBuilder = new ProductFilterBuilder(requestQuery);
             const filterCriteria = filterBuilder.build();
@@ -78,7 +84,7 @@ class ProductService {
             const { limit, offset } = paginationBuilder.build();
 
             // Query products from the database
-            const productsQuery = await Product.findAll({
+            let productsQuery = await Product.findAll({
                 where: filterCriteria,
                 order: [...sortCriteria],
                 limit,
@@ -92,6 +98,7 @@ class ProductService {
                 ],
             });
 
+           
             const totalCount = await Product.count({
                 where: filterCriteria,
             });
