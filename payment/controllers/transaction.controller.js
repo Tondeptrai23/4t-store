@@ -148,6 +148,11 @@ class TransactionController {
             where: { isAdmin: false },
         });
 
+        const adminBalance = await User.findOne({
+            where: { isAdmin: true },
+            attributes: ["balance"],
+        });
+
         const newUsersToday = await User.count({
             where: {
                 isAdmin: false,
@@ -157,9 +162,20 @@ class TransactionController {
             },
         });
 
+        const balanceFluctuationToday = await Transaction.sum("amount", {
+            where: {
+                updatedAt: {
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
+                },
+                status: "completed",
+            },
+        });
+
         res.json({
             totalUsers,
             totalBalance,
+            adminBalance: adminBalance.balance,
+            balanceFluctuationToday,
             newUsersToday,
             averageBalance: totalBalance / totalUsers,
         });
