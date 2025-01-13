@@ -1,5 +1,4 @@
 <header class="header-v2">
-	<!-- Header desktop -->
 	<div class="container-menu-desktop trans-03">
 		<div class="wrap-menu-desktop">
 			<nav class="limiter-menu-desktop p-l-45">
@@ -21,7 +20,7 @@
 							<a href="/product">Cửa hàng</a>
 						</li>
 						<li>
-							<a href="/orders">Đơn hàng</a>
+							<a href="/#about-us">Về chúng tôi</a>
 						</li>
 					</ul>
 				</div>
@@ -36,7 +35,25 @@
 				<% } else { %>
 					<div class="menu-login">
 						<ul class="main-menu">
-							<li><a href="/logout">Đăng xuất</a></li>
+							<li class="dropdown">
+								<div class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								  <img src='https://placehold.co/600x400' alt="Avatar" class="avatar">
+								</div>
+								<div class="dropdown-menu dropdown-menu-right">
+									<div>
+										<a href="/orders" style="padding-left: 14px;">Xem đơn hàng</a>
+									</div>
+									<div>
+										<a href="/profile" style="padding-left: 14px;">Đổi tên</a>
+									</div>
+									<div>
+										<a href="/profile/change-password" style="padding-left: 14px;">Đổi mật khẩu</a>
+									</div>
+									<div>
+										<a href="/logout" style="padding-left: 14px; color: red;">Đăng xuất</a>
+									</div>
+								</div>
+							</li>
 						</ul>
 					</div>
 				<% } %>
@@ -51,22 +68,6 @@
 					</div>
 				</div>
 			</nav>
-		</div>
-	</div>
-
-	<!-- Modal Search -->
-	<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-		<div class="container-search-header">
-			<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-				<i class="zmdi zmdi-close"></i>
-			</button>
-
-			<form class="wrap-search-header flex-w p-l-15">
-				<button class="flex-c-m trans-04">
-					<i class="zmdi zmdi-search"></i>
-				</button>
-				<input class="plh3" type="text" name="search" placeholder="Search..." />
-			</form>
 		</div>
 	</div>
 </header>

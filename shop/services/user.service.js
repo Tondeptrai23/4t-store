@@ -25,6 +25,11 @@ class UserService {
 		const insertedUser = await User.create(user);
 		return insertedUser;
 	}
+
+	async update(userId, user) {
+		const updatedUser = await User.update(user, { where: { userId } });
+		return updatedUser;
+	}
 }
 
 export default new UserService();

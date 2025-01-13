@@ -75,7 +75,17 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   overflow-y: auto;  /* Allow scrolling if content exceeds the height */
   padding: 0; /* Optional: Adjust spacing */
 }
-
+.avatar {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 5px;
+}
+.dropdown-menu a {
+  display: block;
+  padding-left: 20px; /* Adjust the value as needed */
+}
 /* Ensure only active tab-pane is displayed */
 .tab-content > .tab-pane {
   display: none;
