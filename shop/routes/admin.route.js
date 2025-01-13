@@ -30,7 +30,9 @@ router.post(
     adminCategoryController.bulkDeleteCategories
 );
 
+
 router.get("/users", adminUserController.listUsers);
+router.get("/users/query", adminUserController.getUsers);
 router.get("/users/create", adminUserController.showCreateForm);
 router.post("/users/create", adminUserController.createUser);
 router.get("/users/edit/:id", adminUserController.showEditForm);
@@ -40,6 +42,7 @@ router.post(
     "/users/bulk-delete",
     adminUserController.bulkDeleteUsers
 );
-router.get("/users/deleted", adminUserController.listDeletedUsers); 
+router.get("/users/deleted", adminUserController.listDeletedUsers);
+router.get("/users/deleted/query", adminUserController.getDeleteUsers);
 
 export default router;

@@ -9,47 +9,6 @@ class UserController {
         res.json(await userService.getAllInDb());
     }
 
-    async getUsers(req, res) {
-        try {
-            const requestQuery = req.query; // Lấy các tham số từ query string
-            console.log("get users " + JSON.stringify(requestQuery));
-            const result =
-                await userService.getFilteredSortedAndPaginatedUsers(requestQuery);
-
-            // Trả về kết quả
-            res.status(200).json({
-                success: true,
-                data: result,
-            });
-        } catch (error) {
-            console.error("Error fetching users:", error.message);
-            res.status(500).json({
-                success: false,
-                message: "Failed to fetch users.",
-            });
-        }
-    };
-
-    async getDeleteUsers(req, res) {
-        try {
-            const requestQuery = req.query; // Lấy các tham số từ query string
-            console.log("get users " + JSON.stringify(requestQuery));
-            const result =
-                await userService.getFilteredSortedAndPaginatedDeletedUsers(requestQuery);
-
-            // Trả về kết quả
-            res.status(200).json({
-                success: true,
-                data: result,
-            });
-        } catch (error) {
-            console.error("Error fetching users:", error.message);
-            res.status(500).json({
-                success: false,
-                message: `Failed to fetch users. ${error.message}`,
-            });
-        }
-    }
 }
 
 export default new UserController();

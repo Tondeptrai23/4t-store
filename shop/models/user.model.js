@@ -34,7 +34,7 @@ User.init(
         sequelize: db,
         modelName: "user",
         paranoid: true,
-        deletedAt: 'destroyTime',
+        deletedAt: 'deletedAt',
     }
 );
 

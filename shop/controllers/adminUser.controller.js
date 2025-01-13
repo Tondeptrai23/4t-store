@@ -37,6 +37,48 @@ class AdminUserController {
         }
     }
 
+    async getUsers(req, res) {
+        try {
+            const requestQuery = req.query; // Lấy các tham số từ query string
+            console.log("get users " + JSON.stringify(requestQuery));
+            const result =
+                await userService.getFilteredSortedAndPaginatedUsers(requestQuery);
+
+            // Trả về kết quả
+            res.status(200).json({
+                success: true,
+                data: result,
+            });
+        } catch (error) {
+            console.error("Error fetching users:", error.message);
+            res.status(500).json({
+                success: false,
+                message: "Failed to fetch users.",
+            });
+        }
+    };
+
+    async getDeleteUsers(req, res) {
+        try {
+            const requestQuery = req.query; // Lấy các tham số từ query string
+            console.log("get users " + JSON.stringify(requestQuery));
+            const result =
+                await userService.getFilteredSortedAndPaginatedDeletedUsers(requestQuery);
+
+            // Trả về kết quả
+            res.status(200).json({
+                success: true,
+                data: result,
+            });
+        } catch (error) {
+            console.error("Error fetching users:", error.message);
+            res.status(500).json({
+                success: false,
+                message: `Failed to fetch users. ${error.message}`,
+            });
+        }
+    };
+
     async showCreateForm(req, res) {
         try {
 
@@ -47,7 +89,7 @@ class AdminUserController {
             console.error("Error loading create user form:", error);
             res.status(500).send("Internal Server Error");
         }
-    }
+    };
 
     async createUser(req, res) {
         try {
@@ -69,7 +111,7 @@ class AdminUserController {
                 message: error.message,
             });
         }
-    }
+    };
 
     async showEditForm(req, res) {
         try {
@@ -85,13 +127,13 @@ class AdminUserController {
             console.error("Error loading edit user form:", error);
             res.status(500).send("Internal Server Error");
         }
-    }
+    };
 
     async updateUser(req, res) {
         try {
             const { id } = req.params;
             const { name, role } = req.body;
-    
+
             // Kiểm tra dữ liệu đầu vào
             if (!name || !role) {
                 return res.status(400).json({
@@ -99,12 +141,12 @@ class AdminUserController {
                     message: "Name and role are required",
                 });
             }
-    
+
             console.log("Test update user", name, role);
-    
+
             // Gọi service để cập nhật người dùng
             const updatedUser = await userService.update(id, { name, role });
-    
+
             // Nếu không tìm thấy người dùng, trả về lỗi
             if (!updatedUser) {
                 return res.status(404).json({
@@ -112,7 +154,7 @@ class AdminUserController {
                     message: `User with ID ${id} not found`,
                 });
             }
-    
+
             // Trả về kết quả sau khi cập nhật
             res.json({
                 success: true,
@@ -126,8 +168,8 @@ class AdminUserController {
                 message: "Failed to update user",
             });
         }
-    }
-    
+    };
+
 
     async deleteUser(req, res) {
         try {
@@ -146,7 +188,7 @@ class AdminUserController {
                 message: "Failed to delete user",
             });
         }
-    }
+    };
 
     async bulkDeleteUsers(req, res) {
         try {
@@ -164,7 +206,7 @@ class AdminUserController {
                 message: "Failed to delete users",
             });
         }
-    }
+    };
 }
 
 export default new AdminUserController();

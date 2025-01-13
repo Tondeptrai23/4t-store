@@ -17,7 +17,7 @@ export class UserSortBuilder extends SortBuilder {
 			createdAt: ["createdAt"],
 			updatedAt: ["updatedAt"],
 			role: ["role"],
-			destroyTime: ["destroyTime"],
+			deletedAt: ["deletedAt"]
 		};
 		this._defaultSort = [["name", "ASC"]];
 	}
@@ -70,7 +70,7 @@ class UserService {
 			// Lấy tất cả user với điều kiện destroyTime khác null
 			let users = await User.findAll({
 				where: {
-					destroyTime: {
+					deletedAt: {
 						[Op.ne]: null, // Điều kiện: destroyTime khác null
 					},
 				},
@@ -104,7 +104,7 @@ class UserService {
 
 			if (existingUser) {
 
-				if (existingUser.destroyTime !== null) {
+				if (existingUser.deletedAt !== null) {
 
 					console.log('User exists and is soft-deleted, creating a new user with the same email');
 
@@ -127,169 +127,135 @@ class UserService {
 
 	// Get sorted, filtered, and paginated products
 	getFilteredSortedAndPaginatedUsers = async (requestQuery) => {
+        console.log("Query in service:", requestQuery);
 
-		console.log("Query in service:", JSON.stringify(requestQuery));
+        try {
 
-		try {
-			const { page = 1, size = 10, sort = 'createdAt', order = 'ASC', name = '' } = requestQuery;
+            const preprocessRequestQuery = (query) => {
+                let processedQuery = { ...query }; 
+                console.log("processed query: ", processedQuery);
+             
+                if (processedQuery.sort && processedQuery.order) {
+                    if (processedQuery.order.toUpperCase() === "DESC") {
+                        processedQuery.sort = `-${processedQuery.sort}`;
+                    }
 
-			// Pagination
-			const limit = parseInt(size, 10);
-			const offset = (page - 1) * limit;
+                    console.log("Processed query after solve: ", processedQuery);
+                }
 
-			// Sort
-			const sortCriteria = [[sort, order]];
+                return processedQuery;
+            };
 
+            const processedQuery = preprocessRequestQuery(requestQuery);
 
-			const filterBuilder = new UserFilterBuilder(requestQuery);
-			const filterCriteria = filterBuilder.build();
+            // Process filtered users
+            const filterBuilder = new UserFilterBuilder(processedQuery);
+            const filterCriteria = filterBuilder.build();
 
-			let users = await User.findAll({
-				where: filterCriteria,
+            //Process sorted users
+            const sortBuilder = new UserSortBuilder(processedQuery);
+            const sortCriteria = sortBuilder.build();
 
-			});
+            // Process paginated products
+            const paginationBuilder = new PaginationBuilder(processedQuery);
+            const { limit, offset } = paginationBuilder.build();
 
-			users = users.map(user =>
-				user.toJSON()
-			)
+            // Query users from the database
+            let usersQuery = await User.findAll({
+                where: filterCriteria,
+                order: [...sortCriteria],
+                limit,
+                offset
+            });
+    
+            const totalCount = await User.count({
+                where: filterCriteria,
+            });
 
-			users.sort((a, b) => {
-				if (sortCriteria && sortCriteria.length > 0) {
-					const [sortColumn, sortOrder] = sortCriteria[0];
-					const direction = sortOrder === 'DESC' ? -1 : 1;
+            const totalPages = Math.ceil(totalCount / limit);
 
-					const valueA = a[sortColumn];
-					const valueB = b[sortColumn];
-
-					// Xử lý nếu giá trị là null hoặc undefined
-					if (valueA == null && valueB == null) return 0;
-					if (valueA == null) return -1 * direction;
-					if (valueB == null) return 1 * direction;
-
-					// So sánh giá trị dựa trên kiểu dữ liệu
-					if (typeof valueA === 'string' && typeof valueB === 'string') {
-						// Chuỗi: dùng localeCompare
-						return valueA.localeCompare(valueB) * direction;
-					} else if (!isNaN(Date.parse(valueA)) && !isNaN(Date.parse(valueB))) {
-						// Ngày tháng: so sánh theo thời gian
-						return (new Date(valueA) - new Date(valueB)) * direction;
-					} else if (typeof valueA === 'number' && typeof valueB === 'number') {
-						// Số: so sánh trực tiếp
-						return (valueA - valueB) * direction;
-					} else {
-						// Mặc định: chuyển về chuỗi và so sánh
-						return valueA.toString().localeCompare(valueB.toString()) * direction;
-					}
-				}
-				return 0; // Không có tiêu chí sắp xếp
-			});
-
-
-			const paginatedUsers = users.slice(offset, offset + limit);
-
-			const totalCount = users.length;
-
-			const totalPages = Math.ceil(totalCount / limit);
-
-			return {
-				count: totalCount,
-				users: paginatedUsers, // Trả về các categories đã phân trang
-				pagination: { limit, offset, totalPages }, // Trả lại thông tin phân trang (nếu cần)
-			};
-		} catch (err) {
-			console.error(
-				"Error in getFilteredSortedAndPaginatedUsers:",
-				err
-			);
-			throw new Error("Error fetching users.");
-		}
-
-	};
+            return {
+                count: totalCount,
+                users: usersQuery,
+                pagination: { limit, offset, totalPages }, // Trả lại thông tin phân trang (nếu cần)
+            };
+        } catch (err) {
+            console.error(
+                "Error in getFilteredSortedAndPaginatedUsers:",
+                err
+            );
+            throw new Error("Error fetching users.");
+        }
+    };
 
 
 	getFilteredSortedAndPaginatedDeletedUsers = async (requestQuery) => {
+        console.log("Query in service:", requestQuery);
 
-		console.log("Query in service:", JSON.stringify(requestQuery));
+        try {
 
-		try {
-			const { page = 1, size = 10, sort = 'createdAt', order = 'ASC', name = '' } = requestQuery;
+            const preprocessRequestQuery = (query) => {
+                let processedQuery = { ...query }; 
+                console.log("processed query: ", processedQuery);
+             
+                if (processedQuery.sort && processedQuery.order) {
+                    if (processedQuery.order.toUpperCase() === "DESC") {
+                        processedQuery.sort = `-${processedQuery.sort}`;
+                    }
 
-			// Pagination
-			const limit = parseInt(size, 10);
-			const offset = (page - 1) * limit;
+                    console.log("Processed query after solve: ", processedQuery);
+                }
 
-			// Sort
-			const sortCriteria = [[sort, order]];
+                return processedQuery;
+            };
 
+            const processedQuery = preprocessRequestQuery(requestQuery);
 
-			const filterBuilder = new UserFilterBuilder(requestQuery);
-			const filterCriteria = filterBuilder.build();
+            // Process filtered users
+            const filterBuilder = new UserFilterBuilder(processedQuery);
+            const filterCriteria = filterBuilder.build();
 
-			let users = await User.findAll({
-				where: {
-					...filterCriteria, // Các điều kiện lọc khác
-					destroyTime: { [Op.not]: null }, // Chỉ lấy các bản ghi có destroyTime khác null
+            //Process sorted users
+            const sortBuilder = new UserSortBuilder(processedQuery);
+            const sortCriteria = sortBuilder.build();
+
+            // Process paginated users
+            const paginationBuilder = new PaginationBuilder(processedQuery);
+            const { limit, offset } = paginationBuilder.build();
+
+            // Query users from the database
+            let usersQuery = await User.findAll({
+                where: {
+					...filterCriteria,
+					deletedAt: {
+                        [Op.ne]: null, 
+                    },
 				},
+                order: [...sortCriteria],
+                limit,
+                offset,
 				paranoid: false
-			});
+            });
+    
+            const totalCount = await User.count({
+                where: filterCriteria,
+            });
 
-			users = users.map(user =>
-				user.toJSON()
-			)
+            const totalPages = Math.ceil(totalCount / limit);
 
-			users.sort((a, b) => {
-				if (sortCriteria && sortCriteria.length > 0) {
-					const [sortColumn, sortOrder] = sortCriteria[0];
-					const direction = sortOrder === 'DESC' ? -1 : 1;
-
-					const valueA = a[sortColumn];
-					const valueB = b[sortColumn];
-
-					// Xử lý nếu giá trị là null hoặc undefined
-					if (valueA == null && valueB == null) return 0;
-					if (valueA == null) return -1 * direction;
-					if (valueB == null) return 1 * direction;
-
-					// So sánh giá trị dựa trên kiểu dữ liệu
-					if (typeof valueA === 'string' && typeof valueB === 'string') {
-						// Chuỗi: dùng localeCompare
-						return valueA.localeCompare(valueB) * direction;
-					} else if (!isNaN(Date.parse(valueA)) && !isNaN(Date.parse(valueB))) {
-						// Ngày tháng: so sánh theo thời gian
-						return (new Date(valueA) - new Date(valueB)) * direction;
-					} else if (typeof valueA === 'number' && typeof valueB === 'number') {
-						// Số: so sánh trực tiếp
-						return (valueA - valueB) * direction;
-					} else {
-						// Mặc định: chuyển về chuỗi và so sánh
-						return valueA.toString().localeCompare(valueB.toString()) * direction;
-					}
-				}
-				return 0; // Không có tiêu chí sắp xếp
-			});
-
-
-			const paginatedUsers = users.slice(offset, offset + limit);
-
-			const totalCount = users.length;
-
-			const totalPages = Math.ceil(totalCount / limit);
-
-			return {
-				count: totalCount,
-				users: paginatedUsers, // Trả về các categories đã phân trang
-				pagination: { limit, offset, totalPages }, // Trả lại thông tin phân trang (nếu cần)
-			};
-		} catch (err) {
-			console.error(
-				"Error in getFilteredSortedAndPaginatedUsers:",
-				err
-			);
-			throw new Error("Error fetching users.");
-		}
-
-	}
-
+            return {
+                count: totalCount,
+                users: usersQuery,
+                pagination: { limit, offset, totalPages }, // Trả lại thông tin phân trang (nếu cần)
+            };
+        } catch (err) {
+            console.error(
+                "Error in getFilteredSortedAndPaginatedUsers:",
+                err
+            );
+            throw new Error("Error fetching users.");
+        }
+    };
 
 	deleteById = async function (id) {
 		try {
@@ -359,9 +325,3 @@ class UserService {
 }
 
 export default new UserService();
-
-
-const test = new UserService();
-const res = await test.getAll();
-
-console.log(res);

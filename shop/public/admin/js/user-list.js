@@ -23,7 +23,7 @@ $(document).ready(function () {
             },
         },
         ajax: {
-            url: "/users",
+            url: "/admin/users/query",
             type: "GET",
             data: function (d) {
                 return {
@@ -59,11 +59,15 @@ $(document).ready(function () {
                 defaultContent: "",
                 orderable: false,
                 render: function (data, type, row) {
-                    return `
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="check${row.userId}" value="${row.userId}">
-                        <label class="custom-control-label" for="check${row.userId}"></label>
-                    </div>`;
+
+                    if (row.userId !== '1') {
+                        return `
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="check${row.userId}" value="${row.userId}">
+                                <label class="custom-control-label" for="check${row.userId}"></label>
+                            </div>`;
+                    }
+                    return ''; 
                 },
             },
            
@@ -85,16 +89,22 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 render: function (data, type, row) {
+                    
+                    let deleteButton = '';
+                    if (row.userId !== '1') {
+                        deleteButton = `<a class="dropdown-item text-danger delete-product" href="#" data-id="${row.userId}">Xóa</a>`;
+                    }
+            
                     return `
-                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="text-muted sr-only">Thao tác</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="/admin/users/edit/${row.userId}">Sửa</a>
-                        <a class="dropdown-item text-danger delete-product" href="#" data-id="${row.userId}">Xóa</a>
-                    </div>`;
+                        <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-muted sr-only">Thao tác</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/admin/users/edit/${row.userId}">Sửa</a>
+                            ${deleteButton}  <!-- Chỉ hiển thị "Xóa" nếu userId !== 1 -->
+                        </div>`;
                 },
-            },
+            }
         ],
         order: [[1, "desc"]],
     });

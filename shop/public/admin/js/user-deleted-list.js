@@ -20,7 +20,7 @@ $(document).ready(function () {
             },
         },
         ajax: {
-            url: "/users/deleted",
+            url: "/admin/users/deleted/query",
             type: "GET",
             data: function (d) {
                 return {
@@ -67,8 +67,8 @@ $(document).ready(function () {
             },
 
             {
-                data: "destroyTime",
-                name: "destroyTime",
+                data: "deletedAt",
+                name: "deletedAt",
                 render: function (data) {
                     return new Date(data).toLocaleDateString("vi-VN");
                 },

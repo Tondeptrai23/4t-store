@@ -64,25 +64,37 @@ class ProductService {
 
     // Get sorted, filtered, and paginated products
     getFilteredSortedAndPaginatedProducts = async (requestQuery) => {
-        console.log("Query in service:", JSON.stringify(requestQuery));
+        console.log("Query in service:", requestQuery);
 
         try {
 
-            const {sort, order} = requestQuery;
-            const sortField = sort || 'name';
+            const preprocessRequestQuery = (query) => {
+                let processedQuery = { ...query }; 
+                console.log("processed query: ", processedQuery);
+             
+                if (processedQuery.sort && processedQuery.order) {
+                    if (processedQuery.order.toUpperCase() === "DESC") {
+                        processedQuery.sort = `-${processedQuery.sort}`;
+                    }
 
-            console.log("order" + order + "sorted" + sortField);
+                    console.log("Processed query after solve: ", processedQuery);
+                }
+
+                return processedQuery;
+            };
+
+            const processedQuery = preprocessRequestQuery(requestQuery);
 
             // Process filtered products
-            const filterBuilder = new ProductFilterBuilder(requestQuery);
+            const filterBuilder = new ProductFilterBuilder(processedQuery);
             const filterCriteria = filterBuilder.build();
 
             //Process sorted products
-            const sortBuilder = new ProductSortBuilder(requestQuery);
+            const sortBuilder = new ProductSortBuilder(processedQuery);
             const sortCriteria = sortBuilder.build();
 
             // Process paginated products
-            const paginationBuilder = new PaginationBuilder(requestQuery);
+            const paginationBuilder = new PaginationBuilder(processedQuery);
             const { limit, offset } = paginationBuilder.build();
 
             // Query products from the database
@@ -100,17 +112,7 @@ class ProductService {
                 ],
             });
 
-            if(order){
-                productsQuery = productsQuery.sort((a, b) => {
-                    const aValue = a[sort];
-                    const bValue = b[sort];
-        
-                    if (aValue < bValue) return order === 'ASC' ? -1 : 1;
-                    if (aValue > bValue) return order === 'ASC' ? 1 : -1;
-                    return 0; // Trường hợp giá trị bằng nhau
-                });
-            }
-           
+            
             const totalCount = await Product.count({
                 where: filterCriteria,
             });
