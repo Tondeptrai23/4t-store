@@ -111,7 +111,7 @@ $(document).ready(function () {
                 },
             },
         ],
-        order: [[6, "desc"]],
+        order: [[1, "desc"]],
     });
 
     $("#selectAll").change(function () {

@@ -12,6 +12,8 @@ export class ProductSortBuilder extends SortBuilder {
         this._map = {
             name: ["name"],
             price: ["price"],
+            size: ["size"],
+            color: ["color"],
             updatedAt: ["updatedAt"],
             createdAt: ["createdAt"],
         };
@@ -69,8 +71,8 @@ class ProductService {
             const {sort, order} = requestQuery;
             const sortField = sort || 'name';
 
-            console.log("order" + order)
-           
+            console.log("order" + order + "sorted" + sortField);
+
             // Process filtered products
             const filterBuilder = new ProductFilterBuilder(requestQuery);
             const filterCriteria = filterBuilder.build();
@@ -98,17 +100,29 @@ class ProductService {
                 ],
             });
 
+            if(order){
+                productsQuery = productsQuery.sort((a, b) => {
+                    const aValue = a[sort];
+                    const bValue = b[sort];
+        
+                    if (aValue < bValue) return order === 'ASC' ? -1 : 1;
+                    if (aValue > bValue) return order === 'ASC' ? 1 : -1;
+                    return 0; // Trường hợp giá trị bằng nhau
+                });
+            }
            
             const totalCount = await Product.count({
                 where: filterCriteria,
             });
 
             // Map the images to the products
-            const productsWithImages = productsQuery.map((product) =>
+            let productsWithImages = productsQuery.map((product) =>
                 product.toJSON()
             );
 
             const totalPages = Math.ceil(totalCount / limit);
+
+            
 
             return {
                 count: totalCount,
