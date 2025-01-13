@@ -29,6 +29,8 @@ router.get(
 
 router.get("/products/detail/:id", adminProductController.showProductDetail);
 router.get("/products", adminProductController.listProducts);
+router.get("/products/deleted", adminProductController.listDeletedProducts);
+router.get("/products/deleted/data", adminProductController.getDeletedProducts);
 router.get("/products/create", adminProductController.showCreateForm);
 router.post("/products/create", adminProductController.createProduct);
 router.get("/products/edit/:id", adminProductController.showEditForm);

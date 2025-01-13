@@ -69,6 +69,7 @@ class OrderService {
                                 model: Product,
                                 as: "product",
                                 required: false,
+                                paranoid: false,
                                 include: {
                                     model: Image,
                                     as: "images",
@@ -107,6 +108,7 @@ class OrderService {
                                 model: Product,
                                 as: "product",
                                 required: false,
+                                paranoid: false,
                                 include: {
                                     model: Image,
                                     as: "images",
