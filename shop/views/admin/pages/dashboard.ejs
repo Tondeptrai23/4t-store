@@ -1,0 +1,353 @@
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <h2 class="h5 page-title">Dashboard</h2>
+                </div>
+                <div class="col-auto">
+                    <select class="form-control" id="period-select">
+                        <option value="7">7 ngày qua</option>
+                        <option value="30" selected>30 ngày qua</option>
+                        <option value="90">90 ngày qua</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div class="row my-4">
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Tổng doanh thu
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        ₫<%= new
+                                        Intl.NumberFormat().format(totalRevenue
+                                        || 0) %>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-shopping-cart text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Tổng đơn hàng
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        <%= totalOrders %>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-file text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Trung bình đơn hàng
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        ₫<%= new
+                                        Intl.NumberFormat().format(avgOrderValue
+                                        || 0) %>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-dollar-sign text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Tỷ lệ thành công
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        <%= successRate.toFixed(1) %>%
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-percent text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mb-4">
+                <h2 class="h3 mb-4">Thống kê thanh toán</h2>
+                <div class="row">
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Tổng người dùng
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%=
+                                            paymentStats.userStats.totalUsers %>
+                                        </span>
+                                        <div class="small text-muted">
+                                            <%=
+                                            paymentStats.userStats.newUsersToday
+                                            %> người dùng mới hôm nay
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fe fe-users text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Số dư Admin
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%= new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency', currency: 'VND'
+                                            }).format(paymentStats.userStats.adminBalance)
+                                            %>
+                                        </span>
+                                        <div class="small text-muted">
+                                            <%= new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency', currency: 'VND'
+                                            }).format(paymentStats.userStats.balanceFluctuationToday)
+                                            %> biến động hôm nay
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i
+                                            class="fe fe-credit-card text-muted"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Tổng giao dịch
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%=
+                                            paymentStats.transactionStats.totalTransactions
+                                            %>
+                                        </span>
+                                        <div class="small text-muted">
+                                            <%=
+                                            paymentStats.transactionStats.completedTransactions
+                                            %> đã hoàn thành
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i
+                                            class="fe fe-trending-up text-muted"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6
+                                            class="text-uppercase text-muted mb-2"
+                                        >
+                                            Giao dịch đang chờ
+                                        </h6>
+                                        <span class="h3 mb-0">
+                                            <%=
+                                            paymentStats.transactionStats.pendingTransactions
+                                            %>
+                                        </span>
+                                        <div class="small text-warning">
+                                            Cần xử lý
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i
+                                            class="fe fe-alert-circle text-muted"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Status and Transaction Status Charts Row -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Trạng thái đơn hàng</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 300px"
+                            >
+                                <canvas id="orderStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Trạng thái giao dịch</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 300px"
+                            >
+                                <canvas id="transactionStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Chart Row -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Biểu đồ doanh thu</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 350px"
+                            >
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">Đơn hàng gần đây</strong>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Ngày</th>
+                                    <th>Khách hàng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Số tiền</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentOrders.forEach(order => { %>
+                                <tr>
+                                    <td><%= order.orderId %></td>
+                                    <td>
+                                        <%= new
+                                        Date(order.createdAt).toLocaleDateString()
+                                        %>
+                                    </td>
+                                    <td><%= order.userId %></td>
+                                    <td>
+                                        <span
+                                            class="badge badge-<%= order.status === 'Chờ xử lý' ? 'success' : order.status === 'Đang xử lý' ? 'warning' : order.status === 'Đã hủy' ? 'danger' : 'info' %>"
+                                        >
+                                            <%= order.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        ₫<%= new
+                                        Intl.NumberFormat().format(order.total)
+                                        %>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="/admin/orders/<%= order.orderId %>"
+                                            class="btn btn-sm btn-primary"
+                                        >
+                                            Xem
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- contentFor('style') %>
+
+<style></style>
+
+<%- contentFor('script') %>
+<script></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/admin/js/dashboard-charts.js"></script>
