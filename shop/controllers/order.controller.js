@@ -8,10 +8,12 @@ class OrderController {
             const { count, orders, pagination } = await orderService.getAll(
                 req.query
             );
+			const transformedOrders = transformOrderStatus(orders);
+
             res.status(200).send({
                 success: true,
                 count,
-                orders,
+                orders: transformedOrders,
                 pagination,
             });
         } catch (error) {
@@ -75,8 +77,16 @@ class OrderController {
 
     async getByUserId(req, res) {
         try {
+            if (!req.isAuthenticated()) {
+                return res.send("Not authenticated");
+            }
+            const isLoggedIn = req.isAuthenticated();
             const orders = await orderService.getByUserId(req.user.userId);
-            res.status(200).send(orders);
+            res.render("index", {
+                body: "pages/orders",
+                orders: orders,
+                isLoggedIn: isLoggedIn,
+            });
         } catch (error) {
             res.status(400).send(error.message);
         }
@@ -100,11 +110,29 @@ class OrderController {
                 },
             });
 
+            console.log(response.data);
+
             res.send(response.data);
         } catch (error) {
             res.status(400).send(error.message);
         }
     }
 }
+
+function transformOrderStatus(orders) {
+	const statusMap = {
+		pending: "Chờ xử lý",
+		processing: "Đang xử lý",
+		delivered: "Đã giao",
+		cancelled: "Đã hủy",
+	};
+
+	return orders.map((order) => {
+		const orderData = order.toJSON();
+		orderData.status = statusMap[orderData.status];
+		return orderData;
+	});
+}
+
 
 export default new OrderController();

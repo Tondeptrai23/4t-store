@@ -50,6 +50,49 @@ class AdminOrderController {
             res.status(500).send("Internal Server Error");
         }
     }
+
+	async listOrders(req, res) {
+		try {
+			const { orders } = await orderService.getAll();
+			const transformedOrders = transformOrderStatus(orders);
+
+			res.render("admin/pages/orders/list", {
+				layout: "admin/layouts/main",
+				orders: transformedOrders,
+			});
+		} catch (error) {
+			console.error("Error fetching orders:", error);
+			res.status(500).send("Internal Server Error");
+		}
+	}
+
+	async deliverOrder(req, res) {
+		try {
+			const orderId = req.params.orderId;
+
+			const order = await orderService.getById(orderId);
+			if (!order) {
+				return res.status(404).json({ 
+					success: false,
+					message: "Order not found" 
+				});
+			}
+
+			if (order.status !== "processing") {
+				return res.status(400).json({ 
+					success: false,
+					message: "Order is not being processed"
+				});
+			}
+
+			await orderService.updateStatus(orderId, "delivered");
+
+			res.json({ success: true });
+		} catch (error) {
+			console.error("Error delivering order:", error);
+			res.status(500).send("Internal Server Error");
+		}
+	}
 }
 
 function transformOrderStatus(orders) {

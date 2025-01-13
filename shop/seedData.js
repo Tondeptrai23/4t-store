@@ -21,6 +21,7 @@ const seedData = async () => {
             email: "admin@example.com",
             password: await bcrypt.hash("admin", salt),
             role: "admin",
+			provider: "local",
         },
         {
             userId: "2",
@@ -28,6 +29,7 @@ const seedData = async () => {
             email: "user@example.com",
             password: await bcrypt.hash("user", salt),
             role: "user",
+			provider: "local",
         },
     ];
 

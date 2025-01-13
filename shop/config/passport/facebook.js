@@ -1,8 +1,7 @@
-import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as FacebookStrategy } from "passport-facebook";
+import api, { generateToken } from "../../config/api.js";
 import UserService from "../../services/user.service.js";
-import api from "../../config/api.js";
 
 passport.use(
     new FacebookStrategy(
@@ -15,39 +14,60 @@ passport.use(
         },
         async function (request, accessToken, refreshToken, profile, done) {
             try {
-				if (!profile.emails) { return done(null, false); }
+                if (!profile.emails) {
+                    return done(null, false);
+                }
                 let user = await UserService.findByEmail(
                     profile.emails[0]?.value
                 );
-				if (!user) {
-					const res = await api.post(`/register`, {
-						username: profile.emails[0]?.value,
-						password: Buffer.from('hiddenfacebook_' + profile.emails[0]?.value).toString('base64'),
-					});
+                if (!user) {
+                    const res = await api.post(
+                        `/register`,
+                        {
+                            username: profile.emails[0]?.value,
+                        },
+                        {
+                            headers: {
+                                "x-server-token": generateToken(),
+                            },
+                        }
+                    );
 
-					const newUser = await UserService.create({
-						name: profile.displayName,
-						email: profile.emails[0]?.value,
-						password: Buffer.from('hiddehiddenfacebook_n_' + profile.emails[0]?.value).toString('base64'),
-						role: "user",
-					});
-					user = newUser;
-				}
+                    const newUser = await UserService.create({
+                        name: profile.displayName,
+                        email: profile.emails[0]?.value,
+                        password: Buffer.from(
+                            "hiddehiddenfacebook_n_" + profile.emails[0]?.value
+                        ).toString("base64"),
+                        role: "user",
+                        provider: "facebook",
+                    });
+                    user = newUser;
+                }
 
-				const isMatch = await bcrypt.compare(Buffer.from('hiddenfacebook_' + profile.emails[0]?.value).toString('base64'), user.password);
-				if (!isMatch) { return done(null, false); }
+                if (user.provider !== "facebook") {
+                    done(null, false);
+                }
 
-				const res = await api.post(`/login`, {
-					username: user.dataValues.email,
-					password: Buffer.from('hiddenfacebook_' + user.dataValues.email).toString('base64'),
-				});
+                const res = await api.post(
+                    `/login`,
+                    {
+                        username: user.dataValues.email,
+                    },
+                    {
+                        headers: {
+                            "x-server-token": generateToken(),
+                        },
+                    }
+                );
 
-				const { password: passwordUser, ...userWithoutPassword } = user.dataValues;
+                const { password: passwordUser, ...userWithoutPassword } =
+                    user.dataValues;
 
-				return done(null, {
-					...userWithoutPassword,
-					paymentToken: res.data.token,
-				});
+                return done(null, {
+                    ...userWithoutPassword,
+                    paymentToken: res.data.token,
+                });
             } catch (error) {
                 return done(error, null);
             }

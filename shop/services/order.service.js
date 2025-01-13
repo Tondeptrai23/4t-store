@@ -159,18 +159,54 @@ class OrderService {
             throw new Error("Error deleting order: " + error.message);
         }
     };
+    // with order table: orderId, total, status, userId, updatedAt, createdAt, userId
+    // with orderItem table: orderItemId, orderId, productId, quantity, priceAtPurchase
+    // function getByUserId(userId) to get all orders of a user
+    // return array of orders: [{orderId, orderItemId, quantity, images, productName, status, updatedAt, createdAt, userId}]
     getByUserId = async (userId) => {
         try {
             const orders = await Order.findAll({
                 where: {
                     userId,
                 },
+                include: [
+                    {
+                        model: OrderItem,
+                        as: "orderItems",
+                        required: false,
+                        include: [
+                            {
+                                model: Product,
+                                as: "product",
+                                required: false,
+                                include: {
+                                    model: Image,
+                                    as: "images",
+                                    required: false,
+                                },
+                            },
+                        ],
+                    },
+                ],
             });
             return orders;
         } catch (error) {
             throw new Error("Error fetching orders: " + error.message);
         }
     };
+
+	updateStatus = async (orderId, status) => {
+		try {
+			const order = await Order.findByPk(orderId);
+			if (!order) {
+				throw new Error(`Order with ID ${orderId} not found`);
+			}
+			await order.update({ status });
+			return order;
+		} catch (error) {
+			throw new Error("Error updating order status: " + error.message);
+		}
+	};
 }
 
 export default new OrderService();
