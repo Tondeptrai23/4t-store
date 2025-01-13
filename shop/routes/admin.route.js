@@ -2,6 +2,7 @@ import express from "express";
 import expressLayouts from "express-ejs-layouts";
 import adminDashboardController from "../controllers/admin.controller.js";
 import adminCategoryController from "../controllers/adminCategory.controller.js";
+import adminOrderController from "../controllers/adminOrder.controller.js";
 import adminProductController from "../controllers/adminProduct.controller.js";
 import { isAdmin } from "../middlewares/auth.middleware.js";
 
@@ -43,5 +44,7 @@ router.post(
     "/categories/bulk-delete",
     adminCategoryController.bulkDeleteCategories
 );
+
+router.get("/orders/:orderId", adminOrderController.orderDetails);
 
 export default router;
