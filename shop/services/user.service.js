@@ -25,6 +25,21 @@ class UserService {
         const insertedUser = await User.create(user);
         return insertedUser;
     }
+
+    async updatePassword(id, password) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        await User.update(
+            { password: hashedPassword },
+            { where: { userId: id } }
+        );
+
+        return true;
+    }
+
+    async validatePassword(user, password) {
+        return await bcrypt.compare(password, user.password);
+    }
 }
 
 export default new UserService();
