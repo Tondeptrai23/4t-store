@@ -106,7 +106,6 @@ $(document).ready(function () {
             confirmCheckoutButton.addEventListener('click',async function () {
                 try {
                     confirmModal.hide();
-                    loadingModal.show();
 
                     const addressData = `${address}, ${selectedWardName}, ${selectedDistrictName}, ${selectedProvinceName}`;
 
@@ -116,7 +115,7 @@ $(document).ready(function () {
                         total: total,
                         cart: cartItems
                     };
-
+                    loadingModal.show();
                     const response = await fetch('/api/order/create', {
                         method: 'POST',
                         headers: {

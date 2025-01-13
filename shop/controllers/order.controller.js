@@ -77,8 +77,16 @@ class OrderController {
 
     async getByUserId(req, res) {
         try {
+            if (!req.isAuthenticated()) {
+                return res.send("Not authenticated");
+            }
+            const isLoggedIn = req.isAuthenticated();
             const orders = await orderService.getByUserId(req.user.userId);
-            res.status(200).send(orders);
+            res.render("index", {
+                body: "pages/orders",
+                orders: orders,
+                isLoggedIn: isLoggedIn,
+            });
         } catch (error) {
             res.status(400).send(error.message);
         }
@@ -101,6 +109,8 @@ class OrderController {
                     Authorization: `Bearer ${req.user.paymentToken}`,
                 },
             });
+
+            console.log(response.data);
 
             res.send(response.data);
         } catch (error) {

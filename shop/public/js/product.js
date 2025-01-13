@@ -1,5 +1,3 @@
-console.log("product.js loaded");
-
 (function () {
     "use strict";
 
@@ -25,7 +23,7 @@ console.log("product.js loaded");
         searchInput: document.getElementById("search-product"),
         filterButton: document.getElementById("filter-button"),
         resetButton: document.getElementById("reset-button"),
-        dropdownItems: document.querySelectorAll(".dropdown-item"),
+        dropdownItems: document.querySelectorAll(".dropdown-item.product"),
     };
 
     // Constants
@@ -195,7 +193,7 @@ console.log("product.js loaded");
                     currentPage - 1,
                     false,
                     currentPage === 1,
-                    "Prev"
+                    "&#8592;"
                 )
             );
             items.push(createPageItem(1, currentPage === 1));
@@ -227,7 +225,7 @@ console.log("product.js loaded");
                     currentPage + 1,
                     false,
                     currentPage === totalPages,
-                    "Next"
+                    "&#8594;"
                 )
             );
 

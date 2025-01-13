@@ -75,7 +75,17 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   overflow-y: auto;  /* Allow scrolling if content exceeds the height */
   padding: 0; /* Optional: Adjust spacing */
 }
-
+.avatar {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 5px;
+}
+.dropdown-menu a {
+  display: block;
+  padding-left: 20px; /* Adjust the value as needed */
+}
 /* Ensure only active tab-pane is displayed */
 .tab-content > .tab-pane {
   display: none;
@@ -384,7 +394,22 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   .header-v3 .main-menu > li > a {
     color: #fff;
   }
-  
+  .table-centered th, .table-centered td {
+    vertical-align: top;
+    font-family: 'Roboto', sans-serif;
+  }
+  .pending {
+    color: orange;
+  }
+  .processing {
+      color: blue;
+  }
+  .cancelled {
+      color: red;
+  }
+  .delivered {
+      color: green;
+  }
   /*---------------------------------------------*/
   .sub-menu {
     list-style-type: none;
@@ -2286,7 +2311,8 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .mtext-102 {
-    font-family: Roboto-SemiBold;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
     font-size: 16px;
     line-height: 1.6;
   }
@@ -2371,7 +2397,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
   
   .ltext-102 {
-    font-family: Roboto-Bold;
+    font-family: "Roboto", sans-serif;
     font-size: 28px;
     line-height: 1.1;
   }
