@@ -96,6 +96,8 @@ class OrderController{
                 },
             });
 
+            console.log(response.data);
+
             res.send(response.data);
         }catch(error){
             res.status(400).send(error.message);
