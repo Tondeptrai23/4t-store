@@ -1,0 +1,207 @@
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <p class="h5 page-title">Welcome!</p>
+                </div>
+                <div class="col-auto">
+                    <div class="d-flex">
+                        <select class="custom-select" id="period-select">
+                            <option value="7">Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div class="row my-4">
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Total Revenue
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        ₫<%= new
+                                        Intl.NumberFormat().format(totalRevenue
+                                        || 0) %>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-shopping-cart text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Total Orders
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        <%= totalOrders %>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-file text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Average Order
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        ₫<%= new
+                                        Intl.NumberFormat().format(avgOrderValue
+                                        || 0) %>
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-dollar-sign text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="h6 mb-0 text-muted">
+                                        Success Rate
+                                    </h3>
+                                    <p class="fw-bold mb-0 text-primary">
+                                        <%= successRate.toFixed(1) %>%
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <span
+                                        class="fe fe-32 fe-percent text-muted mb-0"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Revenue Trend</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 350px"
+                            >
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Order Status</strong>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                class="chart-container"
+                                style="position: relative; height: 350px"
+                            >
+                                <canvas id="orderStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">Recent Orders</strong>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentOrders.forEach(order => { %>
+                                <tr>
+                                    <td><%= order.orderId %></td>
+                                    <td>
+                                        <%= new
+                                        Date(order.createdAt).toLocaleDateString()
+                                        %>
+                                    </td>
+                                    <td><%= order.userId %></td>
+                                    <td>
+                                        <span
+                                            class="badge badge-<%= order.status === 'delivered' ? 'success' : order.status === 'processing' ? 'warning' : order.status === 'cancelled' ? 'danger' : 'info' %>"
+                                        >
+                                            <%= order.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        ₫<%= new
+                                        Intl.NumberFormat().format(order.total)
+                                        %>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="/admin/orders/<%= order.orderId %>"
+                                            class="btn btn-sm btn-primary"
+                                        >
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- contentFor('style') %>
+
+<style></style>
+
+<%- contentFor('script') %>
