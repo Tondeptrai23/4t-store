@@ -36,14 +36,14 @@ class AdminProductController {
     async showProductDetail(req, res) {
         try {
             const productId = req.params.id;
-            const product = await productService.getById(productId);
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 5;
 
-            // Get order history for this product
-            const orderHistory = await orderItemsService.getByProductId(
-                productId
-            );
-            // Transform order history data
-            const transformedOrderHistory = orderHistory.map((item) => ({
+            const product = await productService.getById(productId);
+            const { orderItems, pagination } =
+                await orderItemsService.getByProductId(productId, page, limit);
+
+            const transformedOrderHistory = orderItems.map((item) => ({
                 orderId: item.order.orderId,
                 status: item.order.status,
                 createdAt: item.order.createdAt,
@@ -51,10 +51,19 @@ class AdminProductController {
                 total: item.quantity * item.priceAtPurchase,
             }));
 
+            // Handle AJAX requests differently
+            if (req.xhr) {
+                return res.json({
+                    orderHistory: transformedOrderHistory,
+                    pagination,
+                });
+            }
+
             res.render("admin/pages/products/detail", {
                 layout: "admin/layouts/main",
                 product,
                 orderHistory: transformedOrderHistory,
+                pagination,
             });
         } catch (error) {
             console.error("Error in showProductDetail:", error);

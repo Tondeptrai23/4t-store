@@ -21,20 +21,35 @@ class OrderItemService {
             throw new Error("Error fetching order item: " + error.message);
         }
     };
-    getByProductId = async (productId) => {
+    getByProductId = async (productId, page = 1, limit = 5) => {
         try {
-            const orderItems = await OrderItem.findAll({
-                where: {
-                    productId,
-                },
-                include: [
-                    {
-                        model: Order,
-                        attributes: ["orderId", "status", "createdAt"],
+            const offset = (page - 1) * limit;
+
+            const { count, rows: orderItems } = await OrderItem.findAndCountAll(
+                {
+                    where: {
+                        productId,
                     },
-                ],
-            });
-            return orderItems;
+                    include: [
+                        {
+                            model: Order,
+                            attributes: ["orderId", "status", "createdAt"],
+                        },
+                    ],
+                    limit,
+                    offset,
+                }
+            );
+
+            return {
+                orderItems,
+                pagination: {
+                    totalItems: count,
+                    currentPage: page,
+                    totalPages: Math.ceil(count / limit),
+                    limit,
+                },
+            };
         } catch (error) {
             throw new Error("Error fetching order items: " + error.message);
         }

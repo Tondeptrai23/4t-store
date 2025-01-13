@@ -232,6 +232,44 @@
                             </div>
                         </div>
                     </div>
+
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li
+                                class="page-item <%= pagination.currentPage === 1 ? 'disabled' : '' %>"
+                            >
+                                <a
+                                    class="page-link"
+                                    href="?page=<%= pagination.currentPage - 1 %>"
+                                    tabindex="-1"
+                                >
+                                    <i class="fe fe-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            <% for(let i = 1; i <= pagination.totalPages; i++) {
+                            %>
+                            <li
+                                class="page-item <%= pagination.currentPage === i ? 'active' : '' %>"
+                            >
+                                <a class="page-link" href="?page=<%= i %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                            <% } %>
+
+                            <li
+                                class="page-item <%= pagination.currentPage === pagination.totalPages ? 'disabled' : '' %>"
+                            >
+                                <a
+                                    class="page-link"
+                                    href="?page=<%= pagination.currentPage + 1 %>"
+                                >
+                                    <i class="fe fe-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -264,8 +302,106 @@
 
 <%- contentFor('script') %>
 <script>
-    function setMainImage(src) {
-        const mainImage = document.querySelector(".main-image img");
-        mainImage.src = src;
+    // Function to update the order history table
+    function updateOrderHistoryTable(orders) {
+        const tableBody = document.getElementById("orderHistoryTableBody");
+
+        if (!orders || orders.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        Chưa có đơn hàng nào
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        const html = orders
+            .map(
+                (order) => `
+            <tr>
+                <td>${order.orderId}</td>
+                <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>${order.quantity}</td>
+                <td>${new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                }).format(order.total)}</td>
+                <td>
+                    <span class="badge badge-${
+                        order.status === "delivered"
+                            ? "success"
+                            : order.status === "processing"
+                            ? "warning"
+                            : order.status === "cancelled"
+                            ? "danger"
+                            : "info"
+                    }">
+                        ${
+                            order.status === "delivered"
+                                ? "Đã giao"
+                                : order.status === "processing"
+                                ? "Đang xử lý"
+                                : order.status === "cancelled"
+                                ? "Đã hủy"
+                                : "Chờ xử lý"
+                        }
+                    </span>
+                </td>
+                <td>
+                    <a href="/admin/orders/${
+                        order.orderId
+                    }" class="btn btn-sm btn-primary">Xem</a>
+                </td>
+            </tr>
+        `
+            )
+            .join("");
+
+        tableBody.innerHTML = html;
     }
+
+    // Handle pagination clicks
+    document.addEventListener("DOMContentLoaded", function () {
+        const pagination = document.querySelector(".pagination");
+        if (pagination) {
+            pagination.addEventListener("click", async function (e) {
+                e.preventDefault();
+                if (e.target.classList.contains("page-link")) {
+                    const href = e.target.getAttribute("href");
+                    const page = new URLSearchParams(href).get("page");
+
+                    try {
+                        const response = await fetch(
+                            `/admin/products/detail/${productId}?page=${page}`,
+                            {
+                                headers: {
+                                    "X-Requested-With": "XMLHttpRequest",
+                                },
+                            }
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            updateOrderHistoryTable(data.orderHistory);
+
+                            // Update URL without reload
+                            history.pushState({}, "", `?page=${page}`);
+
+                            // Update active page in pagination
+                            document
+                                .querySelectorAll(".page-item")
+                                .forEach((item) => {
+                                    item.classList.remove("active");
+                                });
+                            e.target.parentElement.classList.add("active");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching order history:", error);
+                    }
+                }
+            });
+        }
+    });
 </script>

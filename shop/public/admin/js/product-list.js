@@ -88,7 +88,21 @@ $(document).ready(function () {
                 },
             },
             { data: "size", name: "size" },
-            { data: "color", name: "color" },
+            {
+                data: "color",
+                name: "color",
+                render: function (data) {
+                    const colorMap = {
+                        Red: "Đỏ",
+                        Blue: "Xanh dương",
+                        Black: "Đen",
+                        White: "Trắng",
+                        Gray: "Xám",
+                    };
+
+                    return colorMap[data] || data;
+                },
+            },
             {
                 data: "createdAt",
                 name: "createdAt",
