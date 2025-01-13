@@ -37,6 +37,7 @@ passport.use(
                             "hiddengoogle_" + profile.email
                         ).toString("base64"),
                         role: "user",
+                        provider: "google",
                     });
                     user = newUser;
                 }

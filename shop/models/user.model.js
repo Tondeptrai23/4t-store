@@ -29,12 +29,16 @@ User.init(
             type: DataTypes.ENUM("user", "admin"),
             defaultValue: "user",
         },
+        provider: {
+            type: DataTypes.ENUM("local", "google", "facebook"),
+            defaultValue: "local",
+        },
     },
     {
         sequelize: db,
         modelName: "user",
         paranoid: true,
-        deletedAt: 'deletedAt',
+        deletedAt: "deletedAt",
     }
 );
 
