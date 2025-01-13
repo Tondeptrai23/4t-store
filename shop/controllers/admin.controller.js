@@ -2,8 +2,6 @@ import { Op } from "sequelize";
 import api from "../config/api.js";
 import { db } from "../config/config.js";
 import Order from "../models/order.model.js";
-import OrderItem from "../models/orderItem.model.js";
-import Product from "../models/product.model.js";
 
 class AdminDashboardController {
     async dashboard(req, res) {
@@ -25,12 +23,6 @@ class AdminDashboardController {
             const recentOrders = await Order.findAll({
                 limit: 5,
                 order: [["createdAt", "DESC"]],
-                include: [
-                    {
-                        model: OrderItem,
-                        include: [Product],
-                    },
-                ],
             });
 
             const deliveredOrders = await Order.count({
