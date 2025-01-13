@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Helper function to generate order row HTML
-    function generateOrderRow(order) {
+    function generateOrderRow(order, index) {
         const statusMap = {
             pending: "Chờ xử lý",
             processing: "Đang xử lý",
@@ -90,8 +90,21 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         return `
-            <tr>
-                <td>
+        <tr>
+            <td scope="row">${index + 1}</td>
+            <td>
+                <button 
+                    class="btn btn-link text-dark p-0 mb-2 w-100 text-left d-flex justify-content-between align-items-center"
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#orderDetails${index}" 
+                    aria-expanded="false" 
+                    aria-controls="orderDetails${index}"
+                >
+                    <span>Xem chi tiết đơn hàng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="collapse" id="orderDetails${index}">
                     ${order.orderItems
                         .map(
                             (item) => `
@@ -112,20 +125,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     `
                         )
                         .join("")}
-                </td>
-                <td>
-                    <strong>
-                        ${new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                        }).format(order.total)}
-                    </strong>
-                </td>
-                <td class="${order.status}">
-                    <strong>${statusMap[order.status]}</strong>
-                </td>
-            </tr>
-        `;
+                </div>
+            </td>
+            <td>
+                <strong>
+                    ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                    }).format(order.total)}
+                </strong>
+            </td>
+            <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+            <td class="${order.status}">
+                <strong>${statusMap[order.status]}</strong>
+            </td>
+        </tr>
+    `;
     }
 
     paginationContainer.addEventListener("click", async function (e) {
@@ -152,7 +167,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // Update the table content
             const tbody = document.querySelector("table tbody");
             tbody.innerHTML = orders
-                .map((order) => generateOrderRow(order))
+                .map((order) => {
+                    const index = (currentPage - 1) * 3 + orders.indexOf(order);
+
+                    return generateOrderRow(order, index);
+                })
                 .join("");
 
             // Update pagination
