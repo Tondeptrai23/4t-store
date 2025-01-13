@@ -141,17 +141,19 @@ $(document).ready(function () {
                             confirmModal.hide();
                             failModal.show();
                         } else{
-                            const payment = responsePayment.json(); 
+                            confirmModal.hide();
+                            console.log('hello co ba' ,orderModal)
                             try {
                                 await fetch('/api/cart/clear', {
                                     method: 'POST'
                                 });
-                                window.location.reload();
+                                orderModal.show(); 
+                                document.getElementById('confirmOkButton').addEventListener('click', function() {
+                                    window.location.reload();
+                                });
                             } catch (error) {
                                 console.error('Error clearing cart:', error);
-                            }
-                            confirmModal.hide();
-                            orderModal.show();            
+                            }             
                         }
                     }
                 } catch (error) {

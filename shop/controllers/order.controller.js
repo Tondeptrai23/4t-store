@@ -96,10 +96,6 @@ class OrderController{
                 },
             });
 
-            if (response.status === 400) {
-                return res.status(400).send(response.message);
-            }
-
             res.send(response.data);
         }catch(error){
             res.status(400).send(error.message);
