@@ -31,12 +31,6 @@
 							</tbody>
 						</table>
 					</div>
-
-					<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-						<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="js-update-cart">
-							Cập nhật giỏ hàng
-						</div>
-					</div>
 				</div>
 			</div>
 		
@@ -71,6 +65,34 @@
 							<p class="stext-111 cl6 p-t-2">
 								There are no shipping methods available. Please double check your address, or contact us if you need any help.
 							</p>
+
+							<div class="p-t-15">
+								<span class="stext-112 cl8">
+									Địa chỉ nhận hàng
+								</span>
+
+								<div class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9">
+									<select class="form-control" name="province" id="province">
+										<option value="Tỉnh">Tỉnh...</option>
+									</select>
+									<div class="dropDownSelect2"></div>
+								</div>
+								<div class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9">
+									<select class="form-control" name="district" id="district">
+										<option value="Huyện">Huyện...</option>
+									</select>
+									<div class="dropDownSelect2"></div>
+								</div>
+								<div class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9">
+									<select class="form-control" name="ward" id="ward">
+										<option value="Xã">Xã...</option>
+									</select>
+									<div class="dropDownSelect2"></div>
+								</div>
+								<div class="form-group" name="time">
+									<input type="text" class="form-control bg-0" id="adress" placeholder="Địa chỉ nhà">
+								</div>									
+							</div>
 						</div>
 					</div>
 
@@ -90,6 +112,101 @@
 					<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-checkout">
 						Tiến hành thanh toán
 					</button>
+					<div class="modal fade" id="addressModal" aria-labelledby="addressModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="addressModalLabel">Thông báo</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									❌ Vui lòng nhập địa chỉ nhận hàng
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="orderModal" aria-labelledby="orderModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="orderModalLabel">Thông báo</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									Đặt hàng thành công! ✅
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" id="confirmOkButton" data-bs-dismiss="modal">OK</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="confirmModalLabel">Xác nhận thanh toán</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+								<!-- This content will be dynamically updated -->
+									<p id="confirmMessage"></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+									<button type="button" class="btn btn-primary" id="confirmCheckout">Xác nhận</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="emptyCartModal" aria-labelledby="emptyCartModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="emptyCartModalLabel">Thông báo</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									Giỏ hàng trống! 🛒
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="failPaymentModal" aria-labelledby="failPaymentModal" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="failPaymentModal">Thông báo</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									Tài khoản của bạn không đủ tiền. Xin vui lòng nạp thêm! 💵
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="loadingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-body text-center p-4">
+									<div class="spinner-border text-primary mb-3" role="status">
+										<span class="visually-hidden"></span>
+									</div>
+									<h5>Đang xử lý thanh toán...</h5>
+									<p class="mb-0">Vui lòng không đóng cửa sổ này</p>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

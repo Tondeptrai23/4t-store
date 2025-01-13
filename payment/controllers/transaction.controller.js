@@ -10,19 +10,29 @@ import {
 
 class TransactionController {
     async transfer(req, res) {
+        // Validate input before starting any database operations
+        const { amount, message, orderId } = req.body;
+        const userId = req.user.id;
+
+        // Input validation
+        if (!amount || amount <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid amount",
+            });
+        }
+
+        if (!orderId) {
+            return res.status(400).json({
+                success: false,
+                message: "Order ID is required",
+            });
+        }
+
+        // Start transaction only after basic validation passes
         const t = await db.transaction();
 
         try {
-            const { amount, message, orderId } = req.body;
-            const userId = req.user.id;
-
-            // Validate amount
-            if (!amount || amount <= 0) {
-                return res
-                    .status(400)
-                    .json({ success: false, message: "Invalid amount" });
-            }
-
             // Get user and admin
             const user = await User.findByPk(userId, { transaction: t });
             const admin = await User.findOne({
@@ -40,10 +50,24 @@ class TransactionController {
 
             // Check balance
             if (user.balance < amount) {
-                await t.rollback();
-                return res
-                    .status(400)
-                    .json({ success: false, message: "Insufficient balance" });
+                const failureTransaction = await Transaction.create(
+                    {
+                        fromUserId: userId,
+                        toUserId: admin.id,
+                        amount,
+                        status: "failed",
+                        message: "Insufficient funds in user account",
+                        orderId,
+                    },
+                    { transaction: t }
+                );
+
+                await t.commit();
+                return res.status(400).json({
+                    success: false,
+                    message: "Insufficient balance",
+                    transactionId: failureTransaction.id,
+                });
             }
 
             // Create transaction record
@@ -53,14 +77,11 @@ class TransactionController {
                     toUserId: admin.id,
                     amount,
                     status: "pending",
-                    message,
+                    message: message || "Payment processing",
                     orderId,
                 },
                 { transaction: t }
             );
-
-            // Small delay to simulate processing time
-            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             // Update balances
             await User.update(
@@ -74,21 +95,33 @@ class TransactionController {
             );
 
             // Update transaction status
-            await Transaction.update(
-                { status: "completed" },
-                { where: { id: transaction.id }, transaction: t }
+            await transaction.update(
+                {
+                    status: "completed",
+                    message: message || "Payment successful",
+                },
+                { transaction: t }
             );
 
             await t.commit();
 
             res.json({
+                success: true,
                 message: "Transfer successful",
                 transactionId: transaction.id,
                 newBalance: user.balance - amount,
             });
         } catch (error) {
-            await t.rollback();
-            throw error;
+            // If transaction wasn't committed yet, rollback
+            if (!t.finished) {
+                await t.rollback();
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "Transfer failed",
+                error: error.message,
+            });
         }
     }
 
@@ -128,6 +161,53 @@ class TransactionController {
         });
     }
 
+    async getTransactionByOrderId(req, res) {
+        const orderId = req.params.orderId;
+
+        const transaction = await Transaction.findOne({
+            where: { orderId },
+            include: [
+                {
+                    model: User,
+                    as: "fromUser",
+                    attributes: ["id", "username"],
+                },
+                {
+                    model: User,
+                    as: "toUser",
+                    attributes: ["id", "username"],
+                },
+            ],
+        });
+
+        if (!transaction) {
+            return res.status(404).json({
+                success: false,
+                message: "Transaction not found",
+            });
+        }
+
+        res.json({ success: true, transaction });
+    }
+
+    async getUserBalance(req, res) {
+        const username = req.params.username;
+
+        const user = await User.findOne({
+            where: { username },
+            attributes: ["balance"],
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        res.json({ success: true, balance: user.balance });
+    }
+
     async getBalance(req, res) {
         const user = await User.findOne({
             where: {
@@ -148,6 +228,11 @@ class TransactionController {
             where: { isAdmin: false },
         });
 
+        const adminBalance = await User.findOne({
+            where: { isAdmin: true },
+            attributes: ["balance"],
+        });
+
         const newUsersToday = await User.count({
             where: {
                 isAdmin: false,
@@ -157,9 +242,20 @@ class TransactionController {
             },
         });
 
+        const balanceFluctuationToday = await Transaction.sum("amount", {
+            where: {
+                updatedAt: {
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
+                },
+                status: "completed",
+            },
+        });
+
         res.json({
             totalUsers,
             totalBalance,
+            adminBalance: adminBalance.balance,
+            balanceFluctuationToday,
             newUsersToday,
             averageBalance: totalBalance / totalUsers,
         });

@@ -52,18 +52,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
 
-            const modal = new bootstrap.Modal(
-                document.getElementById("exampleModal")
-            );
-            modal.show();
+            const modal = new bootstrap.Modal(document.getElementById('addedProductModal'));
+            modal.show();            
         });
     });
-
+    let cartItems = [];
     if (isLoggedIn) {
         try {
             const response = await fetch("/api/cart");
             if (response.ok) {
-                const cartItems = await response.json();
+                cartItems = await response.json();
                 updateCartUI(cartItems, isLoggedIn);
                 updateCartTable(cartItems);
             }
@@ -186,19 +184,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             });
     }
-
-    const checkoutButton = document.querySelector(".js-checkout");
-    if (checkoutButton) {
-        checkoutButton.addEventListener("click", function (event) {
-            if (!isLoggedIn) {
-                event.preventDefault();
-                redirectToLogin();
-            } else {
-                // Proceed with checkout
-                window.location.href = "/cart";
-            }
-        });
-    }
 });
 
 // update Cart side bar
@@ -254,6 +239,51 @@ function updateCartNotify(cartItems) {
     cartNotify.setAttribute("data-notify", cartItems.length);
 }
 
+async function handleQuantityChange(input, isIncrease) {
+    const productId = input.name.replace("num-product", "");
+    let currentValue = parseInt(input.value, 10);
+    let newValue = isIncrease ? currentValue + 1 : currentValue - 1;
+    
+    // Đảm bảo số lượng không âm
+    if (newValue < 1) newValue = 1;
+    input.value = newValue;
+
+    const isLoggedIn = document.body.getAttribute("data-is-logged-in") === "true";
+    const productData = {
+        productId: productId,
+        quantity: newValue
+    };
+
+    if (!isLoggedIn) {
+        let cart = localStorage.getItem("cart");
+        cart = cart ? JSON.parse(cart) : [];
+        const index = cart.findIndex(item => item.productId === productId);
+        if (index !== -1) {
+            cart[index].quantity = newValue;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartUI(cart, isLoggedIn);
+            updateCartTable(cart);
+        }
+    } else {
+        try {
+            const response = await fetch("/api/cart/update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(productData)
+            });
+            if (response.ok) {
+                const updatedCart = await response.json();
+                updateCartUI(updatedCart, isLoggedIn);
+                updateCartTable(updatedCart);
+            }
+        } catch (error) {
+            console.error("Error updating cart:", error);
+        }
+    }
+}
+
 // update Shopping Cart Table
 function updateCartTable(cartItems) {
     const tableBody = document.querySelector(".table-shopping-cart tbody");
@@ -261,75 +291,55 @@ function updateCartTable(cartItems) {
     tableBody.innerHTML = ``;
 
     if (cartItems.length === 0) {
-        tableBody.innerHTML =
-            '<tr><td colspan="5" class="text-center">Giỏ hàng trống</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Giỏ hàng trống</td></tr>';
     } else {
         cartItems.forEach((item) => {
             const row = `
                 <tr class="table_row">
                     <td class="column-1">
-                        <div class="how-itemcart1 header-cart-item-img" data-product-id="${
-                            item.productId
-                        }">
+                        <div class="how-itemcart1 header-cart-item-img" data-product-id="${item.productId}">
                             <img src="/images/${item.image}" alt="${item.name}">
                         </div>
                     </td>
                     <td class="column-2">${item.name}</td>
-                    <td class="column-3" data-price="${
-                        item.price
-                    }">${convertVietnameseCurrency(item.price)}</td>
+                    <td class="column-3" data-price="${item.price}">${convertVietnameseCurrency(item.price)}</td>
                     <td class="column-4">
                         <div class="wrap-num-product flex-w m-l-auto m-r-0">
                             <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                 <i class="fs-16 fa fa-minus"></i>
                             </div>
     
-                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product${
-                                item.productId
-                            }" value="${item.quantity}">
+                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product${item.productId}" value="${item.quantity}">
     
                             <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                 <i class="fs-16 fa fa-plus"></i>
                             </div>
                         </div>
                     </td>
-                    <td class="column-5">${convertVietnameseCurrency(
-                        item.price * item.quantity
-                    )}</td>
+                    <td class="column-5">${convertVietnameseCurrency(item.price * item.quantity)}</td>
                 </tr>
             `;
             tableBody.insertAdjacentHTML("beforeend", row);
         });
     }
 
-    const total = cartItems.reduce(
-        (sum, item) => sum + item.quantity * item.price,
-        0
-    );
-    document.getElementById("subtotal").textContent =
-        convertVietnameseCurrency(total);
-    document.getElementById("total").textContent =
-        convertVietnameseCurrency(total);
+    const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    document.getElementById("subtotal").textContent = convertVietnameseCurrency(total);
+    document.getElementById("total").textContent = convertVietnameseCurrency(total);
 
     document.querySelectorAll(".num-product").forEach((input) => {
-        input.addEventListener("change", updateQuantity);
+        const downBtn = input.previousElementSibling;
+        const upBtn = input.nextElementSibling;
+        
+        downBtn.addEventListener("click", () => handleQuantityChange(input, false));
+        upBtn.addEventListener("click", () => handleQuantityChange(input, true));
+        
+        input.addEventListener("change", (event) => {
+            const newValue = parseInt(event.target.value, 10);
+            if (newValue < 1) event.target.value = 1;
+            handleQuantityChange(event.target, null);
+        });
     });
 }
 
-function updateQuantity(event) {
-    const input = event.target;
-    const productId = input.name.replace("num-product", "");
-    const quantity = parseInt(input.value, 10);
-    let cart = localStorage.getItem("cart");
-    cart = cart ? JSON.parse(cart) : [];
-    const index = cart.findIndex((item) => item.productId === productId);
-    if (index !== -1) {
-        cart[index].quantity = quantity;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        updateCartTable(cart);
-    }
-}
 
-function redirectToLogin() {
-    window.location.href = "/login";
-}

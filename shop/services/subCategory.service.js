@@ -1,4 +1,4 @@
-import SubCategory from '../models/subCategory.model.js'
+import SubCategory from "../models/subCategory.model.js";
 
 class SubCategoryService {
     getAll = async () => {
@@ -12,6 +12,17 @@ class SubCategoryService {
             return subCategories;
         } catch (error) {
             throw new Error("Error fetching subCategories: " + error.message);
+        }
+    };
+
+    getByCategoryId = async (categoryId) => {
+        try {
+            const subcategories = await SubCategory.findAll({
+                where: { parentId: categoryId },
+            });
+            return subcategories.map((subcat) => subcat.toJSON());
+        } catch (error) {
+            throw new Error("Error fetching subcategories: " + error.message);
         }
     };
 
@@ -29,7 +40,7 @@ class SubCategoryService {
 
     create = async (categoryData) => {
         try {
-            const category = await  SubCategory.create(categoryData);
+            const category = await SubCategory.create(categoryData);
 
             return category.toJSON();
         } catch (error) {
@@ -40,7 +51,6 @@ class SubCategoryService {
 
     update = async (categoryId, categoryData) => {
         try {
-           
             const category = await SubCategory.findByPk(categoryId);
 
             if (!category) {
@@ -50,7 +60,6 @@ class SubCategoryService {
             await category.update(categoryData);
 
             return await SubCategory.findByPk(categoryId);
-            
         } catch (error) {
             throw new Error("Failed to update subCategory: " + error.message);
         }
@@ -93,7 +102,6 @@ class SubCategoryService {
             throw new Error("Failed to delete subCategories");
         }
     };
-
 }
 
 export default new SubCategoryService();

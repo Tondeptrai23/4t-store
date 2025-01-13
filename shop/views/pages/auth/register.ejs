@@ -27,7 +27,7 @@
 				<div class="card p-4 shadow-sm">
 					<h2 class="text-center mb-4">Đăng ký</h2>
 
-					<form action="/register" method="post" id="registerForm">
+					<form id="registerForm">
 						<div class="form-group mb-3">
 							<label for="name" class="form-label">
 								Họ và tên
@@ -47,14 +47,24 @@
 							<label for="password" class="form-label">
 								Mật khẩu
 							</label>
-							<input type="password" class="form-control" id="password" name="password" required />
+							<div class="input-group">
+								<input type="password" class="form-control" id="password" name="password" required />
+								<button type="button" class="btn btn-outline-secondary" id="togglePassword">
+									<i class="fa fa-eye"></i>
+								</button>
+							</div>
 						</div>
 
 						<div class="form-group mb-4">
 							<label for="confirmPassword" class="form-label">
 								Xác nhận mật khẩu
 							</label>
-							<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+							<div class="input-group">
+								<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+								<button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword">
+									<i class="fa fa-eye"></i>
+								</button>
+							</div>
 							<div id="password-feedback" class="invalid-feedback"></div>
 						</div>
 
@@ -67,6 +77,31 @@
 						<button type="submit" class="btn btn-primary w-100 size-101">
 							Đăng ký
 						</button>
+
+						<div class="d-flex align-items-center my-4">
+							<hr class="flex-grow-1">
+							<span class="mx-3 text-muted">hoặc</span>
+							<hr class="flex-grow-1">
+						</div>
+						
+						<div class="row g-2">
+							<div class="col-6">
+								<a href="/auth/google"
+									class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
+									style="height: 40px; gap: 8px;">
+									<img src="https://www.google.com/favicon.ico" alt="Google" width="18" height="18">
+									<span>Google</span>
+								</a>
+							</div>
+							<div class="col-6">
+								<a href="/auth/facebook"
+									class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+									style="height: 40px; gap: 8px;">
+									<i class="fab fa-facebook-f"></i>
+									<span>Facebook</span>
+								</a>
+							</div>
+						</div>
 
 						<div class="text-center mt-3">
 							<p>
@@ -124,7 +159,62 @@
 
 			passwordInput.on('input', checkPasswords);
 			confirmPasswordInput.on('input', checkPasswords);
+
+			document.getElementById('registerForm').addEventListener('submit', async function(event) {
+				event.preventDefault();
+
+				const name = document.getElementById('name').value;
+				const email = document.getElementById('email').value;
+				const password = document.getElementById('password').value;
+				const cartData = localStorage.getItem('cart');
+				const confirmPassword = document.getElementById('confirmPassword').value;
+				const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+
+				const response = await fetch('/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						name: name,
+						email: email,
+						password: password,
+						confirmPassword: confirmPassword,
+						cartData: cartData
+					})
+				});
+
+				if (response.ok) {
+					localStorage.setItem('cart', JSON.stringify([]));
+					localStorage.removeItem('redirectAfterLogin');
+					window.location.href = redirectUrl;
+				} else {
+					const errorText = await response.text();
+					alert('Login failed: ' + errorText);
+				}
+			});
 		});
+
+		function setupPasswordToggle(buttonId, inputId) {
+			document.getElementById(buttonId).addEventListener('click', function() {
+				const passwordInput = document.getElementById(inputId);
+				const icon = this.querySelector('i');
+				
+				if (passwordInput.type === 'password') {
+					passwordInput.type = 'text';
+					icon.classList.remove('fa-eye');
+					icon.classList.add('fa-eye-slash');
+				} else {
+					passwordInput.type = 'password';
+					icon.classList.remove('fa-eye-slash');
+					icon.classList.add('fa-eye');
+				}
+			});
+		}
+
+		// Setup toggle for both password fields
+		setupPasswordToggle('togglePassword', 'password');
+		setupPasswordToggle('toggleConfirmPassword', 'confirmPassword');
 	</script>
 </body>
 

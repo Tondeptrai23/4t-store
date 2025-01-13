@@ -1,0 +1,85 @@
+<%- contentFor('body') %>
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-12">
+				<div class="row align-items-center mb-2">
+					<div class="col">
+						<h2 class="h5 page-title">Quản lý đơn hàng</h2>
+					</div>
+				</div>
+				<div class="card shadow">
+					<div class="card-body">
+						<table class="table datatables" id="orderTable">
+							<thead>
+								<tr>
+									<th>Mã đơn hàng</th>
+									<th>Ngày</th>
+									<th>Khách hàng</th>
+									<th>Trạng thái</th>
+									<th>Số tiền</th>
+									<th>Thao tác</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% orders.forEach(function(order) { %>
+									<tr>
+										<td>
+											<%= order.orderId %>
+										</td>
+										<td>
+											<%= new Date(order.createdAt).toLocaleDateString('vi-VN') %>
+										</td>
+										<td>
+											<%= order.userId %>
+										</td>
+										<td>
+											<span class="badge badge-<%= 
+													order.status === 'Đã giao' ? 'success' : 
+													order.status === 'Đã hủy' ? 'danger' :
+													order.status === 'Đang xử lý' ? 'warning' : 'info' 
+											%>">
+												<%= order.status %>
+											</span>
+										</td>
+										<td>
+											<%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND' }).format(order.total) %>
+										</td>
+										<td>
+											
+											<button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="text-muted sr-only">
+													Thao tác
+												</span>
+											</button>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="/admin/orders/<%= order.orderId %>" class="dropdown-item">
+													Chi tiết
+												</a>
+												<% if (order.status === 'Đang xử lý') { %>
+													<a class="dropdown-item" href="#" onclick="confirmOrder('<%= order.orderId %>')">
+														Giao hàng
+													</a>
+												<% } %>
+											</div>
+										</td>
+									</tr>
+									<% }); %>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<%- contentFor('style') %>
+	<style>
+		.badge {
+			padding: 0.5em 1em;
+			font-size: 0.875em;
+		}
+	</style>
+
+<%- contentFor('script') %>
+<script src="/admin/js/order-list.js"></script>

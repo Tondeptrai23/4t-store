@@ -1,4 +1,5 @@
 import categoryService from "../services/category.service.js";
+import orderItemsService from "../services/orderItems.service.js";
 import productService from "../services/product.service.js";
 import subCategoryService from "../services/subCategory.service.js";
 
@@ -16,6 +17,36 @@ class AdminProductController {
         }
     }
 
+    async listDeletedProducts(req, res) {
+        try {
+            res.render("admin/pages/products/deleted-list", {
+                layout: "admin/layouts/main",
+            });
+        } catch (error) {
+            console.error("Error fetching deleted products:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async getDeletedProducts(req, res) {
+        try {
+            const result =
+                await productService.getFilteredSortedAndPaginatedDeletedProducts(
+                    req.query
+                );
+            res.status(200).json({
+                success: true,
+                data: result,
+            });
+        } catch (error) {
+            console.error("Error fetching deleted products:", error);
+            res.status(500).json({
+                success: false,
+                message: "Failed to fetch deleted products",
+            });
+        }
+    }
+
     async showCreateForm(req, res) {
         try {
             const categories = await categoryService.getAll();
@@ -28,6 +59,44 @@ class AdminProductController {
             });
         } catch (error) {
             console.error("Error loading create product form:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async showProductDetail(req, res) {
+        try {
+            const productId = req.params.id;
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 5;
+
+            const product = await productService.getById(productId);
+            const { orderItems, pagination } =
+                await orderItemsService.getByProductId(productId, page, limit);
+
+            const transformedOrderHistory = orderItems.map((item) => ({
+                orderId: item.order.orderId,
+                status: item.order.status,
+                createdAt: item.order.createdAt,
+                quantity: item.quantity,
+                total: item.quantity * item.priceAtPurchase,
+            }));
+
+            // Handle AJAX requests differently
+            if (req.xhr) {
+                return res.json({
+                    orderHistory: transformedOrderHistory,
+                    pagination,
+                });
+            }
+
+            res.render("admin/pages/products/detail", {
+                layout: "admin/layouts/main",
+                product,
+                orderHistory: transformedOrderHistory,
+                pagination,
+            });
+        } catch (error) {
+            console.error("Error in showProductDetail:", error);
             res.status(500).send("Internal Server Error");
         }
     }
