@@ -58,6 +58,7 @@ $(document).ready(function () {
     const confirmCheckoutButton = document.getElementById('confirmCheckout');
     const orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
     const failModal = new bootstrap.Modal(document.getElementById('failPaymentModal'));
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
     let address = "";
     let flag = 0;
     let cartItems = [];
@@ -104,7 +105,9 @@ $(document).ready(function () {
         if(confirmCheckoutButton){
             confirmCheckoutButton.addEventListener('click',async function () {
                 try {
-                    confirmModal.show();
+                    confirmModal.hide();
+                    loadingModal.show();
+
                     const addressData = `${address}, ${selectedWardName}, ${selectedDistrictName}, ${selectedProvinceName}`;
 
                     const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
@@ -136,13 +139,14 @@ $(document).ready(function () {
                             },
                             body: JSON.stringify(paymentData)
                         });
+
+                        loadingModal.hide();
                         
                         if (responsePayment.status === 400) {
                             confirmModal.hide();
                             failModal.show();
                         } else{
                             confirmModal.hide();
-                            console.log('hello co ba' ,orderModal)
                             try {
                                 await fetch('/api/cart/clear', {
                                     method: 'POST'
@@ -157,6 +161,7 @@ $(document).ready(function () {
                         }
                     }
                 } catch (error) {
+                    loadingModal.hide();
                     console.error('Error updating cart:', error);
                 }
             });
