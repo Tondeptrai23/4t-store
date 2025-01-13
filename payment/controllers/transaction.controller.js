@@ -157,6 +157,24 @@ class TransactionController {
         res.json({ success: true, transaction });
     }
 
+    async getUserBalance(req, res) {
+        const username = req.params.username;
+
+        const user = await User.findOne({
+            where: { username },
+            attributes: ["balance"],
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        res.json({ success: true, balance: user.balance });
+    }
+
     async getBalance(req, res) {
         const user = await User.findOne({
             where: {

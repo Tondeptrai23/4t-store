@@ -40,7 +40,7 @@ class AdminOrderController {
                 console.error("Error fetching transaction:", error);
             }
 
-            res.render("admin/pages/orders/order-detail", {
+            res.render("admin/pages/orders/detail", {
                 layout: "admin/layouts/main",
                 order: transformOrderStatus([order])[0],
                 transaction,

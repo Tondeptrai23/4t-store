@@ -167,18 +167,24 @@
                                 <strong>Từ người dùng:</strong>
                                 <div class="ml-3">
                                     <% if (transaction.fromUserDetails) { %>
-                                    <p class="mb-1">
+                                    <a
+                                        href="/admin/users/<%= transaction.fromUserDetails.userId %>"
+                                        class="mb-1 text-primary"
+                                    >
                                         <%= transaction.fromUserDetails.name %>
-                                    </p>
+                                    </a>
                                     <p class="mb-1">
                                         Email: <%=
                                         transaction.fromUserDetails.email %>
                                     </p>
                                     <% } else { %>
-                                    <p class="mb-1">
+                                    <a
+                                        href="/admin/users/<%= transaction.fromUser.userId %>"
+                                        class="mb-1 text-primary"
+                                    >
                                         Username: <%=
                                         transaction.fromUser.username %>
-                                    </p>
+                                    </a>
                                     <p class="mb-1 text-muted">
                                         Không tìm thấy thông tin chi tiết
                                     </p>
@@ -190,18 +196,24 @@
                                 <strong>Đến người dùng:</strong>
                                 <div class="ml-3">
                                     <% if (transaction.toUserDetails) { %>
-                                    <p class="mb-1">
+                                    <a
+                                        href="/admin/users/<%= transaction.toUserDetails.userId %>"
+                                        class="mb-1 text-primary"
+                                    >
                                         <%= transaction.toUserDetails.name %>
-                                    </p>
+                                    </a>
                                     <p class="mb-1">
                                         Email: <%=
                                         transaction.toUserDetails.email %>
                                     </p>
                                     <% } else { %>
-                                    <p class="mb-1">
+                                    <a
+                                        href="/admin/users/<%= transaction.toUser.userId %>"
+                                        class="mb-1 text-primary"
+                                    >
                                         Username: <%=
                                         transaction.toUser.username %>
-                                    </p>
+                                    </a>
                                     <p class="mb-1 text-muted">
                                         Không tìm thấy thông tin chi tiết
                                     </p>

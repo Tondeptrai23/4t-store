@@ -4,6 +4,7 @@ import adminDashboardController from "../controllers/admin.controller.js";
 import adminCategoryController from "../controllers/adminCategory.controller.js";
 import adminOrderController from "../controllers/adminOrder.controller.js";
 import adminProductController from "../controllers/adminProduct.controller.js";
+import adminUserController from "../controllers/adminUser.controller.js";
 import { isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -48,5 +49,7 @@ router.post(
 );
 
 router.get("/orders/:orderId", adminOrderController.orderDetails);
+
+router.get("/users/:id", adminUserController.getUserDetail);
 
 export default router;

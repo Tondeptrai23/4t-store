@@ -26,6 +26,13 @@ router.get(
 );
 
 router.get(
+    "/admin/balance/:username",
+    verifyToken,
+    isAdmin,
+    transactionController.getUserBalance
+);
+
+router.get(
     "/admin/stats/users",
     verifyToken,
     isAdmin,
