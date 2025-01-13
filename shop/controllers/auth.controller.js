@@ -51,6 +51,9 @@ class AuthController {
 			}
 			request.logIn(user, (err) => {
 				if (err) { return next(err); }
+				if (user.role === "admin") {
+					return response.redirect("/admin");
+				}
 				return response.redirect(redirectTo);
 			});
 		});
