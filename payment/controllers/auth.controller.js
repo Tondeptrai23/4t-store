@@ -34,7 +34,7 @@ class AuthController {
         try {
             const { username } = req.body;
 
-            const DEFAULT_BALANCE = 500000;
+            const DEFAULT_BALANCE = 50000000;
 
             const existingUser = await User.findOne({ where: { username } });
             if (existingUser) {
@@ -43,12 +43,8 @@ class AuthController {
                     .json({ message: "Username already exists" });
             }
 
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-
             const user = await User.create({
                 username,
-                password: hashedPassword,
                 balance: DEFAULT_BALANCE,
                 isAdmin: false,
             });

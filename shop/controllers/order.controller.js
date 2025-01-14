@@ -8,7 +8,7 @@ class OrderController {
             const { count, orders, pagination } = await orderService.getAll(
                 req.query
             );
-			const transformedOrders = transformOrderStatus(orders);
+            const transformedOrders = transformOrderStatus(orders);
 
             res.status(200).send({
                 success: true,
@@ -80,12 +80,31 @@ class OrderController {
             if (!req.isAuthenticated()) {
                 return res.send("Not authenticated");
             }
-            const isLoggedIn = req.isAuthenticated();
-            const orders = await orderService.getByUserId(req.user.userId);
+
+            const { pagination, orders } = await orderService.getByUserId(
+                req.user.userId,
+                req.query.page ?? 1,
+                req.query.size ?? 3
+            );
+
+            // If it's an AJAX request, return JSON
+            if (req.xhr) {
+                return res.json({
+                    orders,
+                    currentPage: pagination.currentPage,
+                    totalPages: pagination.totalPages,
+                    totalOrders: pagination.totalItems,
+                });
+            }
+
+            // For regular requests, render the page
             res.render("index", {
                 body: "pages/orders",
-                orders: orders,
-                isLoggedIn: isLoggedIn,
+                orders,
+                currentPage: pagination.currentPage,
+                totalPages: pagination.totalPages,
+                totalOrders: pagination.totalItems,
+                isLoggedIn: true,
             });
         } catch (error) {
             res.status(400).send(error.message);
@@ -120,19 +139,18 @@ class OrderController {
 }
 
 function transformOrderStatus(orders) {
-	const statusMap = {
-		pending: "Chờ xử lý",
-		processing: "Đang xử lý",
-		delivered: "Đã giao",
-		cancelled: "Đã hủy",
-	};
+    const statusMap = {
+        pending: "Chờ xử lý",
+        processing: "Đang xử lý",
+        delivered: "Đã giao",
+        cancelled: "Đã hủy",
+    };
 
-	return orders.map((order) => {
-		const orderData = order.toJSON();
-		orderData.status = statusMap[orderData.status];
-		return orderData;
-	});
+    return orders.map((order) => {
+        const orderData = order.toJSON();
+        orderData.status = statusMap[orderData.status];
+        return orderData;
+    });
 }
-
 
 export default new OrderController();

@@ -50,7 +50,7 @@ authRoute.get(
         failureRedirect: "/login?google-auth-failed=true",
     }),
     // authController.successRedirect
-    authController.oauth2Callback()
+    authController.oauth2Callback
 );
 
 authRoute.get(
@@ -65,7 +65,7 @@ authRoute.get(
         failureRedirect: "/login?facebook-auth-failed=true",
     }),
     // authController.successRedirect
-    authController.oauth2Callback()
+    authController.oauth2Callback
 );
 
 export default authRoute;

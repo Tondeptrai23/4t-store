@@ -163,8 +163,19 @@ class OrderService {
     // with orderItem table: orderItemId, orderId, productId, quantity, priceAtPurchase
     // function getByUserId(userId) to get all orders of a user
     // return array of orders: [{orderId, orderItemId, quantity, images, productName, status, updatedAt, createdAt, userId}]
-    getByUserId = async (userId) => {
+    getByUserId = async (userId, currentPage, size) => {
         try {
+            const page = parseInt(currentPage) || 1;
+            const limit = parseInt(size) || 3;
+            const offset = (page - 1) * limit;
+
+            const count = await Order.count({
+                where: {
+                    userId,
+                },
+            });
+
+            // Get total count of orders for pagination
             const orders = await Order.findAll({
                 where: {
                     userId,
@@ -179,6 +190,7 @@ class OrderService {
                                 model: Product,
                                 as: "product",
                                 required: false,
+                                paranoid: false,
                                 include: {
                                     model: Image,
                                     as: "images",
@@ -188,25 +200,37 @@ class OrderService {
                         ],
                     },
                 ],
+                limit,
+                offset,
+                order: [["createdAt", "DESC"]],
             });
-            return orders;
+
+            return {
+                orders,
+                pagination: {
+                    totalItems: count,
+                    currentPage: page,
+                    totalPages: Math.ceil(count / limit),
+                    limit,
+                },
+            };
         } catch (error) {
             throw new Error("Error fetching orders: " + error.message);
         }
     };
 
-	updateStatus = async (orderId, status) => {
-		try {
-			const order = await Order.findByPk(orderId);
-			if (!order) {
-				throw new Error(`Order with ID ${orderId} not found`);
-			}
-			await order.update({ status });
-			return order;
-		} catch (error) {
-			throw new Error("Error updating order status: " + error.message);
-		}
-	};
+    updateStatus = async (orderId, status) => {
+        try {
+            const order = await Order.findByPk(orderId);
+            if (!order) {
+                throw new Error(`Order with ID ${orderId} not found`);
+            }
+            await order.update({ status });
+            return order;
+        } catch (error) {
+            throw new Error("Error updating order status: " + error.message);
+        }
+    };
 }
 
 export default new OrderService();

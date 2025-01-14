@@ -38,9 +38,11 @@ class AuthController {
         if (!request.isAuthenticated()) {
             return response.redirect("/login");
         }
+		const isLocal = request.user.provider === "local";
         return response.render("index", {
             body: "pages/auth/change-password",
             isLoggedIn: true,
+			isLocal: isLocal,
         });
     }
 
@@ -49,22 +51,33 @@ class AuthController {
             return response.redirect("/login");
         }
 
-        const { currentPassword, newPassword } = request.body;
+		const { newPassword } = request.body;
+		const user = await UserService.findById(request.user.userId);
 
-        const user = await UserService.findById(request.user.userId);
+		if (user.provider === "local") {
+			const { currentPassword } = request.body;
 
-        if (!user) {
-            return response.status(404).json({ success: false });
-        }
+			if (!user) {
+				return response.render("index", {
+					body: "pages/auth/change-password",
+					isLoggedIn: true,
+					errorMsg: "Tài khoản không tồn tại."	
+				});
+			}
 
-        const isPasswordValid = await UserService.validatePassword(
-            user,
-            currentPassword
-        );
+			const isPasswordValid = await UserService.validatePassword(
+				user,
+				currentPassword
+			);
 
-        if (!isPasswordValid) {
-            return response.status(401).json({ success: false });
-        }
+			if (!isPasswordValid) {
+				return response.render("index", {
+					body: "pages/auth/change-password",
+					isLoggedIn: true,
+					errorMsg: "Mật khẩu hiện tại không chính xác."
+				});
+			}
+		}
 
         await UserService.updatePassword(user.userId, newPassword);
 
@@ -140,18 +153,15 @@ class AuthController {
         };
     }
 
-    oauth2Callback() {
-        return (request, response) => {
-            const { state } = request.query;
-            const { redirectTo } = JSON.parse(
-                Buffer.from(state, "base64").toString("utf-8")
-            );
-            console.log(redirectTo);
-            if (typeof redirectTo === "string") {
-                return response.redirect(redirectTo);
-            }
-            return response.redirect("/");
-        };
+    oauth2Callback(request, response) {
+        const { state } = request.query;
+        const { redirectTo } = JSON.parse(
+            Buffer.from(state, "base64").toString("utf-8")
+        );
+        if (typeof redirectTo === "string") {
+            return response.redirect(redirectTo);
+        }
+        return response.redirect("/");
     }
 
     async checkEmail(request, response) {

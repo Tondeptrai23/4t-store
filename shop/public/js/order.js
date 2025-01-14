@@ -9,69 +9,85 @@ $(document).ready(function () {
 
     // Fetch provinces
     $.getJSON(provinceApi, function (data) {
-        data.forEach(province => {
-            $('#province').append(`<option value="${province.code}">${province.name}</option>`);
+        data.forEach((province) => {
+            $("#province").append(
+                `<option value="${province.code}">${province.name}</option>`
+            );
         });
     });
 
     // On province change, fetch districts
-    $('#province').change(function () {
+    $("#province").change(function () {
         const provinceCode = $(this).val();
-        selectedProvinceName = $(this).find('option:selected').text(); // Get selected province name
-        $('#district').html('<option>Huyện...</option>'); // Reset district dropdown
-        $('#ward').html('<option>Xã...</option>'); // Reset ward dropdown
+        selectedProvinceName = $(this).find("option:selected").text(); // Get selected province name
+        $("#district").html("<option>Huyện...</option>"); // Reset district dropdown
+        $("#ward").html("<option>Xã...</option>"); // Reset ward dropdown
         if (provinceCode !== "Tỉnh...") {
             $.getJSON(districtApi, function (data) {
-                const filteredDistricts = data.filter(district => district.province_code == provinceCode);
-                filteredDistricts.forEach(district => {
-                    $('#district').append(`<option value="${district.code}">${district.name}</option>`);
+                const filteredDistricts = data.filter(
+                    (district) => district.province_code == provinceCode
+                );
+                filteredDistricts.forEach((district) => {
+                    $("#district").append(
+                        `<option value="${district.code}">${district.name}</option>`
+                    );
                 });
             });
         }
     });
 
     // On district change, fetch wards
-    $('#district').change(function () {
+    $("#district").change(function () {
         const districtCode = $(this).val();
-        selectedDistrictName = $(this).find('option:selected').text(); // Get selected district name
-        $('#ward').html('<option>Xã...</option>'); // Reset ward dropdown
+        selectedDistrictName = $(this).find("option:selected").text(); // Get selected district name
+        $("#ward").html("<option>Xã...</option>"); // Reset ward dropdown
         if (districtCode !== "Huyện...") {
             $.getJSON(wardApi, function (data) {
-                const filteredWards = data.filter(ward => ward.district_code == districtCode);
-                filteredWards.forEach(ward => {
-                    $('#ward').append(`<option value="${ward.code}">${ward.name}</option>`);
+                const filteredWards = data.filter(
+                    (ward) => ward.district_code == districtCode
+                );
+                filteredWards.forEach((ward) => {
+                    $("#ward").append(
+                        `<option value="${ward.code}">${ward.name}</option>`
+                    );
                 });
             });
         }
     });
 
     // On ward change, capture selected ward name
-    $('#ward').change(function () {
-        selectedWardName = $(this).find('option:selected').text(); // Get selected ward name
+    $("#ward").change(function () {
+        selectedWardName = $(this).find("option:selected").text(); // Get selected ward name
     });
-    const isLoggedIn = document.body.getAttribute('data-is-logged-in') === 'true';
-  
+    const isLoggedIn =
+        document.body.getAttribute("data-is-logged-in") === "true";
+
     // Checkout logic
-    const checkoutButton = document.querySelector('.js-checkout');
-    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-    const confirmMessage = document.getElementById('confirmMessage');
-    const confirmCheckoutButton = document.getElementById('confirmCheckout');
-    const orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
-    const failModal = new bootstrap.Modal(document.getElementById('failPaymentModal'));
-    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+    const checkoutButton = document.querySelector(".js-checkout");
+    const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+    );
+    const confirmMessage = document.getElementById("confirmMessage");
+    const confirmCheckoutButton = document.getElementById("confirmCheckout");
+    const orderModal = new bootstrap.Modal(
+        document.getElementById("orderModal")
+    );
+    const failModal = new bootstrap.Modal(
+        document.getElementById("failPaymentModal")
+    );
     let address = "";
     let flag = 0;
     let cartItems = [];
 
     if (checkoutButton) {
-        checkoutButton.addEventListener('click', async function (event) {
+        checkoutButton.addEventListener("click", async function (event) {
             if (!isLoggedIn) {
                 event.preventDefault();
                 redirectToLogin();
             } else {
                 event.preventDefault();
                 try {
-                    const response = await fetch('/api/cart');
+                    const response = await fetch("/api/cart");
                     if (response.ok) {
                         cartItems = await response.json();
                         if (cartItems.length !== 0) {
@@ -79,22 +95,36 @@ $(document).ready(function () {
                         }
                     }
                 } catch (error) {
-                    console.error('Error fetching cart items:', error);
+                    console.error("Error fetching cart items:", error);
                 }
 
-                address = $('#adress').val().trim();
-                const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
-                confirmMessage.textContent = `Xác nhận thanh toán giỏ hàng với số tiền là: ${total.toLocaleString('vi-VN')} VND`;
-                const addressModal = new bootstrap.Modal(document.getElementById('addressModal'));
+                address = $("#adress").val().trim();
+                const total = cartItems.reduce(
+                    (sum, item) => sum + item.quantity * item.price,
+                    0
+                );
+                confirmMessage.textContent = `Xác nhận thanh toán giỏ hàng với số tiền là: ${total.toLocaleString(
+                    "vi-VN"
+                )} VND`;
+                const addressModal = new bootstrap.Modal(
+                    document.getElementById("addressModal")
+                );
 
                 // Check if cart is empty
                 if (flag === 0) {
-                    const emptyCartModal = new bootstrap.Modal(document.getElementById('emptyCartModal'));
+                    const emptyCartModal = new bootstrap.Modal(
+                        document.getElementById("emptyCartModal")
+                    );
                     emptyCartModal.show();
                     return;
                 }
                 // Validate address
-                if (!selectedProvinceName || !selectedDistrictName || !selectedWardName || !address) {
+                if (
+                    !selectedProvinceName ||
+                    !selectedDistrictName ||
+                    !selectedWardName ||
+                    !address
+                ) {
                     addressModal.show();
                 } else {
                     confirmModal.show();
@@ -102,66 +132,70 @@ $(document).ready(function () {
             }
         });
 
-        if(confirmCheckoutButton){
-            confirmCheckoutButton.addEventListener('click',async function () {
+        if (confirmCheckoutButton) {
+            confirmCheckoutButton.addEventListener("click", async function () {
                 try {
                     confirmModal.hide();
 
                     const addressData = `${address}, ${selectedWardName}, ${selectedDistrictName}, ${selectedProvinceName}`;
 
-                    const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+                    const total = cartItems.reduce(
+                        (sum, item) => sum + item.quantity * item.price,
+                        0
+                    );
                     const orderData = {
                         address: addressData,
                         total: total,
-                        cart: cartItems
+                        cart: cartItems,
                     };
-                    loadingModal.show();
-                    const response = await fetch('/api/order/create', {
-                        method: 'POST',
+                    const response = await fetch("/api/order/create", {
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json'
+                            "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(orderData)
+                        body: JSON.stringify(orderData),
                     });
                     if (response.ok) {
                         const order = await response.json();
 
                         const paymentData = {
                             total: total,
-                            orderId: order.orderId
-                        }
+                            orderId: order.orderId,
+                        };
 
-                        const responsePayment = await fetch('/api/order/payment',{
-                            method: 'POST',
-                            headers:{
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(paymentData)
-                        });
+                        const responsePayment = await fetch(
+                            "/api/order/payment",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(paymentData),
+                            }
+                        );
 
-                        loadingModal.hide();
-                        
                         if (responsePayment.status === 400) {
                             confirmModal.hide();
                             failModal.show();
-                        } else{
+                        } else {
                             confirmModal.hide();
                             try {
-                                await fetch('/api/cart/clear', {
-                                    method: 'POST'
+                                await fetch("/api/cart/clear", {
+                                    method: "POST",
                                 });
-                                orderModal.show(); 
-                                document.getElementById('confirmOkButton').addEventListener('click', function() {
-                                    window.location.reload();
-                                });
+                                orderModal.show();
+                                document
+                                    .getElementById("confirmOkButton")
+                                    .addEventListener("click", function () {
+                                        window.location.reload();
+                                    });
                             } catch (error) {
-                                console.error('Error clearing cart:', error);
-                            }             
+                                console.error("Error clearing cart:", error);
+                            }
                         }
                     }
                 } catch (error) {
-                    loadingModal.hide();
-                    console.error('Error updating cart:', error);
+                    console.error("Error updating cart:", error);
                 }
             });
         }
@@ -171,5 +205,3 @@ $(document).ready(function () {
 function redirectToLogin() {
     window.location.href = "/login";
 }
-
-
