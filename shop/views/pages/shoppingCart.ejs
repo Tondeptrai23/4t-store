@@ -1,214 +1,353 @@
 <div class="container">
-	<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-		<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
-			Trang chủ
-			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-		</a>
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+            Trang chủ
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
 
-		<span class="stext-109 cl4">
-			Giỏ hàng
-		</span>
-	</div>
+        <span class="stext-109 cl4">Giỏ hàng</span>
+    </div>
 </div>
-	
+
 <form class="bg0 p-t-75 p-b-85">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
-				<div class="m-l-25 m-r--38 m-lr-0-xl">
-					<div class="wrap-table-shopping-cart">
-						<table class="table-shopping-cart">
-							<thead>
-								<tr class="table_head">
-									<th class="column-1">Sản phẩm</th>
-									<th class="column-2"></th>
-									<th class="column-3">Giá</th>
-									<th class="column-4">Số lượng</th>
-									<th class="column-5">Tổng cộng</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		
-		
-			<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-				<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-					<h4 class="mtext-109 cl2 p-b-30">
-						Tổng giỏ hàng
-					</h4>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+                <div class="m-l-25 m-r--38 m-lr-0-xl">
+                    <div class="wrap-table-shopping-cart">
+                        <table class="table-shopping-cart">
+                            <thead>
+                                <tr class="table_head">
+                                    <th class="column-1">Sản phẩm</th>
+                                    <th class="column-2"></th>
+                                    <th class="column-3">Giá</th>
+                                    <th class="column-4">Số lượng</th>
+                                    <th class="column-5">Tổng cộng</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-					<div class="flex-w flex-t bor12 p-b-13">
-						<div class="size-208">
-							<span class="stext-110 cl2">
-								Tạm tính:
-							</span>
-						</div>
+            <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+                <div
+                    class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm"
+                >
+                    <h4 class="mtext-109 cl2 p-b-30">Tổng giỏ hàng</h4>
 
-						<div class="size-209">
-							<span class="mtext-110 cl2" id="subtotal">
-							</span>
-						</div>
-					</div>
+                    <div class="flex-w flex-t bor12 p-b-13">
+                        <div class="size-208">
+                            <span class="stext-110 cl2">Tạm tính:</span>
+                        </div>
 
-					<div class="flex-w flex-t bor12 p-t-15 p-b-30">
-						<div class="size-208 w-full-ssm">
-							<span class="stext-110 cl2">
-								Vận chuyển:
-							</span>
-						</div>
+                        <div class="size-209">
+                            <span class="mtext-110 cl2" id="subtotal"></span>
+                        </div>
+                    </div>
 
-						<div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-							<p class="stext-111 cl6 p-t-2">
-								There are no shipping methods available. Please double check your address, or contact us if you need any help.
-							</p>
+                    <div class="flex-w flex-t bor12 p-t-15 p-b-30">
+                        <div class="size-208 w-full-ssm">
+                            <span class="stext-110 cl2">Vận chuyển:</span>
+                        </div>
 
-							<div class="p-t-15">
-								<span class="stext-112 cl8">
-									Địa chỉ nhận hàng
-								</span>
+                        <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
+                            <p class="stext-111 cl6 p-t-2">
+                                There are no shipping methods available. Please
+                                double check your address, or contact us if you
+                                need any help.
+                            </p>
 
-								<div class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9">
-									<select class="form-control" name="province" id="province">
-										<option value="Tỉnh">Tỉnh...</option>
-									</select>
-									<div class="dropDownSelect2"></div>
-								</div>
-								<div class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9">
-									<select class="form-control" name="district" id="district">
-										<option value="Huyện">Huyện...</option>
-									</select>
-									<div class="dropDownSelect2"></div>
-								</div>
-								<div class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9">
-									<select class="form-control" name="ward" id="ward">
-										<option value="Xã">Xã...</option>
-									</select>
-									<div class="dropDownSelect2"></div>
-								</div>
-								<div class="form-group" name="time">
-									<input type="text" class="form-control bg-0" id="adress" placeholder="Địa chỉ nhà">
-								</div>									
-							</div>
-						</div>
-					</div>
+                            <div class="p-t-15">
+                                <span class="stext-112 cl8">
+                                    Địa chỉ nhận hàng
+                                </span>
 
-					<div class="flex-w flex-t p-t-27 p-b-33">
-						<div class="size-208">
-							<span class="mtext-101 cl2">
-								Tổng cộng:
-							</span>
-						</div>
+                                <div
+                                    class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9"
+                                >
+                                    <select
+                                        class="form-control"
+                                        name="province"
+                                        id="province"
+                                    >
+                                        <option value="Tỉnh">Tỉnh...</option>
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                                <div
+                                    class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9"
+                                >
+                                    <select
+                                        class="form-control"
+                                        name="district"
+                                        id="district"
+                                    >
+                                        <option value="Huyện">Huyện...</option>
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                                <div
+                                    class="rs1-select2 rs2-select2 bg0 m-b-12 m-t-9"
+                                >
+                                    <select
+                                        class="form-control"
+                                        name="ward"
+                                        id="ward"
+                                    >
+                                        <option value="Xã">Xã...</option>
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                                <div class="form-group" name="time">
+                                    <input
+                                        type="text"
+                                        class="form-control bg-0"
+                                        id="adress"
+                                        placeholder="Địa chỉ nhà"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-						<div class="size-209 p-t-1">
-							<span class="mtext-110 cl2" id="total">
-							</span>
-						</div>
-					</div>
+                    <div class="flex-w flex-t p-t-27 p-b-33">
+                        <div class="size-208">
+                            <span class="mtext-101 cl2">Tổng cộng:</span>
+                        </div>
 
-					<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-checkout">
-						Tiến hành thanh toán
-					</button>
-					<div class="modal fade" id="addressModal" aria-labelledby="addressModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="addressModalLabel">Thông báo</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									❌ Vui lòng nhập địa chỉ nhận hàng
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="orderModal" aria-labelledby="orderModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="orderModalLabel">Thông báo</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									Đặt hàng thành công! ✅
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" id="confirmOkButton" data-bs-dismiss="modal">OK</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="confirmModalLabel">Xác nhận thanh toán</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-								<!-- This content will be dynamically updated -->
-									<p id="confirmMessage"></p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-									<button type="button" class="btn btn-primary" id="confirmCheckout">Xác nhận</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="emptyCartModal" aria-labelledby="emptyCartModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="emptyCartModalLabel">Thông báo</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									Giỏ hàng trống! 🛒
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="failPaymentModal" aria-labelledby="failPaymentModal" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="failPaymentModal">Thông báo</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									Tài khoản của bạn không đủ tiền. Xin vui lòng nạp thêm! 💵
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="loadingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-body text-center p-4">
-									<div class="spinner-border text-primary mb-3" role="status">
-										<span class="visually-hidden"></span>
-									</div>
-									<h5>Đang xử lý thanh toán...</h5>
-									<p class="mb-0">Vui lòng không đóng cửa sổ này</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <div class="size-209 p-t-1">
+                            <span class="mtext-110 cl2" id="total"></span>
+                        </div>
+                    </div>
+
+                    <button
+                        class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-checkout"
+                    >
+                        Tiến hành thanh toán
+                    </button>
+                    <div
+                        class="modal fade"
+                        id="addressModal"
+                        aria-labelledby="addressModalLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5
+                                        class="modal-title"
+                                        id="addressModalLabel"
+                                    >
+                                        Thông báo
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    ❌ Vui lòng nhập địa chỉ nhận hàng
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="modal fade"
+                        id="orderModal"
+                        aria-labelledby="orderModalLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5
+                                        class="modal-title"
+                                        id="orderModalLabel"
+                                    >
+                                        Thông báo
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    Đặt hàng thành công! ✅
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        id="confirmOkButton"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="modal fade"
+                        id="confirmModal"
+                        tabindex="-1"
+                        aria-labelledby="confirmModalLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5
+                                        class="modal-title"
+                                        id="confirmModalLabel"
+                                    >
+                                        Xác nhận thanh toán
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- This content will be dynamically updated -->
+                                    <p id="confirmMessage"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        Hủy
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary"
+                                        id="confirmCheckout"
+                                    >
+                                        Xác nhận
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="modal fade"
+                        id="emptyCartModal"
+                        aria-labelledby="emptyCartModalLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5
+                                        class="modal-title"
+                                        id="emptyCartModalLabel"
+                                    >
+                                        Thông báo
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">Giỏ hàng trống! 🛒</div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="modal fade"
+                        id="failPaymentModal"
+                        aria-labelledby="failPaymentModal"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5
+                                        class="modal-title"
+                                        id="failPaymentModal"
+                                    >
+                                        Thông báo
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    Tài khoản của bạn không đủ tiền. Xin vui
+                                    lòng nạp thêm! 💵
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="modal fade"
+                        id="loadingModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body text-center p-4">
+                                    <div
+                                        class="spinner-border text-primary mb-3"
+                                        role="status"
+                                    >
+                                        <span class="visually-hidden"></span>
+                                    </div>
+                                    <h5>Đang xử lý thanh toán...</h5>
+                                    <p class="mb-0">
+                                        Vui lòng không đóng cửa sổ này
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
