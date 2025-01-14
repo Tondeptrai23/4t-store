@@ -57,7 +57,6 @@ $(document).ready(function () {
     const confirmMessage = document.getElementById('confirmMessage');
     const confirmCheckoutButton = document.getElementById('confirmCheckout');
     const orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
-    const failModal = new bootstrap.Modal(document.getElementById('failPaymentModal'));
     const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
     let address = "";
     let flag = 0;
@@ -138,15 +137,10 @@ $(document).ready(function () {
                             },
                             body: JSON.stringify(paymentData)
                         });
-
-                        loadingModal.hide();
                         
-                        if (responsePayment.status === 400) {
-                            confirmModal.hide();
-                            failModal.show();
-                        } else{
-                            confirmModal.hide();
+                        if (responsePayment.ok) {
                             try {
+                                bootstrap.Modal.getInstance(document.getElementById('loadingModal')).hide();
                                 await fetch('/api/cart/clear', {
                                     method: 'POST'
                                 });

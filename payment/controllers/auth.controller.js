@@ -34,7 +34,7 @@ class AuthController {
         try {
             const { username } = req.body;
 
-            const DEFAULT_BALANCE = 500000;
+            const DEFAULT_BALANCE = 50000000;
 
             const existingUser = await User.findOne({ where: { username } });
             if (existingUser) {
