@@ -1,4 +1,23 @@
-# WEB PROJECT
+# WEB APPLICATION PROJECT
+This is a web application project that consists of two main systems:
+1. `Main System`: A management application with shopping cart, checkout, statistics, CRUD functionality, and two types of interfaces (Client and Admin)
+2. Payment System: Manages user payments and accounts for transactions between users and the main system.
+## Features
+1. Main System:
+- Shopping cart, payment, statistics, CRUD operations.
+- Two interfaces for Client and Admin.
+- Built using MVC architecture.
+- AJAX for async requests.
+- Express.js (or similar) for the backend framework.
+- Database with meaningful and complete data.
+  
+2. Payment System:
+- User accounts with balances.
+- Payment processing: transfer from user accounts to a main account.
+- Account creation for users when they sign up.
+- Transaction reconciliation system.
+- WebAPI integration between the main system and the payment system.
+- OAuth 2.0 authentication for secure connections.
 
 ## Installations
 
