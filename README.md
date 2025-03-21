@@ -1,79 +1,162 @@
-# WEB PROJECT
+# 4T-Store E-commerce Platform
 
-## Installations
+## Overview
 
-### Preparation
+4T-Store is a full-featured e-commerce web application built using modern web technologies. The project consists of two integrated systems:
 
-1. Install MySQL8.0, Nodejs.
+1. **Main System**: A comprehensive e-commerce application with product catalog management, shopping cart functionality, checkout process, statistical reporting, and complete CRUD operations. It offers separate interfaces for customers and administrators.
 
-2. Create new database
+2. **Payment System**: A secure transaction processing system that manages user accounts, payment processing, and transaction record-keeping between users and the main system.
 
-3. Create a `.env` file based on the `.env.sample` file.
+## 📋 Features
 
-### Signed SSL Certificate
+### Main System Features
 
-Create the ssl directory inside the payment directory:
+-   **Store Front**: Intuitive product browsing, filtering, and search capabilities
+-   **User Authentication**: Local login, Google and Facebook OAuth integration
+-   **Shopping Experience**: Cart management, checkout process, and order history
+-   **Admin Dashboard**: Sales analytics, order management, and inventory control
+-   **Product Management**: Complete CRUD operations for products and categories
+-   **User Management**: User accounts administration with role-based access control
+-   **MVC Architecture**: Well-structured codebase following MVC design patterns
+-   **Responsive Design**: Mobile-friendly interface built with Bootstrap
+-   **AJAX Integration**: Asynchronous requests for a smoother user experience
+-   **API Integration**: WebAPI connection to the payment system
+
+### Payment System Features
+
+-   **User Accounts**: Account creation and balance management
+-   **Secure Transactions**: SSL-secured transfer from user accounts to the main system
+-   **Automatic Account Creation**: Accounts created for new users during signup
+-   **Transaction Reconciliation**: System to verify and reconcile all transactions
+-   **OAuth 2.0 Authentication**: Secure connections between systems
+
+## 💻 Technologies Used
+
+-   **Backend**: Node.js, Express.js
+-   **Frontend**: EJS, HTML, CSS, JavaScript, Bootstrap
+-   **Database**: MySQL 8.0, Sequelize ORM
+-   **Authentication**: Passport.js, OAuth 2.0
+-   **Payment Processing**: Custom secure payment system
+-   **HTTP Security**: HTTPS with self-signed certificates
+
+## 🚀 Getting Started
+
+### System Requirements
+
+-   Node.js (v14 or higher)
+-   MySQL 8.0
+-   Modern web browser
+
+### Installation
+
+#### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/4T-Store.git
+cd 4T-Store
+```
+
+#### 2. Environment Setup
+
+Create a `.env` file in the root directory based on the provided `.env.sample` file with your database credentials and other configurations.
+
+```
+# Database Configuration
+DB_HOST=localhost
+DB_USER=your_mysql_username
+DB_PASS=your_mysql_password
+DB_NAME=4t_store
+
+# Payment System Configuration
+PAYMENT_DB_HOST=localhost
+PAYMENT_DB_USER=your_mysql_username
+PAYMENT_DB_PASS=your_mysql_password
+PAYMENT_DB_NAME=4t_payment
+PAYMENT_PORT=3001
+PAYMENT_JWT_SECRET=your_jwt_secret
+PAYMENT_CONNECTION_SECRET=your_connection_secret
+
+# OAuth Configuration
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=https://localhost:3000/auth/google/callback
+
+FACEBOOK_CLIENT_ID=your_facebook_client_id
+FACEBOOK_CLIENT_SECRET=your_facebook_client_secret
+FACEBOOK_CALLBACK_URL=https://localhost:3000/auth/facebook/callback
+
+# Server Configuration
+PORT=3000
+FRONTEND_URL=https://localhost:3000
+SERVER_URL=https://localhost:3000
+```
+
+#### 3. SSL Certificate Generation
+
+For secure HTTPS connections, create self-signed SSL certificates:
 
 ```bash
 # Create ssl directory
 mkdir payment/ssl
 cd payment/ssl
-```
 
-Run the following command to generate a self-signed SSL certificate.
-
-```bash
 # Generate SSL certificates
 openssl genrsa -out key.pem 2048
 openssl req -new -key key.pem -out csr.pem
 openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem
 ```
 
-### Execution
+#### 4. Install Dependencies
 
-Before any coding or running, run this below command to install all the dependencies.
+From the root directory, install all dependencies:
 
 ```bash
 npm install
 ```
 
-To run both servers, run this below command.
+#### 5. Initialize Database
 
-```bash
-npm start
-```
-
-Or you can run each server separately.
-
-```bash
-npm run start:shop
-npm run start:payment
-```
-
-### Data Initialization
-
-By default, sequelize will create the tables based on the models. If you want to initialize the data for both servers, you can run the following command.
+Seed the database with initial data:
 
 ```bash
 npm run seed:all
 ```
 
-Sometimes, you may want to reset the database when sequelize cannot drop the tables. You should drop the database manually in MySQL workbench.
-
-Or you can seed two servers separately.
+Alternatively, you can seed the shop and payment systems separately:
 
 ```bash
 npm run seed:shop
 npm run seed:payment
 ```
 
-### Helper Classes Instructions
+If you encounter issues with Sequelize dropping tables, you may need to manually drop the database in MySQL Workbench.
 
-1. **Sorting**
+### Running the Application
 
--   First, implement base class `SortBuilder` and define the sorting fields in the constructor.
+To start both servers concurrently:
+
+```bash
+npm start
+```
+
+To run each server separately:
+
+```bash
+npm run start:shop    # Start main e-commerce system
+npm run start:payment # Start payment system
+```
+
+The application will be available at: https://localhost:3000
+
+## 🛠️ Helper Classes Usage
+
+### Sorting
+
+The app includes a sorting system that can be used via URL parameters:
 
 ```javascript
+// Define sortable fields in your class
 export default class ProductSortBuilder extends SortBuilder {
     constructor(requestQuery) {
         super(requestQuery);
@@ -86,11 +169,8 @@ export default class ProductSortBuilder extends SortBuilder {
         this._defaultSort = [["createdAt", "DESC"]];
     }
 }
-```
 
--   Then, create a new instance of the class and call the `build` method to get the sorting array.
-
-```javascript
+// Usage in route handler
 const sortBuilder = new ProductSortBuilder(req.query);
 const sort = sortBuilder.build();
 
@@ -99,15 +179,11 @@ await Product.findAll({
 });
 ```
 
--   The sorting fields can be passed in the query string. The fields are separated by commas, '-' prefix means descending order. For example, the following query string will sort the products by name in ascending order and price in descending order.
+Example URL with sorting: `api/products?sort=name,-price` (sorts by name ascending, then price descending)
 
-```bash
-api/products?sort=name,-price
-```
+### Pagination
 
-2. **Pagination**
-
--   Use the `PaginationBuilder` class to build the pagination object.
+Pagination can be implemented using the PaginationBuilder:
 
 ```javascript
 const paginationBuilder = new PaginationBuilder(req.query);
@@ -119,15 +195,11 @@ await Product.findAll({
 });
 ```
 
--   The pagination fields can be passed in the query string. The default limit is 10 and the default offset is 0. For example, the following query string will return the first 10 products.
+Example URL with pagination: `api/products?page=1&size=10`
 
-```bash
-api/products?page=1
-```
+### Filtering
 
-3. **Filtering**
-
--   First, implement base class `FilterBuilder` and define the filtering fields in the constructor.
+Filter results using the FilterBuilder:
 
 ```javascript
 export default class ProductFilterBuilder extends FilterBuilder {
@@ -142,11 +214,7 @@ export default class ProductFilterBuilder extends FilterBuilder {
         ];
     }
 }
-```
 
--   Then, create a new instance of the class and call the `build` method to get the filtering object.
-
-```javascript
 const filterBuilder = new ProductFilterBuilder(req.query);
 const filter = filterBuilder.build();
 
@@ -155,15 +223,11 @@ await Product.findAll({
 });
 ```
 
--   The filtering supports multiple comparison operators, such as `ne`, `gt`, `gte`, `lt`, `lte`, `like`, `between` and multiple fields at a time. For example, the following query string will filter the products whose name contains 'apple' and price is greater than or equal to 100.
+Example URL with filtering: `api/products?name=[like]apple&price=[gte]100`
 
-```bash
-api/products?name=[like]apple&price=[gte]100
-```
+### Combining Helpers
 
-4. **Combining**
-
--   You can combine the sorting, pagination and filtering together. For example, the following query string will filter the products whose name contains 'apple', price is greater than or equal to 100, less than 200, sort by name in ascending order, and return the second page with 10 products.
+You can combine all these helpers for powerful data retrieval:
 
 ```bash
 api/products?name=[like]apple&price=[gte]100&price=[lt]200&sort=name&page=2&size=10
